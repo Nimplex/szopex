@@ -4,8 +4,10 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Pszemek\\Classchat\\": "src/"
+            "App\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
 }
