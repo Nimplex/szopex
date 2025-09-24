@@ -1,3 +1,8 @@
+<?php
+
+require __DIR__ . '/../bootstrap.php';
+
+$sql = <<<SQL
 CREATE TABLE listings (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -8,3 +13,9 @@ CREATE TABLE listings (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+SQL;
+
+$db->exec($sql);
+
+echo "Migration 002 applied\n";
+
