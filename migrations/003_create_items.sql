@@ -1,0 +1,7 @@
+CREATE TABLE items (
+    id SERIAL PRIMARY KEY,
+    listing_id INT NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+    title VARCHAR(100) NOT NULL,
+    attributes JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
