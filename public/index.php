@@ -10,9 +10,17 @@ use App\Controller\AuthController;
 use App\Model\User;
 use App\Service\AuthService;
 
+use App\Controller\ListingController;
+use App\Model\Listing;
+use App\Service\ListingService;
+
 $userModel = new User($db);
 $authService = new AuthService($userModel);
 $authController = new AuthController($authService);
+
+$listingModel = new Listing($db);
+$listingService = new ListingService($listingModel);
+$listingController = new ListingController($listingService);
 
 $path = $_SERVER['PATH_INFO'] ?? '/';
 $method = $_SERVER['REQUEST_METHOD'];
@@ -26,6 +34,9 @@ if ($path === '/register' && $method === 'POST') {
 } elseif ($path === '/logout') {
     session_destroy();
     echo 'Logged out';
+} elseif ($path === '/listings' && $method === 'GET') {
+    $res = $listingController->listAll($_GET);
+    echo $res;
 } else {
     header('Location: /404.php');
     die;

@@ -15,7 +15,7 @@ class ListingService
 
     public function listAll(int $page): ?array
     {
-        $page = min(1, max(1000, $page));
+        $page = max(1, min(1000, $page));
         $perPage = 10;
         $offset = ($page - 1) * $perPage;
         return $this->listingModel->listAll($perPage, $offset);
