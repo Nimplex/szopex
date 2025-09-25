@@ -13,9 +13,12 @@ class Listing
         $this->db = $db;
     }
 
-    public function getAll(): ?array
+    public function listAll(int $limit, int $offset): ?array
     {
-        $stmt = $this->db->prepare('SELECT * FROM listings');
+        $stmt = $this->db->prepare('SELECT * FROM listings ORDER BY created_at DESC LIMIT :limit OFFSET :offset');
+        // I'm using bindValue to enforce use of INT
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: null;
     }
@@ -41,4 +44,3 @@ class Listing
         ]);
     }
 }
-
