@@ -25,7 +25,10 @@ $listingController = new ListingController($listingService);
 $path = $_SERVER['PATH_INFO'] ?? '/';
 $method = $_SERVER['REQUEST_METHOD'];
 
-if ($path === '/register' && $method === 'POST') {
+if ($path === "/") {
+    echo 'home page???<br>';
+    echo 'is logged in: ' . (isset($_SESSION['user_id']) ? 'true' : 'false');
+} elseif ($path === '/register' && $method === 'POST') {
     $res = $authController->register($_POST);
     echo $res;
 } elseif ($path === '/login' && $method === 'POST') {
@@ -34,10 +37,10 @@ if ($path === '/register' && $method === 'POST') {
 } elseif ($path === '/logout') {
     session_destroy();
     echo 'Logged out';
-} elseif ($path === '/listings' && $method === 'GET') {
+} elseif ($path === '/api/listings' && $method === 'GET') {
     $res = $listingController->listAll($_GET);
     echo $res;
 } else {
-    header('Location: /404.php');
+    require __DIR__ . '/404.php';
     die;
 }

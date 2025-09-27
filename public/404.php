@@ -1,3 +1,4 @@
+<?php http_response_code(404); ?>
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -7,9 +8,6 @@
     <title>404</title>
 </head>
 <body>
-    <?php
-        http_response_code(404);
-    ?>
     <h1>Not found</h1>
 </body>
 

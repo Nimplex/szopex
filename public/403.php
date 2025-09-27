@@ -1,15 +1,13 @@
+<?php http_response_code(403); ?>
 <!DOCTYPE html>
 <html lang="pl">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>404</title>
+    <title>403</title>
 </head>
 <body>
-    <?php
-        http_response_code(403);
-    ?>
     <h1>Forbidden</h1>
 </body>
 
