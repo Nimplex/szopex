@@ -45,8 +45,8 @@ class Listing extends BaseDBModel
 
     public function listAll(int $page): ?array
     {
-        $page = max($this->MIN_PAGE, min($this->MAX_PAGE, $page));
-        $offset = ($page - 1) * $this->PER_PAGE;
-        return $this->_listAll($this->PER_PAGE, $offset);
+        $page = max(Listing::MIN_PAGE, min(Listing::MAX_PAGE, $page));
+        $offset = ($page - 1) * Listing::PER_PAGE;
+        return $this->_listAll(Listing::PER_PAGE, $offset);
     }
 }

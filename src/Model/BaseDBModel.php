@@ -6,9 +6,9 @@ use PDO;
 
 class BaseDBModel
 {
-    private PDO $db;
+    protected PDO $db;
 
-    protected function __construct(PDO $db)
+    public function __construct(PDO $db)
     {
         $this->db = $db;
     }

@@ -4,7 +4,7 @@ namespace App\Model;
 
 use PDO;
 
-class User extends BaseDBModel
+class Auth extends BaseDBModel
 {
     private function _findByEmail(string $email): ?array
     {

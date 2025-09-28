@@ -6,10 +6,10 @@ session_start();
 require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/../vendor/autoload.php';
 
-use App\Model\User;
+use App\Model\Auth;
 use App\Model\Listing;
 
-$auth = new User($db);
+$auth = new Auth($db);
 $listing = new Listing($db);
 
 $path = $_SERVER['PATH_INFO'] ?? '/';
