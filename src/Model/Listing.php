@@ -37,11 +37,11 @@ class Listing extends BaseDBModel
             ':user_id' => $user_id,
             ':title' => $title,
             ':price' => $price,
-            ':description' => $description
+            ':description' => $description,
         ]);
     }
 
-    // --- public methods --- 
+    // --- public methods ---
 
     public function listAll(int $page): ?array
     {

@@ -22,13 +22,13 @@ class Auth extends BaseDBModel
         $hash = password_hash($password, PASSWORD_ARGON2ID, [
             'memory_cost' => 1 << 16,
             'time_cost' => 4,
-            'threads' => 2
+            'threads' => 2,
         ]);
 
         return $stmt->execute([
             ':login' => $login,
             ':email' => $email,
-            ':password_hash' => $hash
+            ':password_hash' => $hash,
         ]);
     }
 
