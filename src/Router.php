@@ -21,7 +21,7 @@ class Router
     public function GET(string $path, \Closure $callback): Router
     {
         if (isset($this->routes[['GET', $path]])) {
-            throw new \ErrorException("");
+            throw new \ErrorException("'{$path}' has been already registered");
         }
         return $this->_registerRoute('GET', $path, $callback);
     }
