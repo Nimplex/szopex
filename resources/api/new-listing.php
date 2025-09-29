@@ -7,7 +7,7 @@
 ] = $_POST;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-$listing = (new App\Builder\ListingBuilder)->make();
+$listing = (new App\Builder\ListingBuilder())->make();
 $status = $listing->create($title, $price, $description);
 
 // send '303 See Other' to redirect to page

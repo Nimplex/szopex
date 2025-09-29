@@ -1,1 +1,3 @@
-<?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-index.php';
+<?php
+
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-index.php';

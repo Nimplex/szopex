@@ -1,4 +1,5 @@
 <?php
+
 @session_start();
 if (!isset($_SESSION['user_id'])) {
     require __DIR__ . '/../public/401.php';

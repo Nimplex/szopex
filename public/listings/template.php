@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SERVER['HTTP_HX_REQUEST'])) {
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-$listing = (new App\Builder\ListingBuilder)->make();
+$listing = (new App\Builder\ListingBuilder())->make();
 
 $page = $_GET['page'] ?: 1;
 

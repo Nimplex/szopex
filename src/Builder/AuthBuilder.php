@@ -6,7 +6,6 @@ use App\Model\Auth;
 
 class AuthBuilder
 {
-
     public function make(): Auth
     {
         require __DIR__ . '/../../bootstrap.php';

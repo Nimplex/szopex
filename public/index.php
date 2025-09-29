@@ -7,6 +7,7 @@ require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use App\Model\Auth;
+
 $auth = new Auth($db);
 
 $path = $_SERVER['PATH_INFO'] ?? '/';

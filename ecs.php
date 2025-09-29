@@ -2,35 +2,20 @@
 
 declare(strict_types=1);
 
-use PhpCsFixer\Fixer\ArrayNotation\ArraySyntaxFixer;
-use PhpCsFixer\Fixer\ListNotation\ListSyntaxFixer;
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
+use PhpCsFixer\Fixer\Whitespace\IndentationTypeFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
     ->withPaths([
         __DIR__ . '/public',
+        __DIR__ . '/resources',
         __DIR__ . '/src',
+        __DIR__ . '/migrations',
     ])
 
-    // add a single rule
     ->withRules([
         NoUnusedImportsFixer::class,
-        ListSyntaxFixer::class,
+        IndentationTypeFixer::class,
     ])
-
-    ->withConfiguredRule(
-        ArraySyntaxFixer::class,
-        array('syntax' => 'short')
-    )
-
-    // add sets - group of rules, from easiest to more complex ones
-    // uncomment one, apply one, commit, PR, merge and repeat
-    ->withPreparedSets(
-          docblocks: true,
-          arrays: true,
-          // spaces: true,
-          // namespaces: true,
-          // comments: true,
-    )
-    ;
+    ->withPreparedSets(psr12: true);
