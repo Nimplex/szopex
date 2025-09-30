@@ -43,11 +43,11 @@ class Router
     /**
      * Register a GET route.
      * It is shorthand for `_registerRoute('GET', $path, $route);`
-     * 
+     *
      * @param Closure(array $query, array $body): mixed $callback
      *        Receives $_GET and $_POST arrays.
      *
-     * @return self
+     * @return Route
      */
     public function GET(string $path, \Closure $callback): Route
     {
@@ -65,11 +65,11 @@ class Router
     /**
      * Register a POST route.
      * It is shorthand for `_registerRoute('POST', $path, $route);`
-     * 
+     *
      * @param Closure(array $query, array $body): mixed $callback
      *        Receives $_GET and $_POST arrays.
      *
-     * @return self
+     * @return Route
      */
     public function POST(string $path, \Closure $callback): Route
     {
@@ -87,12 +87,12 @@ class Router
     /**
      * Register a ERROR route.
      * It is shorthand for `_registerRoute('ERROR', $path, $route);`
-     * 
+     *
      * @param Closure(array $query, array $body): mixed $callback
      *        Receives $_GET and $_POST arrays.
      *
-     * @return self
-     */ 
+     * @return Route
+     */
     public function ERROR(string $code, \Closure $callback): Route
     {
         if (isset($this->routes[$code]['ERROR'])) {
@@ -106,6 +106,9 @@ class Router
         return $route;
     }
 
+    /**
+     * Handle all requests
+     */
     public function handle()
     {
         $path = $_SERVER['PATH_INFO'] ?? '/';
