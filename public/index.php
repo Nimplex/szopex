@@ -6,12 +6,10 @@ session_start();
 require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/../vendor/autoload.php';
 
-require __DIR__ . '/router.php';
-
 use App\Model\Auth;
 
 $auth = new Auth($db);
-$router = new Router();
+$router = new App\Router();
 
 $test_middleware = function() {
     $query_str = json_encode($_GET);
