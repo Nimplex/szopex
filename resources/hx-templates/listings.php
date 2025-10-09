@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
+
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 $listing = (new App\Builder\ListingBuilder())->make();
 

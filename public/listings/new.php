@@ -1,6 +1,5 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-404.php';
 ?>
 
 <!DOCTYPE html>

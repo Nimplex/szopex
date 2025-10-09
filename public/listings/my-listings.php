@@ -1,11 +1,5 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
-
-$_target = "/listings/my-listings.php";
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-index.php';
-
-// ==========================
-
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 $listingModel = (new App\Builder\ListingBuilder())->make();
 ?>

@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <form action="/register" method="POST">
+    <form action="/api/register" method="POST">
         <label>Nazwa użytkownika: <input type="text" name="login" required></label><br>
         <label>E-mail: <input type="email" name="email" required></label><br>
         <label>Hasło: <input type="password" name="password" required></label><br>

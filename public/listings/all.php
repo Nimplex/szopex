@@ -1,7 +1,10 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
-$_target = "/listings.php";
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-index.php';
+
+if (isset($_SERVER['HTTP_HX_REQUEST'])) {
+    require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/listings.php';
+    die;
+}
 ?>
 
 <!DOCTYPE HTML>

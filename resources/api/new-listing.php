@@ -16,4 +16,4 @@ try {
 }
 
 // send '303 See Other' to redirect to page
-header('Location: /listings/my-listings' . ($status == 0 ? "?ok=1" : "/new?err=$status"), true, 303);
+header('Location: /listings/' . ($status == 0 ? "my-listings?ok=1" : "new?err=$status"), true, 303);

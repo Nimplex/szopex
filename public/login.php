@@ -1,4 +1,3 @@
-<?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/no-hx-index.php'; ?>
 <!DOCTYPE HTML>
 <html lang="pl">
 
