@@ -1,12 +1,9 @@
 <?php
-
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+
 $listing = (new App\Builder\ListingBuilder())->make();
-
-$page = max($_GET['page'] ?: 1, 1);
+$page = max($_GET['page'] ?? 1, 1);
 ?>
-
-
 
 <?php foreach ($listing->listAll($page) as $lis): ?>
 <article>
@@ -21,6 +18,14 @@ $page = max($_GET['page'] ?: 1, 1);
 </article>
 <?php endforeach; ?>
 <?php if (!empty($listing->listAll($page + 1))): ?>
-<div class="target" aria-hidden="true" hx-get="?page=<?= $page + 1 ?>" hx-target="this" hx-swap="outerHTML" hx-trigger="revealed"></div>
+<div
+    class="target"
+    aria-hidden="true"
+    hx-get="?page=<?= $page + 1 ?>"
+    hx-target="this"
+    hx-swap="outerHTML"
+    hx-trigger="revealed"
+    hx-indicator="#throbber"
+></div>
 <?php endif; ?>
 

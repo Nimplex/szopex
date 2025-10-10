@@ -1,10 +1,3 @@
-<?php
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
-use App\FlashMessage;
-
-$msg = new FlashMessage();
-?>
 <!DOCTYPE HTML>
 <html lang="pl">
 

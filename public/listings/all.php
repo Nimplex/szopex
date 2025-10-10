@@ -22,8 +22,9 @@ if (isset($_SERVER['HTTP_HX_REQUEST'])) {
     <div id="listings-outer">
         <div id="offers">
             <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/listings.php'; ?>
+            <!-- this is just a placeholder, later we can put something else in here -->
+            <span id="throbber" class="htmx-indicator">Loading...</span>
         </div>
-        <span class=""></span>
     </div>
 </body>
 
