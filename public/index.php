@@ -42,17 +42,11 @@ $test_middleware = function () {
 
 $router->GET("/", function () {
     echo 'home page???<br>';
-    echo 'is logged in: ' . (isset($_SESSION['user_id']) ? 'true' : 'false');
-    echo '<br><a href="/api/logout">Logout</a>';
+    echo 'is logged in: ' . (isset($_SESSION['user_id']) ? 'true<br><a href="/api/logout">Logout</a>' : 'false');
 })->with($test_middleware);
 
 $router->POST('/api/register', function () use ($auth) {
     $res = $auth->register_from_request($_POST);
-    echo $res;
-});
-
-$router->POST('/api/login', function () use ($auth) {
-    $res = $auth->login_from_request($_POST);
     echo $res;
 });
 
@@ -62,12 +56,11 @@ $router->GET('/api/logout', function () {
     die;
 });
 
-$router->POST('/api/new-listing', function () {
-    include __DIR__ . '/../resources/api/new-listing.php';
-});
+$router->POST('/api/login', fn () => require __DIR__ . '/../resources/api/login.php');
+$router->POST('/api/new-listing', fn () => require __DIR__ . '/../resources/api/new-listing.php');
 
 $router->DEFAULT(function () {
-    include __DIR__ . '/404.php';
+    require __DIR__ . '/404.php';
     die;
 });
 

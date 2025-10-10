@@ -8,7 +8,7 @@ $page = max($_GET['page'] ?: 1, 1);
 
 
 
-<?php foreach($listing->listAll($page) as $lis): ?>
+<?php foreach ($listing->listAll($page) as $lis): ?>
 <article>
     <main>
         <h2><?= $lis['title'] ?></h2>
