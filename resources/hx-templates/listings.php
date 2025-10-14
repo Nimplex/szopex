@@ -7,12 +7,21 @@ $page = max($_GET['page'] ?? 1, 1);
 
 <?php foreach ($listing->listAll($page) as $lis): ?>
 <article>
+    <?php if (!empty($lis['cover_file_id'])) {
+        echo "
+            <header>
+                <img src=\"/covers/${lis['cover_file_id']}\">
+                <hr />
+            </header>
+        ";
+        }
+    ?>
     <main>
         <h2><?= $lis['title'] ?></h2>
         <p><?= $lis['description'] ?></p>
     </main>
     <footer>
-        <hr>
+        <hr />
         <h2><?= $lis['price'] ?></h2>
     </footer>
 </article>

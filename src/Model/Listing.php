@@ -16,8 +16,22 @@ class Listing extends BaseDBModel
 
     private function _listAll(int $limit, int $offset): array
     {
-        $stmt = $this->db->prepare('SELECT * FROM listings ORDER BY created_at DESC LIMIT :limit OFFSET :offset');
-        // I'm using bindValue to enforce use of INT
+        $stmt = $this->db->prepare(
+            'SELECT 
+            l.id AS listing_id,
+            l.user_id,
+            l.title,
+            l.price,
+            l.description,
+            l.created_at,
+            c.file_id AS cover_file_id
+         FROM listings l
+         LEFT JOIN covers c 
+            ON c.listing_id = l.id 
+           AND c.main = TRUE
+         ORDER BY l.created_at DESC
+         LIMIT :limit OFFSET :offset'
+        );       // I'm using bindValue to enforce use of INT
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
