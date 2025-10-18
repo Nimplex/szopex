@@ -104,7 +104,7 @@ class Listing extends BaseDBModel
             throw new \InvalidArgumentException("Nieprawidłowy format ceny", 1);
         }
 
-        $parsed_price = str_replace(',', '.', $price);
+        $parsed_price = str_replace('.', ',', $price);
 
         $res = $this->_create($_SESSION['user_id'], $title, $parsed_price, $description);
     }

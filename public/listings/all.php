@@ -13,7 +13,7 @@ if (isset($_SERVER['HTTP_HX_REQUEST'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/_css/listings.css">
+    <link rel="stylesheet" href="/_css/all_listings.css">
     <script src="/_js/htmx.min.js"></script>
     <title>Oferty</title>
 </head>
