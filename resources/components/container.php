@@ -33,7 +33,10 @@ if (!in_array($lang, $allowed, true)) {
 </head>
 
 <body>
-    <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/navbar.php'; ?>
+    <?php
+    if (!isset($no_navbar)) {
+        require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/navbar.php';
+    } ?>
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/message-box.php'; ?>
 
     <main>
@@ -44,7 +47,7 @@ if (!in_array($lang, $allowed, true)) {
 
     <?php if (function_exists('render_scripts')) {
         echo render_scripts();
-        } ?>
+    } ?>
 
     <script>
         lucide.createIcons();
