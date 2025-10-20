@@ -19,6 +19,7 @@ main hr {
 #offers article {
   display: flex;
   padding: 1rem;
+  margin-bottom: 1rem;
   gap: 1.5rem;
   background: var(--gray-bg);
   border: 1px solid var(--border-gray);
