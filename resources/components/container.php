@@ -26,6 +26,7 @@ if (!in_array($lang, $allowed, true)) {
     <link rel="stylesheet" href="/_css/base.css">
     <link rel="preconnect" href="https://rsms.me/">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <?php if (function_exists('render_head')) {
         echo render_head();
     } ?>
@@ -35,12 +36,19 @@ if (!in_array($lang, $allowed, true)) {
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/navbar.php'; ?>
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/message-box.php'; ?>
 
+    <main>
     <?php if (function_exists('render_content')) {
         echo render_content();
     } ?>
+    </main>
+
     <?php if (function_exists('render_scripts')) {
         echo render_scripts();
-    } ?>
+        } ?>
+
+    <script>
+        lucide.createIcons();
+    </script>
 
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/footer.php'; ?>
 </body>
