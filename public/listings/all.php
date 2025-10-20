@@ -24,12 +24,10 @@ function render_content()
     
     return <<<HTML
     <h1>Aktualne oferty</h1>
-    <div id="listings-outer">
-        <div id="offers">
-            $listings
-            <!-- this is just a placeholder, later we can put something else in here -->
-            <span id="throbber" class="htmx-indicator">Loading...</span>
-        </div>
+    <div id="offers">
+        $listings
+        <!-- this is just a placeholder, later we can put something else in here -->
+        <span id="throbber" class="htmx-indicator">Loading...</span>
     </div>
     HTML;
 }
