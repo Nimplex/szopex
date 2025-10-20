@@ -15,8 +15,30 @@ class Auth extends BaseDBModel
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
+    private function _login_repeats(string $login): bool
+    {
+        $stmt = $this->db->prepare('SELECT 1 FROM users WHERE login = ?');
+        $stmt->execute([$login]);
+        return !empty($stmt->fetch(PDO::FETCH_ASSOC) ?: null);
+    }
+
+    private function _email_repeats(string $email): bool
+    {
+        $stmt = $this->db->prepare('SELECT 1 FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        return !empty($stmt->fetch(PDO::FETCH_ASSOC) ?: null);
+    }
+
     private function _create(string $login, string $display_name, string $email, string $password): bool
     {
+        if ($this->_login_repeats($login)) {
+            throw new \InvalidArgumentException('Ten login już jest w użyciu', 1);
+        }
+
+        if ($this->_email_repeats($email)) {
+            throw new \InvalidArgumentException('Ten adres e-mail już jest w użyciu', 1);
+        }
+        
         $stmt = $this->db->prepare('INSERT INTO users (login, display_name, email, password_hash) VALUES (:login, :display_name, :email, :password_hash)');
 
         // https://www.php.net/manual/en/function.password-hash.php
@@ -49,7 +71,7 @@ class Auth extends BaseDBModel
         if (strlen($password) < Auth::MIN_PASS_LENGTH) {
             throw new \InvalidArgumentException("Hasło musi składać się z conajmniej ${Auth::MIN_PASS_LENGTH} znaków", 1);
         }
-        
+
         return $this->_create($login, $display_name, $email, $password);
     }
 

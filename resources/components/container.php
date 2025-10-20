@@ -11,6 +11,8 @@ if (!in_array($lang, $allowed, true)) {
 // that. It is used by templates to render it's custom content.
 //
 
+/** @var string $title */
+/** @var bool $no_navbar */
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +20,7 @@ if (!in_array($lang, $allowed, true)) {
 
 <head>
     <meta charset="utf-8">
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="dark">
     <title><?= $title ?? 'Neovim enjoyers club'?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preload" href="/_css/base.css" as="style">

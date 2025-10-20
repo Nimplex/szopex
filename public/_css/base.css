@@ -209,6 +209,13 @@ button {
   transition: 250ms all;
 }
 
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"] {
+  cursor: text;
+}
+
 button svg {
   width: 1em;
   height: 1em;

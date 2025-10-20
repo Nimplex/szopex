@@ -1,0 +1,7 @@
+summary > div {
+    display: inline-block;
+}
+
+.summary-title {
+    font-size: large;
+}

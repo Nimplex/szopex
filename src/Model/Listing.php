@@ -94,7 +94,8 @@ class Listing extends BaseDBModel
         return $this->_listAll(Listing::PER_PAGE, $offset);
     }
 
-    public function get(int $id) {
+    public function get(int $id): ?array
+    {
         if (!$id) {
             throw new \InvalidArgumentException("Not enough arguments");
         }
@@ -126,7 +127,7 @@ class Listing extends BaseDBModel
             );
         }
 
-        if (!preg_match('/^\d+(?:(?:,|\.)\d\d)?$/', $price)) {
+        if (!preg_match('/^\d{,4}(?:(?:,|\.)\d\d)?$/', $price)) {
             throw new \InvalidArgumentException("Nieprawidłowy format ceny", 1);
         }
 

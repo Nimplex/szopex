@@ -3,14 +3,14 @@
 $title = 'Rejestracja';
 $no_navbar = true;
 
-function render_head()
+function render_head(): string
 {
     return <<<HTML
     <link rel="stylesheet" href="/_css/register.css">
     HTML;
 }
 
-function render_content()
+function render_content(): string
 {
     return <<<HTML
     <form action="/api/register" method="POST">
@@ -22,8 +22,8 @@ function render_content()
         <input type="submit" value="Zarejestruj się">
         <footer role="contentinfo">
             <p class="small-text">
-                Korzystając z serwisu, akceptujesz 
-                <a href="/terms-of-use">Regulamin</a> i 
+                Korzystając z serwisu, akceptujesz
+                <a href="/terms-of-use">Regulamin</a> i
                 <a href="/privacy-policy">Politykę prywatności</a>.
             </p>
         </footer>

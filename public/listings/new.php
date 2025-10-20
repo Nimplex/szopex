@@ -34,7 +34,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
                     class="money-input"
                     type="text"
                     inputmode="numeric"
-                    pattern="\d+((,|\.)\d\d)?"
+                    pattern="\d{,4}((,|\.)\d\d)?"
                     name="price"
                     placeholder="5,00"
                     required

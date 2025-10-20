@@ -56,5 +56,9 @@ $page = max($_GET['page'] ?? 1, 1);
     hx-trigger="revealed"
     hx-indicator="#throbber"
 ></div>
+<?php else: ?>
+<div class="content-end">
+    &mdash; Nic więcej tu nie ma! &mdash;
+</div>
 <?php endif; ?>
 

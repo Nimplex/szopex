@@ -7,9 +7,10 @@ use App\FlashMessage;
 global $auth;
 
 try {
-    $auth->login_from_request($_POST);
-    header('Location: /?login=1', true, 303);
+    $auth->register_from_request($_POST);
+    (new FlashMessage())->setOk('Rejestracja udana!');
+    header('Location: /login.php', true, 303);
 } catch (\InvalidArgumentException $e) {
     (new FlashMessage())->fromException($e);
-    header('Location: /login.php', true, 303);
+    header('Location: /register.php', true, 303);
 }

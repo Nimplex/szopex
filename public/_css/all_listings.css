@@ -41,8 +41,6 @@ main hr {
 }
 
 @media only screen and (max-width: 1000px) {
-  #offers article .vr {
-  }
   #offers article {
     flex-direction: column;
   }
@@ -84,6 +82,7 @@ main hr {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-width: 260px;
 }
 
 #offers article footer button {
@@ -91,8 +90,9 @@ main hr {
   width: 100%;
 }
 
-.htmx-indicator {
-  grid-column: 1 / -1;
+.htmx-indicator,
+.content-end {
   text-align: center;
-  font-size: 3rem;
+  font-size: 2rem;
+  color: #999;
 }
