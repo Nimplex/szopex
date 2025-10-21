@@ -1,4 +1,5 @@
 <?php
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
 
 $filename = $_GET['file'] ?? '';
 $baseDir = realpath($_SERVER['DOCUMENT_ROOT'] . '/../storage/covers') . DIRECTORY_SEPARATOR;

@@ -2,36 +2,23 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 $listingModel = (new App\Builder\ListingBuilder())->make();
-?>
 
-<!DOCTYPE html>
-<html>
+$title = "Oferty użytkownika {$_SESSION['user_display_name']}";
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/_css/main.css">
-    <title>Moje oferty</title>
-</head>
-<body>
-    <h1>Moje oferty</h1>
-    <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/message-box.php'; ?>
-    <div>
-        <?php foreach ($listingModel->listByUser($_SESSION['user_id']) as $listing): ?>
+function render_content() {
+    global $listingModel;
+    $html = "<h1>Moje oferty</h1><div>";
+    foreach ($listingModel->listByUser($_SESSION['user_id']) as $listing) {
+        $html .= <<<HTML
         <div class="listing">
-            <div class="listing-title">
-                <?= $listing['title'] ?>
-            </div>
-            <div class="listing-price">
-                <?= $listing['price'] ?>
-            </div>
-            <div class="listing-timestamp">
-                <?= $listing['updated_at'] ?>
-            </div>
-            <br>
+            <div class="listing-title">{$listing['title']}</div>
+            <div class="listing-price">{$listing['price']}</div>
+            <div class="listing-timestamp">{$listing['updated_at']}</div>
         </div>
-        <?php endforeach; ?>
-    </div>
-</body>
+        HTML;
+    }
+    $html .= "</div>";
+    return $html;
+}
 
-</html>
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
