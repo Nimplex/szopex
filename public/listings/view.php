@@ -54,8 +54,7 @@ function render_content(): string
         HTML;
     }
 
-    $template = <<<HTML
-    <div class="row">
+    $carousel_section = ($array_size == 0) ? null : <<<HTML
         <section class="carousel" role="region" aria-roledescription="carousel" aria-label="Zdjęcia oferty">
             <div id="cover-container">
                 <img src="/covers.php?file={$main_cover}" id="main-cover">
@@ -65,6 +64,11 @@ function render_content(): string
             <hr>
             {$carousel}
         </section>
+    HTML;
+
+    $template = <<<HTML
+    <div class="row">
+        {$carousel_section}
         <div id="inner-container">
             <h1>{$title}</h1>
             <hr>
