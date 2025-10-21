@@ -58,7 +58,7 @@ class Listing extends BaseDBModel
            ON u.id = l.user_id
         LEFT JOIN covers c
            ON c.listing_id = l.id
-        WHERE id = ?
+        WHERE l.id = ?
         ');
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;

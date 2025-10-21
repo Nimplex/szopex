@@ -6,7 +6,7 @@ $page = max($_GET['page'] ?? 1, 1);
 ?>
 
 <?php foreach ($listing->listAll($page) as $lis): ?>
-<a id="offers" class="offer-card" href="/listings/<?= $lis['listing_id'] ?>" role="link">
+<a id="offers" class="offer-card" href="/listings/view.php?listing=<?= urlencode($lis['listing_id']) ?>" role="link">
     <article>
         <?php if (!empty($lis['cover_file_id'])):
             $encoded_file = urlencode($lis['cover_file_id']); ?>
