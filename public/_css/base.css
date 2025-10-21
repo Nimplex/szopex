@@ -12,7 +12,7 @@
     "liga" 1,
     "calt" 1, /* Contextual alternates */
     "tnum" 1, /* Tabular numbers */
-    "zero" 1, /* Slashed zero Slashed zero */
+    "zero" 1, /* Slashed zero */
     "ss02" 1, /* Disambiguation */
     "ss03" 1; /* Round quotes & comma */
   font-variant-numeric: tabular-nums;
