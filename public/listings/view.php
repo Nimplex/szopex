@@ -1,6 +1,8 @@
 <?php
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../src/WebpackManifest.php';
+use App\WebpackManifest;
 
 $listing_id = $_GET['listing'];
 
@@ -13,8 +15,9 @@ $title = htmlspecialchars($listing['title']);
 
 function render_head(): string
 {
+    $style_path = WebpackManifest::asset('view.css');
     return <<<HTML
-    <link rel="stylesheet" href="/_css/view.css">
+    <link rel="stylesheet" href="{$style_path}">
     HTML;
 }
 

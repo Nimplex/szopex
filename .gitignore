@@ -1,3 +1,6 @@
 /vendor/
 .env
 storage
+public/_js
+public/_css
+node_modules

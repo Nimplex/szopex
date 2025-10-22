@@ -1,12 +1,15 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../src/WebpackManifest.php';
+use App\WebpackManifest;
 
 $title = 'Logowanie';
 $no_navbar = true;
 
 function render_head(): string
 {
+    $style_path = WebpackManifest::asset('login.css');
     return <<<HTML
-    <link rel="stylesheet" href="/_css/login.css">
+    <link rel="stylesheet" href="{$style_path}">
     HTML;
 }
 

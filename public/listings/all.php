@@ -7,12 +7,16 @@ if (isset($_SERVER['HTTP_HX_REQUEST'])) {
     die;
 }
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../src/WebpackManifest.php';
+use App\WebpackManifest;
+
 $title = 'Ogłoszenia';
 
 function render_head()
 {
+    $style_path = WebpackManifest::asset('all_listings.css');
     return <<<HTML
-    <link rel="stylesheet" href="/_css/all_listings.css">
+    <link rel="stylesheet" href="{$style_path}">
     HTML;
 }
 
@@ -30,13 +34,6 @@ function render_content()
         <!-- this is just a placeholder, later we can put something else in here -->
         <div id="throbber" class="htmx-indicator">Wczytywanie...</span>
     </div>
-    HTML;
-}
-
-function render_scripts()
-{
-    return <<<HTML
-    <script src="/_js/htmx.min.js"></script>
     HTML;
 }
 

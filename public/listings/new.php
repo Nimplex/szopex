@@ -4,6 +4,18 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
 
 $title = "Nowe ogłoszenie";
 
+function render_head()
+{
+    return <<<HTML
+        <link rel="stylesheet" href="<?= WebpackManifest::asset('new.css') ?>">
+        <style>
+        .money-input {
+            width: 5em;
+        }
+    </style>
+    HTML;
+}
+
 function render_content()
 {
     return <<<HTML
@@ -40,18 +52,6 @@ function render_content()
             <p></p>
         </div>
     </div>
-    HTML;
-}
-
-function render_head()
-{
-    return <<<HTML
-        <link rel="stylesheet" href="/_css/new.css">
-        <style>
-        .money-input {
-            width: 5em;
-        }
-    </style>
     HTML;
 }
 
