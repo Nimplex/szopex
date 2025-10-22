@@ -12,7 +12,7 @@ function render_head()
         .money-input {
             width: 5em;
         }
-    </style>
+        </style>
     HTML;
 }
 
