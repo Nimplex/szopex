@@ -1,8 +1,10 @@
 <?php
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../src/ISO3166.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../src/WebpackManifest.php';
 use App\WebpackManifest;
+
 
 $listing_id = $_GET['listing'];
 
@@ -12,6 +14,20 @@ $listing = $listingBuilder->get($listing_id);
 $listing_covers = $listingBuilder->getCovers($listing_id);
 
 $title = htmlspecialchars($listing['title']);
+
+$key_lookup_table = [
+    'isbn' => 'ISBN',
+    'cover' => 'Okładka',
+    'genre' => 'Gatunek',
+    'pages' => 'Strony',
+    'title' => 'Tytuł',
+    'author' => 'Autor',
+    'release' => 'Data wydania',
+    'language' => 'Język',
+    'condition' => 'Stan',
+    'publisher' => 'Wydawca',
+    'subject' => 'Przedmiot',
+];
 
 function render_head(): string
 {
@@ -23,7 +39,7 @@ function render_head(): string
 
 function render_content(): string
 {
-    global $title, $listing, $listing_covers;
+    global $title, $listing, $listing_covers, $key_lookup_table;
 
     $array_size = count($listing_covers);
     $disabled = $array_size <= 1 ? "disabled" : null;
@@ -49,9 +65,17 @@ function render_content(): string
     foreach (json_decode($listing['attributes']) as $attribute => $value) {
         $attribute = htmlspecialchars($attribute);
         $value = htmlspecialchars($value);
+
+        switch ($attribute) {
+        case 'language':
+                $language = iso3_to_language($value);
+                $value = "{$language['normalized']} ({$language['localized']})";
+                break;
+        }
+
         $attributes .= <<<HTML
         <tr>
-            <th class="with-icon"><i data-lucide="table-properties" aria-hidden="true"></i>{$attribute}</th>
+            <th class="with-icon"><i data-lucide="table-properties" aria-hidden="true"></i>{$key_lookup_table[$attribute]}</th>
             <td>{$value}</td>
         </tr>
         HTML;

@@ -105,6 +105,12 @@ img {
   gap: 2rem;
 }
 
+#data-section div:first-of-type {
+  background: var(--gray-bg);
+  border: 1px solid var(--border-gray);
+  padding: 1rem;
+}
+
 #data-section div:first-of-type > p:first-of-type {
   margin-bottom: 0.5rem;
 }
