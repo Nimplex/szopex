@@ -7,7 +7,7 @@ $title = "Nowe ogłoszenie";
 function render_head()
 {
     return <<<HTML
-        <link rel="stylesheet" href="<?= WebpackManifest::asset('new.css') ?>">
+        <link rel="stylesheet" href="{WebpackManifest::asset('new.css')}">
         <style>
         .money-input {
             width: 5em;
