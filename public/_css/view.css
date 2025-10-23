@@ -122,16 +122,17 @@ img {
 }
 
 #details {
-  padding: 0.25rem;
   width: 100%;
   flex: 1;
   border: 1px solid var(--border-gray);
   border-radius: var(--radius);
+  border-spacing: 0;
 }
 
 #details tr {
   display: flex;
   flex-direction: column;
+  padding: 0.25rem;
 }
 
 #details tr:nth-child(even) {
