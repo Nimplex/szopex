@@ -112,6 +112,7 @@ nav {
   font-size: 1rem;
   background: var(--gray-bg);
   border-bottom: 2px solid var(--border-gray);
+  position: relative;
 }
 
 .nav-inner {
@@ -124,7 +125,7 @@ nav {
   gap: 2rem;
 }
 
-.nav-inner > :first-child {
+.nav-inner > .desktop:first-child {
   justify-self: start;
 }
 
@@ -132,7 +133,7 @@ nav {
   justify-self: center;
 }
 
-.nav-inner > :last-child {
+.nav-inner > .desktop:nth-child(3) {
   justify-self: end;
 }
 
@@ -164,6 +165,58 @@ nav a {
 nav a:hover {
   color: var(--accent);
   border-bottom-color: var(--accent);
+}
+
+nav .mobile {
+  display: none;
+}
+
+nav .mobile {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#mobile-container {
+  margin-top: 1rem;
+  background: var(--gray-bg);
+  border-top: 1px solid var(--border-gray);
+  padding: 1rem 0;
+  flex-direction: column;
+  display: revert;
+}
+
+#mobile-container > li > a {
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+@media (max-width: 1000px) {
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  nav .desktop {
+    display: none;
+  }
+  nav .mobile {
+    display: flex;
+    justify-self: end;
+  }
+  .inline-input {
+    max-width: unset !important;
+    flex: 1;
+    width: 100%;
+  }
+  #mobile-container[hidden] {
+    display: none;
+  }
+  #mobile-container:not([hidden]) {
+    display: flex;
+  }
 }
 
 /*
