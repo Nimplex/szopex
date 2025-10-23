@@ -1,9 +1,8 @@
 <?php
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/../src/ISO3166.php';
-use function App\iso3_to_language;
 
+$iso = new Matriphe\ISO639\ISO639();
 $listingBuilder = (new App\Builder\ListingBuilder())->make();
 
 $listing_id = $_GET['listing'];
@@ -13,17 +12,50 @@ $listing_covers = $listingBuilder->getCovers($listing_id);
 $title = htmlspecialchars($listing['title']);
 
 $key_lookup_table = [
-    'isbn' => 'ISBN',
-    'cover' => 'Okładka',
-    'genre' => 'Gatunek',
-    'pages' => 'Strony',
-    'title' => 'Tytuł',
-    'author' => 'Autor',
-    'release' => 'Data wydania',
-    'language' => 'Język',
-    'condition' => 'Stan',
-    'publisher' => 'Wydawca',
-    'subject' => 'Przedmiot',
+    'isbn' => [
+        'display' => 'ISBN',
+        'icon' => 'barcode',
+    ],
+    'cover' => [
+        'display' => 'Okładka',
+        'icon' => 'book',
+    ],
+    'genre' => [
+        'display' => 'Gatunek',
+        'icon' => 'drama',
+    ],
+    'pages' => [
+        'display' => 'Strony',
+        'icon' => 'book-open-text',
+    ],
+    'title' => [
+        'display' => 'Tytuł',
+        'icon' => 'case-sensitive',
+    ],
+    'author' => [
+        'display' => 'Autor',
+        'icon' => 'signature',
+    ],
+    'release' => [
+        'display' => 'Data wydania',
+        'icon' => 'table-properties',
+    ],
+    'language' => [
+        'display' => 'Język',
+        'icon' => 'languages',
+    ],
+    'condition' => [
+        'display' => 'Stan',
+        'icon' => 'brush-cleaning',
+    ],
+    'publisher' => [
+        'display' => 'Wydawca',
+        'icon' => 'building',
+    ],
+    'subject' => [
+        'display' => 'Przedmiot',
+        'icon' => 'case-sensitive',
+    ],
 ];
 
 function render_head(): string
@@ -35,7 +67,7 @@ function render_head(): string
 
 function render_content(): string
 {
-    global $title, $listing, $listing_covers, $key_lookup_table;
+    global $title, $listing, $listing_covers, $key_lookup_table, $iso;
 
     $array_size = count($listing_covers);
     $disabled = $array_size <= 1 ? "disabled" : null;
@@ -64,14 +96,15 @@ function render_content(): string
 
         switch ($attribute) {
             case 'language':
-                $language = iso3_to_language($value);
-                $value = "{$language['normalized']} ({$language['localized']})";
+                $language = $iso->languageByCode2t($value, true);
+                $native_language = $iso->nativeByCode2t($value, true);
+                $value = "{$native_language} ({$language})";
                 break;
         }
 
         $attributes .= <<<HTML
         <tr>
-            <th class="with-icon"><i data-lucide="table-properties" aria-hidden="true"></i>{$key_lookup_table[$attribute]}</th>
+            <th class="with-icon"><i data-lucide="{$key_lookup_table[$attribute]['icon']}" aria-hidden="true"></i>{$key_lookup_table[$attribute]['display']}</th>
             <td>{$value}</td>
         </tr>
         HTML;
