@@ -96,7 +96,11 @@ main hr {
 
 .htmx-indicator,
 .content-end {
+  display: none;
   text-align: center;
   font-size: 2rem;
-  color: #999;
+}
+
+.htmx-request.htmx-indicator {
+  display: block;
 }

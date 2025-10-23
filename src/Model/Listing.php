@@ -95,6 +95,19 @@ class Listing extends BaseDBModel
 
     // --- public methods ---
 
+    public function count(): int
+    {
+        $stmt = $this->db->prepare('SELECT COUNT(*) FROM listings');
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function countPages(): int
+    {
+        $rows = $this->count();
+        return ceil($rows / Listing::PER_PAGE);
+    }
+
     public function listAll(int $page): array
     {
         $page = max(Listing::MIN_PAGE, min(Listing::MAX_PAGE, $page));
