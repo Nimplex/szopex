@@ -170,10 +170,6 @@ nav a:hover {
 
 nav .mobile {
   display: none;
-}
-
-nav .mobile {
-  display: none;
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -192,6 +188,11 @@ nav .mobile {
 #mobile-container > li > a {
   width: 100%;
   padding: 0.5rem 0;
+}
+
+#menu-toggle {
+    aspect-ratio: 1/1;
+    transform: translateY(-3px);
 }
 
 @media (max-width: 1000px) {
@@ -357,6 +358,6 @@ hr {
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }

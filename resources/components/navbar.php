@@ -34,9 +34,9 @@ $user_item .= "</li>";
         </ul>
 
         <button id="menu-toggle" class="mobile" aria-expanded="false" aria-controls="mobile-container">
-          ≡
+            ≡
         </button>
-   </div>
+    </div>
     <ul id="mobile-container" hidden>
         <li><a href="/">Strona główna</a></li>
         <li><a href="/listings/all.php">Ogłoszenia</a></li>
