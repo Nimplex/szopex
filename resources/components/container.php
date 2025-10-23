@@ -1,5 +1,7 @@
 <?php
 
+@session_start();
+
 $lang = $_GET['lang'] ?? 'pl';
 $allowed = ['pl', 'en'];
 if (!in_array($lang, $allowed, true)) {
