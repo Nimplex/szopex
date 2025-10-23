@@ -1,6 +1,6 @@
 main {
-  max-width: 1400px;
-  margin: 0 auto;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
   min-height: 100vh;
   display: flex;
   justify-content: center;
