@@ -35,20 +35,6 @@ main hr {
   gap: 1rem;
 }
 
-@media only screen and (max-width: 1000px) {
-  #image-input {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .row {
-    flex-direction: column;
-  }
-
-  .row > div {
-    width: revert;
-  }
-}
-
 #image-input > div {
   position: relative;
 }
@@ -103,6 +89,30 @@ main hr {
   transition: 250ms opacity, 250ms color;
   opacity: 0;
   z-index: 1;
+}
+
+@media only screen and (max-width: 1000px) {
+  #image-input {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .row {
+    flex-direction: column;
+  }
+
+  .row > div {
+    width: revert;
+  }
+
+  #image-input .has-img > div {
+    opacity: 1;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #image-input {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 #image-input div div {
