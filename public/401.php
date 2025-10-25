@@ -4,6 +4,12 @@ http_response_code(401);
 
 $title = '401';
 
+$render_head = function (): string {
+    return <<<HTML
+    <link rel="stylesheet" href="/_css/error.css">
+    HTML;
+};
+
 $render_content = function (): string {
     return <<<HTML
     <h1>Unauthorized</h1>

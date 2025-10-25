@@ -1,0 +1,7 @@
+main {
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

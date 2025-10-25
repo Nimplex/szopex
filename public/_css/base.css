@@ -38,6 +38,10 @@ body {
   color: var(--white);
 }
 
+body > main {
+    min-height: 100vh;
+}
+
 body,
 input,
 button,
@@ -360,4 +364,23 @@ hr {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+}
+
+/*
+* ==============================================================================
+* FOOTER
+* ==============================================================================
+*/
+
+body > footer {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 2rem;
+    background: var(--gray-bg);
+}
+
+body > footer > ul li {
+    display: block;
+    margin: 1rem 0;
 }
