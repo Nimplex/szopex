@@ -94,13 +94,33 @@ main hr {
   width: 100%;
 }
 
-.htmx-indicator,
-.content-end {
-  display: none;
+#next-page {
   text-align: center;
-  font-size: 2rem;
 }
 
-.htmx-request.htmx-indicator {
-  display: block;
+#next-page a {
+  height: 3rem;
+  padding: 1rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-gray);
+  background: var(--main-bg);
+  outline: none;
+  transition: 250ms all;
+  border-radius: var(--radius);
+  text-decoration: inherit;
+  color: inherit;
+}
+
+#next-page a:hover {
+  border-color: var(--white);
+}
+
+.htmx-indicator,
+.content-end {
+  text-align: center;
+  font-size: 2rem;
+  color: #999;
 }
