@@ -11,7 +11,7 @@ if (isset($_SERVER['HTTP_HX_REQUEST'])) {
 $listingBuilder = (new App\Builder\ListingBuilder())->make();
 
 $title = 'Ogłoszenia';
-$current_page = (int)$_GET['page'] ?? 0;
+$current_page = (int)($_GET['page'] ?? 0);
 
 $render_head = function () {
     return <<<HTML
