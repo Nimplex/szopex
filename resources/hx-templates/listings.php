@@ -13,7 +13,6 @@ $page = max($_GET['page'] ?? 1, 1);
             <header>
                 <img height="300" src="/covers.php?file=<?= $encoded_file ?>" alt="<?= htmlspecialchars($lis['title']) ?>">
             </header>
-            <span class="vr"></span>
         <?php endif; ?>
 
         <main>
