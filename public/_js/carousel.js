@@ -7,37 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!carousel || !main || !list || !btnLeft || !btnRight) return;
 
-  const items = Array.from(list.querySelectorAll("img"));
+  const items = [...list.querySelectorAll("img")];
   if (!items.length) return;
 
   let currentIndex = 0;
 
-  const syncWidth = () => {
-    carousel.style.width = main.offsetWidth + "px";
-    list.style.display = "flex";
-  };
-
-  const updateMain = (index) => {
+  function updateMain(index) {
     currentIndex = (index + items.length) % items.length;
     main.src = items[currentIndex].src;
-  };
+  }
 
-  btnLeft.addEventListener("click", () => {
-    updateMain(currentIndex - 1);
-  });
+  items.values().forEach((item, index) => item.addEventListener("click", () => updateMain(index)));
 
-  btnRight.addEventListener("click", () => {
-    updateMain(currentIndex + 1);
-  });
-
-  window.addEventListener("resize", () => {
-    syncWidth();
-  });
-
-  for (const item of items) {
-    }
-
-  main.addEventListener("load", syncWidth);
-
-  syncWidth();
+  btnLeft.addEventListener("click", () => updateMain(currentIndex - 1));
+  btnRight.addEventListener("click", () => updateMain(currentIndex + 1));
 });

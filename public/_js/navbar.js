@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("menu-toggle").addEventListener("click", (e) => {
     const btn = e.currentTarget;
     const menu = document.getElementById("mobile-container");

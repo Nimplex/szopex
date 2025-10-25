@@ -13,7 +13,6 @@ $page = max($_GET['page'] ?? 1, 1);
             <header>
                 <img height="300" src="/covers.php?file=<?= $encoded_file ?>" alt="<?= htmlspecialchars($lis['title']) ?>">
             </header>
-            <span class="vr"></span>
         <?php endif; ?>
 
         <main>
@@ -56,6 +55,11 @@ $page = max($_GET['page'] ?? 1, 1);
     hx-trigger="revealed"
     hx-indicator="#throbber"
 ></div>
+<noscript>
+    <div id="next-page">
+        <a class="btn-primary" href="?page=<?= $page + 1 ?>">Następna strona</a>
+    </div>
+</noscript>
 <?php else: ?>
 <div class="content-end">
     &mdash; Nic więcej tu nie ma! &mdash;

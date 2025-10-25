@@ -88,24 +88,28 @@ $render_content = function (): string {
 
     $carousel .= "</ul>";
 
-    foreach (json_decode($listing['attributes']) as $attribute => $value) {
-        $attribute = htmlspecialchars($attribute);
-        $value = htmlspecialchars($value);
+    $attrib_list = json_decode($listing['attributes']) ?? null;
 
-        switch ($attribute) {
-            case 'language':
-                $language = $iso->languageByCode2t($value, true);
-                $native_language = $iso->nativeByCode2t($value, true);
-                $value = "{$native_language} ({$language})";
-                break;
+    if ($attrib_list) {
+        foreach ($attrib_list as $attribute => $value) {
+            $attribute = htmlspecialchars($attribute);
+            $value = htmlspecialchars($value);
+
+            switch ($attribute) {
+                case 'language':
+                    $language = $iso->languageByCode2t($value, true);
+                    $native_language = $iso->nativeByCode2t($value, true);
+                    $value = "{$native_language} ({$language})";
+                    break;
+            }
+
+            $attributes .= <<<HTML
+            <tr>
+                <th class="with-icon"><i data-lucide="{$key_lookup_table[$attribute]['icon']}" aria-hidden="true"></i>{$key_lookup_table[$attribute]['display']}</th>
+                <td>{$value}</td>
+            </tr>
+            HTML;
         }
-
-        $attributes .= <<<HTML
-        <tr>
-            <th class="with-icon"><i data-lucide="{$key_lookup_table[$attribute]['icon']}" aria-hidden="true"></i>{$key_lookup_table[$attribute]['display']}</th>
-            <td>{$value}</td>
-        </tr>
-        HTML;
     }
 
     $carousel_section = ($array_size === 0) ? null : <<<HTML

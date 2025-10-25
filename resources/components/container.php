@@ -26,7 +26,7 @@ if (!in_array($lang, $allowed, true)) {
 <head>
     <meta charset="utf-8">
     <meta name="color-scheme" content="dark">
-    <title>Shopex: <?= $title ?? 'Neovim enjoyers club'?></title>
+    <title><?= $title ?? 'Helix enthusiasts club' ?> | Szopex</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preload" href="/_css/base.css" as="style">
     <link rel="preload" href="/_js/htmx.min.js" as="script">
