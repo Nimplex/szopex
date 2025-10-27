@@ -46,15 +46,8 @@ $page = max($_GET['page'] ?? 1, 1);
 </a>
 <?php endforeach; ?>
 <?php if (!empty($listing->listAll($page + 1))): ?>
-<div
-    class="target"
-    aria-hidden="true"
-    hx-get="?page=<?= $page + 1 ?>"
-    hx-target="this"
-    hx-swap="outerHTML"
-    hx-trigger="revealed"
-    hx-indicator="#throbber"
-></div>
+<div id="sentinel" data-next-page="<?= $page + 1 ?>"></div>
+<div id="throbber" aria-hidden="true" class="htmx-indicator small-text">Wczytywanie...</span>
 <noscript>
     <div id="next-page">
         <a class="btn-primary" href="?page=<?= $page + 1 ?>">Następna strona</a>

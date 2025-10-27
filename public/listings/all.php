@@ -3,7 +3,7 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
 
-if (isset($_SERVER['HTTP_HX_REQUEST'])) {
+if (isset($_SERVER['HTTP_RAW_REQUEST'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/listings.php';
     die;
 }
@@ -37,14 +37,13 @@ $render_content = function () {
     <hr>
     <div id="offers">
         $listings
-        <div id="throbber" aria-hidden="true" class="htmx-indicator small-text">Wczytywanie...</span>
     </div>
     HTML;
 };
 
 $render_scripts = function () {
     return <<<HTML
-    <script src="/_js/htmx.min.js"></script>
+    <script src="/_js/scroll.js"></script>
     HTML;
 };
 

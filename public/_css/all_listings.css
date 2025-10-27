@@ -118,6 +118,10 @@ main hr {
   border-color: var(--white);
 }
 
+.htmx-indicator {
+  display: none;
+}
+
 .htmx-indicator,
 .content-end {
   text-align: center;

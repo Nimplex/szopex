@@ -29,7 +29,6 @@ if (!in_array($lang, $allowed, true)) {
     <title><?= $title ?? 'Helix enthusiasts club' ?> | Szopex</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preload" href="/_css/base.css" as="style">
-    <link rel="preload" href="/_js/htmx.min.js" as="script">
     <link rel="preload" href="/_js/navbar.js" as="script">
     <link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
     <link rel="preconnect" href="https://rsms.me/">
