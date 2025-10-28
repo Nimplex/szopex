@@ -26,6 +26,7 @@ $router->GET('/api/logout', function () {
 $router->POST('/api/register', fn () => require __DIR__ . '/../resources/api/register.php');
 $router->POST('/api/login', fn () => require __DIR__ . '/../resources/api/login.php');
 $router->POST('/api/new-listing', fn () => require __DIR__ . '/../resources/api/new-listing.php');
+// $router->POST('/api/new-listing', function () { echo '<pre>'; var_dump($_FILES); echo '</pre>'; });
 
 $router->DEFAULT(function () {
     require __DIR__ . '/404.php';

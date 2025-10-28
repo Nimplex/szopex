@@ -15,7 +15,7 @@ $render_content = function (): string {
     <h1>Nowe ogłoszenie</h1>
     <hr>
     <div>
-        <form action="/api/new-listing" method="POST">
+        <form action="/api/new-listing" method="POST" enctype="multipart/form-data">
             <label>
                 Tytuł ogłoszenia:
                 <input type="text" name="title" minlength="8" maxlength="100" required>
@@ -34,7 +34,7 @@ $render_content = function (): string {
                             class="money-input"
                             type="text"
                             inputmode="numeric"
-                            pattern="\d{,4}((,|\.)\d\d)?"
+                            pattern="\d{1,4}((,|\.)\d\d)?"
                             name="price"
                             placeholder="5,00"
                             required
@@ -54,7 +54,8 @@ $render_content = function (): string {
                                     type="file"
                                     class="sr-only"
                                     onchange="previewFile(this)"
-                                    name="image0"
+                                    name="images[]"
+                                    accept="image/jpeg,image/png"
                                 >
                             </label>
                             <button onclick="removeFile(this); event.preventDefault(); event.stopPropagation();">×</button>

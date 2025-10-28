@@ -22,7 +22,8 @@ function previewFile(input) {
         type="file"
         class="sr-only"
         onchange="previewFile(this)"
-        name="image${[...grid.children].indexOf(wrapper) + 1}"
+        name="images[]"
+        accept="image/jpeg,image/png"
     >
 </label>
 <button onclick="removeFile(this); event.preventDefault(); event.stopPropagation();">×</button>`;
@@ -39,13 +40,5 @@ function previewFile(input) {
 }
 
 function removeFile(close) {
-  const wrapper = close.parentNode;
-  const grid = document.getElementById('image-input');
-
-  wrapper.remove();
-
-  const field_amount = grid.children.length - 1;
-  for (let i = 0; i < field_amount; i++) {
-    grid.children[i].firstElementChild.children[1].name = `image${i}`;
-  }
+  close.parentNode.remove();
 }
