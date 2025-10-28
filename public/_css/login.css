@@ -55,3 +55,7 @@ button {
   justify-content: space-between;
   gap: 3rem;
 }
+
+a {
+  color: var(--accent);
+}

@@ -389,17 +389,30 @@ body > footer {
   background: var(--gray-bg);
   border-top: 2px solid var(--border-gray);
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .footer-inner {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  gap: 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.footer-inner img {
+  height: auto;
+}
+
+.footer-links {
+  display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
   gap: 4rem;
-  background: var(--gray-bg);
-  max-width: 1400px;
-  margin: 0 auto;
-  text-wrap: nowrap;
+  flex: 1;
 }
 
 .footer-inner h1 {
@@ -417,7 +430,17 @@ body > footer {
 }
 
 @media (max-width: 1000px) {
+  body > footer,
   .footer-inner {
+    align-items: flex-start;
+  }
+
+  .footer-inner,
+  .footer-links {
     flex-direction: column;
+  }
+
+  .footer-inner {
+    padding: 1rem 0;
   }
 }

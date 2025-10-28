@@ -1,5 +1,6 @@
 <?php
 $user_item = "<li>";
+
 if (!isset($_SESSION['user_id'])) {
     $user_item .= <<<HTML
     <a href="/login.php">Zaloguj się</a>
@@ -18,8 +19,7 @@ $user_item .= "</li>";
 <nav aria-label="Main navigation">
     <div role="presentation" class="nav-inner">
         <ul class="desktop">
-            <li><a href="/">Strona główna</a></li>
-            <li><a href="/listings/all.php">Ogłoszenia</a></li>
+            <li><a href="/"><img src="/_assets/thumbnail.png" height="40"></a></li>
         </ul>
 
         <form class="inline-input" role="search" action="/listings/search.php" method="get">
@@ -30,6 +30,12 @@ $user_item .= "</li>";
         </form>
 
         <ul class="desktop">
+            <li>
+                <a href="/listings/all.php">
+                    <i data-lucide="badge-euro"></i>
+                    Ogłoszenia
+                </a>
+            </li>
             <?= $user_item ?>
         </ul>
 
@@ -39,7 +45,12 @@ $user_item .= "</li>";
     </div>
     <ul id="mobile-container" hidden>
         <li><a href="/">Strona główna</a></li>
-        <li><a href="/listings/all.php">Ogłoszenia</a></li>
+        <li>
+            <a href="/listings/all.php">
+                <i data-lucide="badge-euro"></i>
+                Ogłoszenia
+            </a>
+        </li>
         <?= $user_item ?>
     </ul>
 </nav>

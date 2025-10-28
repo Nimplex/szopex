@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const html = await res.text();
     offers.insertAdjacentHTML("beforeend", html);
     throbber.style.display = "none";
+    window.history.pushState({"html": document.html, "pageTitle": document.title}, "", `/listings/all.php?page=${page}`);
     loading = false;
   }
 
