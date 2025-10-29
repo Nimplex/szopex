@@ -103,62 +103,55 @@ class Listing extends BaseDBModel
         return false;
     }
 
-    /**
-     * @param array<string,array<int,mixed>> $files
-     */
+
     private function _addCovers(int $listing_id, array $files): bool
     {
-        // temporary; i'll finish this later
-        return false;
-        
-        if (!isset($files) || empty($files)) {
+        if (!isset($files) || !isset($files['images']) || empty($files['images']) || !isset($files['images']['error'])) {
             return false;
         }
 
-        foreach ($files['error'] as $i => $err) {
-            switch ((int) $err) {
-                case UPLOAD_ERR_OK:
-                    break;
-
-                case UPLOAD_ERR_NO_FILE:
-                case UPLOAD_ERR_PARTIAL:
-                    // for whatever reason in PHP `switch` is considered a loop,
-                    // so we break the 2nd "loop" (foreach)
-                    continue 2;
-
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:
-                    throw new \InvalidArgumentException('Plik jest zbyt duży', 1);
-
-                default: // this should basically never happen
-                    error_log('File upload warning: ' . (int) $err);
-                    // same as above
-                    continue 2;
-            }
-
-            $tmp_name = $files['tmp_name'][$i];
-            $mime = $files['type'][$i];
-
-            if (mime_content_type($tmp_name) != $mime) {
-                error_log("File upload warning: MIME types don't match");
+        foreach ($files['images']['error'] as $i => $err) {
+            if ($err === UPLOAD_ERR_NO_FILE) {
                 continue;
             }
 
-            $size = $files['size'][$i];
+            if ($err !== UPLOAD_ERR_OK) {
+                throw new \RuntimeException("Upload error (code: $err)");
+            }
 
-            $file_extension = match ($mime) {
-                'image/jpeg' => '.jpg',
-                'image/png' => '.png',
-            };
+            $tmp_name = $files['images']['tmp_name'][$i];
+            $mime = (new \finfo(FILEINFO_MIME_TYPE))->file($tmp_name);
+            $allowed = ['image/jpeg' => '.jpg', 'image/png' => '.png'];
 
-            do {
-                $new_name = sprintf('%d-%s', $listing_id, bin2hex(random_bytes(16)));
-                $final_file_path = $_SERVER['DOCUMENT_ROOT'] . '/../storage/covers/' . $new_name . $file_extension;
-            } while (file_exists($final_file_path));
+            if (!isset($allowed[$mime])) {
+                throw new \InvalidArgumentException('Unsupported file type');
+            }
+
+            $size = $files['images']['size'][$i];
+            if ($size <= 0 || $size > 5_000_000) {
+                throw new \InvalidArgumentException('Invalid file size');
+            }
+
+            $new_name = sprintf('%d-%s%s', $listing_id, bin2hex(random_bytes(8)), $allowed[$mime]);
+            $target = $_SERVER['DOCUMENT_ROOT'] . '/../storage/covers/' . $new_name;
+
+            if (!move_uploaded_file($tmp_name, $target)) {
+                throw new \RuntimeException('Failed to move uploaded file');
+            }
             
-            move_uploaded_file($tmp_name, $final_file_path);
+            $stmt = $this->db->prepare(
+                'INSERT INTO covers (listing_id, file_id, main) VALUES (:listing_id, :file_id, :main)'
+            );
 
-            
+            $res = $stmt->execute([
+                ':listing_id' => $listing_id,
+                ':file_id' => $new_name,
+                ':main' => $i == 0,
+            ]);
+
+            if (!$res) {
+                throw new \RuntimeException("Couldn't insert record to database");
+            }
         }
 
         return true;
@@ -251,7 +244,6 @@ class Listing extends BaseDBModel
             throw new \ErrorException('DB error');
         }
 
-        // WIP
-        // $res = $this->_addCovers($id, $images);
+        $res = $this->_addCovers($id, $images);
     }
 }

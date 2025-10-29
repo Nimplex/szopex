@@ -36,6 +36,7 @@ main hr {
 .offer-card article header img {
   width: 100%;
   height: auto;
+  aspect-ratio: 1 / 1;
   max-height: 300px;
   object-fit: cover;
   display: block;
