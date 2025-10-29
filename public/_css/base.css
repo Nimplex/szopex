@@ -31,6 +31,10 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  min-width: 0;
 }
 
 body {
