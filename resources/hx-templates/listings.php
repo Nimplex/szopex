@@ -29,14 +29,16 @@ $page = max($_GET['page'] ?? 1, 1);
             <div>
                 <button
                     type="button"
-                    onclick="event.preventDefault(); event.stopPropagation();"
+                    onclick="event.preventDefault(); event.stopPropagation(); favourite(event)"
+                    data-listing-id="<?= urlencode($lis['listing_id']) ?>"
                     aria-label="Dodaj '<?= htmlspecialchars($lis['title']) ?>' do ulubionych">
                         Dodaj do ulubionych
                 </button>
                 <button
                     type="button"
                     class="btn-accent"
-                    onclick="event.preventDefault(); event.stopPropagation();"
+                    onclick="event.preventDefault(); event.stopPropagation(); message(event)"
+                    data-listing-id="<?= urlencode($lis['listing_id']) ?>"
                     aria-label="Skontaktuj się z sprzedającym na temat '<?= htmlspecialchars($lis['title']) ?>'">
                         Napisz do ogłoszeniodawcy
                 </button>

@@ -43,6 +43,7 @@ $render_content = function () {
 
 $render_scripts = function () {
     return <<<HTML
+    <script src="/_js/listings.js"></script>
     <script src="/_js/scroll.js"></script>
     HTML;
 };
