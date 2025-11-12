@@ -87,10 +87,9 @@ class UserController
 
     /**
      * @param array<string,string|null> $request
-     * @return string Possible warning
      * @throws \InvalidArgumentException
      */
-    public function login_from_request(array $request): ?string
+    public function login_from_request(array $request): void
     {
         $email = $request['email'] ?? null;
         $password = $request['password'] ?? null;
@@ -129,26 +128,26 @@ class UserController
                 $res = $this->activation->regenerate_expired($activation['id']);
             }
 
-            if ($res) {
-                $user_id = $user['id'];
-                $host = $_SERVER['SERVER_NAME'];
-                $protocol = ($host == 'localhost' || $host == '127.0.0.1') ? 'http' : 'https';
-                $mailer = new Mailer();
-                $mailer->send(
-                    $user['email'],
-                    'Potwierdzenie rejestracji',
-                    'activation',
-                    [
-                        'name' => $user['display_name'],
-                        'login' => $user['login'],
-                        'link' => "$protocol://$host/api/activate/$user_id/$res"
-                    ],
-                );
-
-                throw new \InvalidArgumentException('i18n:resent_code');
+            if (!$res) {
+                throw new \InvalidArgumentException('i18n:account_not_activated');
             }
 
-            throw new \InvalidArgumentException('i18n:account_not_activated');
+            $user_id = $user['id'];
+            $host = $_SERVER['SERVER_NAME'];
+            $protocol = ($host == 'localhost' || $host == '127.0.0.1') ? 'http' : 'https';
+            $mailer = new Mailer();
+            $mailer->send(
+                $user['email'],
+                'Potwierdzenie rejestracji',
+                'activation',
+                [
+                    'name' => $user['display_name'],
+                    'login' => $user['login'],
+                    'link' => "$protocol://$host/api/activate/$user_id/$res"
+                ],
+            );
+
+            throw new \InvalidArgumentException('i18n:resent_code');
         }
 
         $_SESSION['user_id'] = $user['id'];
@@ -159,7 +158,7 @@ class UserController
 
     /**
      * @param array<string,string|null> $request
-     * @return int User ID
+     * @return bool Success
      * @throws \InvalidArgumentException
      * @throws \Exception
      */
