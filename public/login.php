@@ -1,5 +1,4 @@
 <?php
-
 $title = 'Logowanie';
 $no_navbar = true;
 

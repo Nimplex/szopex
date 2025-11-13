@@ -32,7 +32,8 @@ class FlashMessage
      */
     public function fromException(\Exception $e): void
     {
-        if (!$e->getCode()) {
+        $code = $e->getCode();
+        if (!isset($code)) {
             return;
         }
         $msg = $e->getMessage();
