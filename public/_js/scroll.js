@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let loading = false;
 
   function clearSettling() {
-    setTimeout(() => [...document.getElementsByClassName("settling")].forEach(x => x.classList.remove("settling")), 200);
+    setTimeout(() => [...document.getElementsByClassName("settling")].forEach(x => x.classList.remove("settling")), 100);
   }
 
   clearSettling();
@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadNextPage(page) {
     const throbber = document.getElementById("throbber");
     loading = true;
-    console.log(throbber);
     const res = await fetch(`/listings/all.php?page=${page}`, {
       headers: {
         RAW_REQUEST: true,
