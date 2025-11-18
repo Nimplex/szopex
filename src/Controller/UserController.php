@@ -6,6 +6,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 
 use App\Mailer;
 use App\Model\Activation;
+use App\Model\Favourites;
 use App\Model\User;
 use PDO;
 
@@ -13,11 +14,13 @@ class UserController
 {
     protected User $user;
     protected Activation $activation;
+    protected Favourites $favourites;
 
     public function __construct(PDO $db)
     {
         $this->user = new User($db);
         $this->activation = new Activation($db);
+        $this->favourites = new Favourites($db);
     }
 
     private function _check_password_complexity(string $password): bool
@@ -168,7 +171,7 @@ class UserController
         $token = $request['token'] ?? null;
 
         if (!isset($id) || !isset($token)) {
-            throw new \InvalidArgumentException('i18n:missing_parameters');
+            throw new \InvalidArgumentException('i18n:missing_parameters', 1);
         }
     
         $id = trim($id);
@@ -182,9 +185,37 @@ class UserController
 
         if ($activation['expired']) {
             $this->activation->delete($activation['id']);
-            throw new \InvalidArgumentException('i18n:activation:expired_activation');
+            throw new \InvalidArgumentException('i18n:activation:expired_activation', 1);
         }
 
         return $this->activation->activate($activation['id']);
+    }
+
+    /**
+     * @param array<string,string|null> $request
+     * @throws \InvalidArgumentException
+     * @throws \Exception
+     */
+    public function favourite_from_request(array $request): bool
+    {
+        @session_start();
+
+        if (!isset($_SESSION['user_id'])) {
+            throw new \Exception('i18n:not_logged_in', 1);
+        }
+
+        $listing_id = $request['listingId'];
+        
+        if (!isset($listing_id)) {
+            throw new \InvalidArgumentException('i18n:missing_parameters', 1);
+        }
+
+        $existing = $this->favourites->exists($listing_id, $_SESSION['user_id']);
+
+        if (!empty($existing)) {
+            return $this->favourites->delete($existing['id']);
+        }
+
+        return $this->favourites->create($listing_id, $_SESSION['user_id']);;
     }
 }

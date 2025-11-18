@@ -17,7 +17,7 @@ class User extends BaseDBModel
         $stmt->execute([$email]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-
+    
     public function find_by_login(string $login): ?array
     {
         $stmt = $this->db->prepare(<<<SQL

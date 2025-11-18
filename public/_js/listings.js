@@ -1,27 +1,30 @@
 async function favourite(event) {
-    const { listingId } = event.target.dataset;
-    
-    if (!listingId || listingId === "")
-        return console.warn("No listingId found!");
+  const { listingId } = event.target.dataset;
 
-    const res = await fetch("/api/listings/favourite", {
-        method: "POST",
-        body: JSON.stringify({ listingId })
-    });
+  if (!listingId || listingId === "")
+    return console.warn("No listingId found!");
 
-   const contentType = res.headers.get("Content-Type");
+  const res = await fetch("/api/listings/favourite", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ listingId }),
+  });
 
-    if (!contentType.startsWith("application/json"))
-        return console.error("API returned invalid response!");
+  const contentType = res.headers.get("Content-Type");
 
-    const body = await res.json();
+  if (!contentType.startsWith("application/json"))
+    return console.error("API returned invalid response!");
 
-    console.log(body);
+  const body = await res.json();
+
+  console.log(body);
 }
 
 function message(event) {
-    const { listingId } = event.target.dataset;
-    
-    if (!listingId || listingId === "")
-        return console.warn("No listingId found!");
+  const { listingId } = event.target.dataset;
+
+  if (!listingId || listingId === "")
+    return console.warn("No listingId found!");
 }
