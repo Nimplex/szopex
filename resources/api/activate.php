@@ -13,7 +13,5 @@ try {
     header('Location: /login.php', true, 303);
 } catch (\InvalidArgumentException $e) {
     (new FlashMessage())->fromException($e);
-    var_dump($e);
-    die;
     header('Location: /', true, 303);
 }

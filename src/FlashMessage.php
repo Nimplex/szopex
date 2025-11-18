@@ -32,9 +32,8 @@ class FlashMessage
      */
     public function fromException(\Exception $e): void
     {
-        $code = $e->getCode();
-        if (!isset($code)) {
-            return;
+        if (!$e->getCode()) {
+            throw new \ErrorException($e);
         }
         $msg = $e->getMessage();
         $this->set($msg, FlashMsgType::Err);

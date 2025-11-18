@@ -54,11 +54,11 @@ class UserController
         $password = trim($password);
 
         if (!$this->_check_password_complexity($password)) {
-            throw new \InvalidArgumentException('i18n:password_too_weak');
+            throw new \InvalidArgumentException('i18n:password_too_weak', 1);
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new \InvalidArgumentException('i18n:invalid_email');
+            throw new \InvalidArgumentException('i18n:invalid_email', 1);
         }
 
         $res = $this->user->create($login, $display_name, $email, $password);
@@ -110,11 +110,11 @@ class UserController
         }
 
         if (!$user) {
-            throw new \InvalidArgumentException('i18n:invalid_account');
+            throw new \InvalidArgumentException('i18n:invalid_account', 1);
         }
 
         if (!password_verify($password, $user['password_hash'])) {
-            throw new \InvalidArgumentException('i18n:invalid_account');
+            throw new \InvalidArgumentException('i18n:invalid_account', 1);
         }
 
         if (!$user['active']) {
@@ -129,7 +129,7 @@ class UserController
             }
 
             if (!$res) {
-                throw new \InvalidArgumentException('i18n:account_not_activated');
+                throw new \InvalidArgumentException('i18n:account_not_activated', 1);
             }
 
             $user_id = $user['id'];
@@ -147,7 +147,7 @@ class UserController
                 ],
             );
 
-            throw new \InvalidArgumentException('i18n:resent_code');
+            throw new \InvalidArgumentException('i18n:resent_code', 1);
         }
 
         $_SESSION['user_id'] = $user['id'];
@@ -177,7 +177,7 @@ class UserController
         $activation = $this->activation->find_by_token($token);
 
         if (!$activation || $activation['user_id'] != $id) {
-            throw new \InvalidArgumentException('i18n:activation:invalid_url');
+            throw new \InvalidArgumentException('i18n:activation:invalid_url', 1);
         }
 
         if ($activation['expired']) {
