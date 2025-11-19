@@ -18,14 +18,14 @@ class Favourites extends BaseDBModel
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    public function find_by_user_id(int $user_id): array
+    public function find_by_user_id(int $user_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
         SELECT * FROM favourites WHERE user_id = ?
         SQL);
 
         $stmt->execute([$user_id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function exists(int $listing_id, int $user_id): ?array

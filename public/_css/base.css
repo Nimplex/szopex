@@ -394,7 +394,7 @@ hr {
 
 body > footer {
   width: 100%;
-  min-height: 400px;
+  min-height: 280px;
   font-size: 1rem;
   background: var(--gray-bg);
   border-top: 2px solid var(--border-gray);
@@ -436,7 +436,7 @@ body > footer {
 .footer-inner ul li a {
   color: var(--accent);
   flex: 1;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 
 @media (max-width: 1000px) {
