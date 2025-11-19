@@ -213,9 +213,11 @@ class UserController
         $existing = $this->favourites->exists($listing_id, $_SESSION['user_id']);
 
         if (!empty($existing)) {
-            return $this->favourites->delete($existing['id']);
+            $this->favourites->delete($existing['id']);
+            return 0;
         }
 
-        return $this->favourites->create($listing_id, $_SESSION['user_id']);;
+        $this->favourites->create($listing_id, $_SESSION['user_id']);;
+        return 1;
     }
 }

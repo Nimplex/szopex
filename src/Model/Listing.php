@@ -14,7 +14,7 @@ class Listing extends BaseDBModel
     public const int MIN_DESC_LEN = 8;
     public const int MAX_DESC_LEN = 1000;
 
-    private function _listAll(int $limit, int $offset): array
+    private function _listAll(int $limit, int $offset, int $current_user_id): array
     {
         $stmt = $this->db->prepare(<<<SQL
         SELECT
@@ -25,16 +25,19 @@ class Listing extends BaseDBModel
             l.created_at,
             l.attributes,
             u.display_name,
-            c.file_id AS cover_file_id
+            c.file_id AS cover_file_id,
+            EXISTS (
+                SELECT 1
+                FROM favourites f
+                WHERE f.listing_id = l.id AND f.user_id = :current_user_id
+            ) AS is_favourited
         FROM listings l
-        LEFT JOIN users u
-            ON u.id = l.user_id
-        LEFT JOIN covers c
-            ON c.listing_id = l.id
-            AND c.main = TRUE
+        LEFT JOIN users u ON u.id = l.user_id
+        LEFT JOIN covers c ON c.listing_id = l.id AND c.main = TRUE
         ORDER BY l.created_at DESC
         LIMIT :limit OFFSET :offset
-        SQL);       // I'm using bindValue to enforce use of INT
+        SQL);
+        $stmt->bindValue(':current_user_id', $current_user_id, PDO::PARAM_INT);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
@@ -172,11 +175,11 @@ class Listing extends BaseDBModel
         return ceil($rows / Listing::PER_PAGE);
     }
 
-    public function listAll(int $page): array
+    public function listAll(int $page, int $user_id): array
     {
         $page = max(Listing::MIN_PAGE, min(Listing::MAX_PAGE, $page));
         $offset = ($page - 1) * Listing::PER_PAGE;
-        return $this->_listAll(Listing::PER_PAGE, $offset);
+        return $this->_listAll(Listing::PER_PAGE, $offset, $user_id);
     }
 
     public function get(int $id): ?array

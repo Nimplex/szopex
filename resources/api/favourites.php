@@ -6,7 +6,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 global $user;
 
 try {
-    $user->favourite_from_request($_POST);
+    echo $user->favourite_from_request($_POST) ? "yes" : "no";
 } catch (\InvalidArgumentException $e) {
     http_response_code(500);
 }

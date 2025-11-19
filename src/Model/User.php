@@ -8,6 +8,15 @@ use PDO;
 
 class User extends BaseDBModel
 {
+    public function find_by_id(int $id): ?array
+    {
+        $stmt = $this->db->prepare(<<<SQL
+        SELECT * FROM users WHERE id = ?
+        SQL);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+
     public function find_by_email(string $email): ?array
     {
         $stmt = $this->db->prepare(<<<SQL

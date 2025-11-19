@@ -4,10 +4,9 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 $listing = (new App\Builder\ListingBuilder())->make();
 $page = max($_GET['page'] ?? 1, 1);
 $is_raw = $_SERVER['HTTP_RAW_REQUEST'] ?? null;
-
 ?>
 
-<?php foreach ($listing->listAll($page) as $lis): ?>
+<?php foreach ($listing->listAll($page, $_SESSION['user_id']) as $lis): ?>
 <a class="offer-card<?= $is_raw ? ' settling' : '' ?>" href="/listings/view.php?listing=<?= urlencode($lis['listing_id']) ?>" role="link">
     <article>
         <?php if (!empty($lis['cover_file_id'])):
@@ -32,9 +31,10 @@ $is_raw = $_SERVER['HTTP_RAW_REQUEST'] ?? null;
                 <button
                     type="button"
                     onclick="event.preventDefault(); event.stopPropagation(); favourite(event)"
+                    class="<?= $lis['is_favourited'] ? 'btn-red' : '' ?>"
                     data-listing-id="<?= urlencode($lis['listing_id']) ?>"
-                    aria-label="Dodaj '<?= htmlspecialchars($lis['title']) ?>' do ulubionych">
-                        Dodaj do ulubionych
+                    aria-label="<?= sprintf($lis['is_favourited'] ? "Usuń %s z ulubionych" : "Dodaj %s do ulubionych", htmlspecialchars($lis['title'])) ?>">
+                    <?= $lis['is_favourited'] ? "Usuń z ulubionych" : "Dodaj do ulubionych" ?>
                 </button>
                 <button
                     type="button"
@@ -49,7 +49,7 @@ $is_raw = $_SERVER['HTTP_RAW_REQUEST'] ?? null;
     </article>
 </a>
 <?php endforeach; ?>
-<?php if (!empty($listing->listAll($page + 1))): ?>
+<?php if (!empty($listing->listAll($page + 1, $_SESSION['user_id']))): ?>
 <div id="sentinel" data-next-page="<?= $page + 1 ?>"></div>
 <div id="throbber" aria-hidden="true" class="small-text">Wczytywanie...</div>
 <noscript>

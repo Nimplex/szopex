@@ -1,4 +1,6 @@
 async function favourite(event) {
+  event.target.blur();
+
   const { listingId } = event.target.dataset;
 
   if (!listingId || listingId === "")
@@ -14,12 +16,19 @@ async function favourite(event) {
 
   const contentType = res.headers.get("Content-Type");
 
-  if (!contentType.startsWith("application/json"))
+  if (!contentType.startsWith("text/html"))
     return console.error("API returned invalid response!");
 
-  const body = await res.json();
+  const body = await res.text();
+  const isFavourited = body == "yes";
 
-  console.log(body);
+  if (isFavourited) {
+    event.target.classList.add("btn-red");
+    event.target.innerHTML = "Usuń z ulubionych";
+  } else {
+    event.target.classList.remove("btn-red");
+    event.target.innerHTML = "Dodaj do ulubionych";
+  }
 }
 
 function message(event) {
