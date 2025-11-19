@@ -27,7 +27,9 @@ class Favourites extends BaseDBModel
             l.title,
             l.price,
             l.created_at,
+            l.updated_at,
             l.attributes,
+            l.active,
             u.display_name,
             c.file_id AS cover_file_id
         FROM favourites f

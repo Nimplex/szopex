@@ -6,8 +6,7 @@ $favouritesModel = (new App\Builder\FavouritesBuilder())->make();
 
 $title = "Polubione";
 
-$render_content = function () {
-    global $favouritesModel;
+$render_content = function () use ($favouritesModel) {
     $html = "<h1>Polubione</h1><div>";
     foreach ($favouritesModel->find_by_user_id($_SESSION['user_id']) as $listing) {
         $html .= <<<HTML

@@ -455,3 +455,11 @@ body > footer {
     padding: 1rem 0;
   }
 }
+
+#throbber {
+  text-align: center;
+  font-size: 2rem;
+  color: #999;
+  margin-top: 2rem;
+}
+

@@ -51,7 +51,7 @@ $is_raw = $_SERVER['HTTP_RAW_REQUEST'] ?? null;
 <?php endforeach; ?>
 <?php if (!empty($listing->listAll($page + 1, $_SESSION['user_id']))): ?>
 <div id="sentinel" data-next-page="<?= $page + 1 ?>"></div>
-<div id="throbber" aria-hidden="true" class="small-text">Wczytywanie...</div>
+<div id="throbber" aria-hidden="true">Wczytywanie...</div>
 <noscript>
     <div id="next-page">
         <a class="btn-primary" href="?page=<?= $page + 1 ?>">Następna strona</a>
