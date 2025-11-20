@@ -12,9 +12,9 @@ use PDO;
 
 class UserController
 {
-    protected User $user;
-    protected Activation $activation;
-    protected Favourites $favourites;
+    public User $user;
+    public Activation $activation;
+    public Favourites $favourites;
 
     public function __construct(PDO $db)
     {
