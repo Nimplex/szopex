@@ -8,6 +8,8 @@
   --white: #ebe9e9;
   --red: #dc3545;
   --radius: 4px;
+  --sel-color: var(--accent);
+  --sel-outline: 2px solid var(--sel-color);
 
   font-family: Inter, sans-serif;
   /* prettier-ignore */
@@ -81,6 +83,7 @@ body > footer {
   color: #fff;
   padding: 1.25rem;
   opacity: 0;
+  border-radius: var(--radius);
   transform: translateY(20px);
   transition:
     opacity 0.3s ease,
@@ -176,13 +179,24 @@ nav a {
   transform: translateY(0.25rem);
   padding-bottom: 0.25rem;
   border-bottom: 2px solid transparent;
-  transition: 250ms all;
+  transition: 250ms all, 0s outline;
 }
 
 nav a:hover {
   color: var(--accent);
   border-bottom-color: var(--accent);
 }
+
+nav a:has(img) {
+  border-bottom: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  nav a:has(img):hover {
+    scale: 1.2;
+  }
+}
+
 
 nav .mobile {
   display: none;
@@ -217,21 +231,26 @@ nav .mobile {
     justify-content: space-between;
     gap: 1rem;
   }
+
   nav .desktop {
     display: none;
   }
+
   nav .mobile {
     display: flex;
     justify-self: end;
   }
+
   .inline-input {
     max-width: unset !important;
     flex: 1;
     width: 100%;
   }
+
   #mobile-container[hidden] {
     display: none;
   }
+
   #mobile-container:not([hidden]) {
     display: flex;
   }
@@ -272,10 +291,18 @@ textarea:focus {
 }
 
 input,
+button {
+  padding: 0 1rem;
+}
+
+textarea {
+  padding: 1rem;
+}
+
+input,
 textarea,
 button {
   height: 3rem;
-  padding: 1rem;
   font-size: 1rem;
   display: flex;
   align-items: center;
@@ -283,7 +310,7 @@ button {
   border: 1px solid var(--border-gray);
   background: var(--main-bg);
   outline: none;
-  transition: 250ms all;
+  transition: 250ms all, 0s outline;
   border-radius: var(--radius);
 }
 
@@ -310,8 +337,13 @@ button {
   gap: 0.5rem;
 }
 
-button:hover,
-button:focus {
+button:focus-visible,
+input[type="submit"]:focus-visible {
+  outline: var(--sel-outline);
+  border-color: var(--sel-color);
+}
+
+button:hover {
   border-color: var(--white);
 }
 
@@ -327,10 +359,9 @@ button:focus {
   border: 1px solid var(--red);
 }
 
-.btn-red:hover,
-.btn-red:focus {
+.btn-red:hover {
   background: var(--main-bg);
-  border: 1px solid var(--red) !important;
+  border: 1px solid var(--red);
 }
 
 input[type="submit"],
@@ -341,9 +372,9 @@ input[type="submit"],
 }
 
 input[type="submit"]:hover,
-input[type="submit"]:focus,
+input[type="submit"]:focus-visible,
 .btn-accent:hover,
-.btn-accent:focus {
+.btn-accent:focus-visible {
   color: var(--white);
   background: var(--main-bg);
 }
@@ -395,7 +426,7 @@ hr {
 */
 
 body > footer {
-  min-height: 280px;
+  min-height: 170px;
   font-size: 1rem;
   background: var(--gray-bg);
   border-top: 2px solid var(--border-gray);
@@ -416,6 +447,7 @@ body > footer {
 
 .footer-inner img {
   height: auto;
+  max-width: 100%;
 }
 
 .footer-links {

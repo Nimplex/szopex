@@ -26,7 +26,7 @@ main > hr {
   color: var(--border-gray);
   font-size: 2rem;
   opacity: 0;
-  transition: 250ms all;
+  transition: 250ms all, 0s outline;
 }
 
 #cover-container:hover button {
@@ -61,11 +61,12 @@ main > hr {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 500px;
 }
 
 .carousel ul {
   display: flex;
-  overflow-x: auto;
+  overflow: auto;
   scroll-behavior: smooth;
   list-style: none;
   padding: 0;
@@ -81,10 +82,16 @@ main > hr {
   border-radius: var(--radius);
   overflow: hidden;
   transition: 250ms border-color;
+  flex-shrink: 0;
 }
 
 .carousel ul li:hover {
   border-color: var(--white);
+}
+
+.carousel ul li:has(img:focus-visible) {
+  /* outline: var(--sel-outline); */
+  border-color: var(--sel-color);
 }
 
 .carousel ul li img {
@@ -95,8 +102,11 @@ main > hr {
   transition: 250ms scale;
 }
 
-.carousel ul li img:hover {
-  scale: 1.2;
+
+@media (prefers-reduced-motion: no-preference) {
+  .carousel ul li img:hover {
+    scale: 1.2;
+  }
 }
 
 .row {

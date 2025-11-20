@@ -6,34 +6,37 @@ main hr {
   margin: 2rem 0;
 }
 
-.offer-card {
-  text-decoration: inherit;
-  color: inherit;
-  transition: opacity 300ms ease-in;
-}
-
 .offer-card.settling {
   opacity: 0;
 }
 
-.offer-card article {
+article {
   display: flex;
   padding: 1rem;
   margin-bottom: 1rem;
   gap: 1.5rem;
   background: var(--gray-bg);
   border: 1px solid var(--border-gray);
-  transition: 250ms all;
+  transition: 250ms all, 0s outline;
   border-radius: var(--radius);
 }
 
-.offer-card article header {
+article > a {
+  display: flex;
+  flex: 1;
+  gap: 1.5rem;
+  text-decoration: inherit;
+  color: inherit;
+  transition: opacity 300ms ease-in;
+}
+
+article header {
   flex: 0 1 300px;
   max-width: 300px;
   width: 100%;
 }
 
-.offer-card article header img {
+article header img {
   width: 100%;
   height: auto;
   aspect-ratio: 1 / 1;
@@ -45,44 +48,61 @@ main hr {
 }
 
 @media only screen and (max-width: 1000px) {
-  .offer-card article {
+  article {
     flex-direction: column;
   }
-  .offer-card article main .small-text {
+
+  article main .small-text {
     margin-top: 1.5rem !important;
   }
-  .offer-card article header {
+
+  article header {
     width: 100%;
     max-width: 100%;
   }
 }
 
-.offer-card article:hover {
+article:has(a:hover) {
   background: var(--gray-hover);
+  border-color: var(--border-hover);
 }
 
-.offer-card article main {
+article main {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.offer-card article main h2 {
+article main h2 {
   margin-bottom: 1rem;
 }
 
-.offer-card article main ul {
+article main ul {
   margin-left: 1rem;
   line-height: 1.5rem;
 }
 
-.offer-card article main .small-text {
+article main .small-text {
   margin-top: auto;
   color: #999;
   font-size: 1rem;
+  opacity: 0;
+  transition: opacity 300ms;
 }
 
-.offer-card article footer {
+article:has(a:hover) main .small-text {
+  opacity: 1;
+}
+
+article:has(a:focus-visible) {
+  outline: var(--sel-outline);
+}
+
+article a:focus-visible {
+  outline: none;
+}
+
+article footer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -90,7 +110,7 @@ main hr {
   flex: 0;
 }
 
-.offer-card article footer button {
+article footer button {
   margin-top: 1rem;
   width: 100%;
 }
@@ -109,7 +129,7 @@ main hr {
   border: 1px solid var(--border-gray);
   background: var(--main-bg);
   outline: none;
-  transition: 250ms all;
+  transition: 250ms all, 0s outline;
   border-radius: var(--radius);
   text-decoration: inherit;
   color: inherit;

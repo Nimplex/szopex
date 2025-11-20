@@ -53,7 +53,7 @@ main hr {
   border-radius: var(--radius);
   background: var(--main-bg);
   outline: none;
-  transition: 250ms all;
+  transition: 250ms all, 0s outline;
   cursor: pointer;
   overflow: hidden;
 }
@@ -65,14 +65,19 @@ main hr {
   transition: 250ms scale;
 }
 
-#image-input label > img:hover,
-#image-input label > img:has(~ input:focus) {
-  scale: 1.2;
+@media (prefers-reduced-motion: no-preference) {
+  #image-input label > img:hover,
+  #image-input label > img:has(~ input:focus-visible) {
+    scale: 1.2;
+  }
 }
 
-#image-input label:hover,
-#image-input label:has(> input:focus) {
+#image-input label:hover {
   border-color: var(--white);
+}
+
+#image-input label:has(input:focus-visible) {
+  outline: var(--sel-outline);
 }
 
 /* this #image-input is needed for specificity */
@@ -125,8 +130,8 @@ main hr {
 }
 
 #image-input > div:hover > button,
-#image-input label:has(input:focus) + button,
-#image-input > div > button:focus {
+#image-input label:has(input:focus-visible) + button,
+#image-input > div > button:focus-visible {
   opacity: 1;
 }
 
