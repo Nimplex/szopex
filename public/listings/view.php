@@ -83,7 +83,7 @@ $render_content = function (): string {
 
         $carousel .= <<<HTML
         <li>
-            <img src="/covers.php?file={$cover['file_id']}" alt="Podgląd '{$title}'">
+            <img src="/covers.php?file={$cover['file_id']}" alt="Podgląd '{$title}'" tabindex="0">
         </li>
         HTML;
     }
@@ -118,8 +118,8 @@ $render_content = function (): string {
         <section class="carousel" role="region" aria-roledescription="carousel" aria-label="Zdjęcia oferty">
             <div id="cover-container">
                 <img src="/covers.php?file={$main_cover}" id="main-cover">
-                <button class="left" aria-label="Poprzednie zdjęcie" $disabled>‹</button>
-                <button class="right" aria-label="Kolejne zdjęcie" $disabled>›</button>
+                <button class="left" aria-label="Poprzednie zdjęcie" tabindex="-1" $disabled>‹</button>
+                <button class="right" aria-label="Kolejne zdjęcie" tabindex="-1" $disabled>›</button>
             </div>
             <hr>
             {$carousel}
@@ -134,8 +134,8 @@ $render_content = function (): string {
         </table>
     HTML;
 
-    $template_favourited_class = $listing['is_favourited'] ? 'btn-red' : '';
-    $template_label = $listing['is_favourited'] ? "Usuń z ulubionych" : "Dodaj do ulubionych";
+    $template_favourited_class = ($listing['is_favourited'] ?? null) ? 'btn-red' : '';
+    $template_label = ($listing['is_favourited'] ?? null) ? "Usuń z ulubionych" : "Dodaj do ulubionych";
 
     $template = <<<HTML
     <div class="row">
