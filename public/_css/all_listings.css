@@ -6,7 +6,7 @@ main hr {
   margin: 2rem 0;
 }
 
-.offer-card.settling {
+.settling {
   opacity: 0;
 }
 
