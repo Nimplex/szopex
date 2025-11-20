@@ -75,7 +75,8 @@ class User extends BaseDBModel
     }
 
     // I think it will be much safer not to expose password hashes etc. in responses even if it's not shown to user
-    public function get_profile(int $id): ?array {
+    public function get_profile(int $id): ?array
+    {
         $stmt = $this->db->prepare(<<<SQL
         SELECT
             display_name,

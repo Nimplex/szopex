@@ -214,10 +214,10 @@ class UserController
 
         if (!empty($existing)) {
             $this->favourites->delete($existing['id']);
-            return 0;
+            return false;
         }
 
-        $this->favourites->create($listing_id, $_SESSION['user_id']);;
-        return 1;
+        $this->favourites->create($listing_id, $_SESSION['user_id']);
+        return true;
     }
 }

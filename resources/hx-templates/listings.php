@@ -11,7 +11,7 @@ $is_raw = $_SERVER['HTTP_RAW_REQUEST'] ?? null;
     <article>
         <a href="/listings/view.php?listing=<?= urlencode($lis['listing_id']) ?>" role="link">
             <?php if (!empty($lis['cover_file_id'])):
-            $encoded_file = urlencode($lis['cover_file_id']); ?>
+                $encoded_file = urlencode($lis['cover_file_id']); ?>
             <header>
                 <img height="300" src="/covers.php?file=<?= $encoded_file ?>" alt="<?= htmlspecialchars($lis['title']) ?>">
             </header>

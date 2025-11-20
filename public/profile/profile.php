@@ -17,23 +17,19 @@ $res = $user->user->get_profile($id);
 
 $title = "Użytkownik {$res['display_name']}";
 
-$render_content = function () {
-    global $res;
-
+$render_content = function () use ($res) {
     [
-        'display_name'  => $display_name,
-        'created_at'    => $created_at,
+        'display_name' => $display_name,
+        'created_at' => $created_at,
         'listing_count' => $listing_count,
     ] = $res;
 
     return <<<HTML
-
     <div>
         <h1>{$display_name}</h1>
         <p>{$created_at}</p>
         <p>{$listing_count}</p>
     </div>
-
     HTML;
 };
 
