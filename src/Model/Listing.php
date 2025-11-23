@@ -46,27 +46,35 @@ class Listing extends BaseDBModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
    
-    private function _findByID(int $id): ?array
+    private function _findByID(int $id, int $current_user_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
         SELECT
-           l.id AS listing_id,
-           l.user_id,
-           l.title,
-           l.price,
-           l.description,
-           l.created_at,
-           l.attributes,
-           c.file_id AS cover_file_id,
-           u.display_name
+            l.id AS listing_id,
+            l.user_id,
+            l.title,
+            l.price,
+            l.description,
+            l.created_at,
+            l.attributes,
+            u.display_name,
+            c.file_id AS cover_file_id,
+            EXISTS (
+                SELECT 1
+                FROM favourites f
+                WHERE f.listing_id = l.id AND f.user_id = :current_user_id
+            ) AS is_favourited
         FROM listings l
         LEFT JOIN users u
             ON u.id = l.user_id
         LEFT JOIN covers c
             ON c.listing_id = l.id
-        WHERE l.id = ?
+        WHERE l.id = :id
         SQL);
-        $stmt->execute([$id]);
+        $stmt->execute([
+            ':id' => $id,
+            ':current_user_id' => $current_user_id,
+        ]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -186,12 +194,13 @@ class Listing extends BaseDBModel
         return $this->_listAll(Listing::PER_PAGE, $offset, $user_id);
     }
 
-    public function get(int $id): ?array
+    public function get(int $id, int $user_id): ?array
     {
-        if (!$id) {
+        if (!$id || !$user_id) {
             throw new \InvalidArgumentException('Not enough arguments');
         }
-        return $this->_findByID($id);
+
+        return $this->_findByID($id, $user_id);
     }
 
     public function getCovers(int $id): ?array

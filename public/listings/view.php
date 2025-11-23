@@ -8,7 +8,7 @@ $iso = new Matriphe\ISO639\ISO639();
 $listingBuilder = (new App\Builder\ListingBuilder())->make();
 
 $listing_id = $_GET['listing'];
-$listing = $listingBuilder->get($listing_id);
+$listing = $listingBuilder->get($listing_id, $_SESSION['user_id']);
 $listing_covers = $listingBuilder->getCovers($listing_id);
 
 $title = htmlspecialchars($listing['title']);
@@ -66,9 +66,7 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function (): string {
-    global $title, $listing, $listing_covers, $key_lookup_table, $iso, $listing_id;
-
+$render_content = function () use ($title, $listing, $listing_covers, $key_lookup_table, $iso, $listing_id): string {
     $array_size = count($listing_covers);
     $disabled = $array_size <= 1 ? "disabled" : null;
     $main_cover = "";
