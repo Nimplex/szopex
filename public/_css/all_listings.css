@@ -10,6 +10,12 @@ main hr {
   opacity: 0;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .settling {
+    scale: 0.9;
+  }
+}
+
 article {
   display: flex;
   padding: 1rem;
@@ -27,7 +33,7 @@ article > a {
   gap: 1.5rem;
   text-decoration: inherit;
   color: inherit;
-  transition: opacity 300ms ease-in;
+  transition: opacity 300ms ease-in, scale 200ms;
 }
 
 article header {
