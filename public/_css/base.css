@@ -1,6 +1,6 @@
 :root {
   --main-bg: #020202;
-  --accent: #F8B763;
+  --accent: #f8b763;
   --gray-bg: #252525;
   --gray-hover: #151515;
   --border-gray: #575757;
@@ -11,6 +11,7 @@
   --sel-color: var(--accent);
   --sel-outline: 2px solid var(--sel-color);
 
+  font-size: 16px;
   font-family: Inter, sans-serif;
   /* prettier-ignore */
   font-feature-settings:
@@ -26,6 +27,12 @@
 @supports (font-variation-settings: normal) {
   :root {
     font-family: InterVariable, sans-serif;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    font-size: 14px !important;
   }
 }
 
@@ -181,7 +188,9 @@ nav a {
   transform: translateY(0.25rem);
   padding-bottom: 0.25rem;
   border-bottom: 2px solid transparent;
-  transition: all 250ms, outline 0s;
+  transition:
+    all 250ms,
+    outline 0s;
 }
 
 nav a:hover {
@@ -198,7 +207,6 @@ nav a:has(img) {
     scale: 1.2;
   }
 }
-
 
 nav .mobile {
   display: none;
@@ -312,7 +320,9 @@ button {
   border: 1px solid var(--border-gray);
   background: var(--main-bg);
   outline: none;
-  transition: all 250ms, outline 0s;
+  transition:
+    all 250ms,
+    outline 0s;
   border-radius: var(--radius);
 }
 
@@ -496,4 +506,3 @@ body > footer {
   color: #999;
   margin-top: 2rem;
 }
-
