@@ -8,10 +8,9 @@ if (isset($_SERVER['HTTP_RAW_REQUEST'])) {
     die;
 }
 
-$listingBuilder = (new App\Builder\ListingBuilder())->make();
+$lis = (new App\Builder\ListingBuilder())->make();
 
 $title = 'Ogłoszenia';
-$current_page = (int)($_GET['page'] ?? 0);
 
 $render_head = function () {
     return <<<HTML
@@ -24,9 +23,8 @@ $render_head = function () {
     HTML;
 };
 
-$render_content = function () {
-    global $listingBuilder, $current_page;
-    $total_pages = $listingBuilder->countPages();
+$render_content = function () use ($lis) {
+    $total_pages = $lis->countPages();
 
     ob_start();
     require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/listings.php';
@@ -35,9 +33,7 @@ $render_content = function () {
     return <<<HTML
     <h1>Aktualne ogłoszenia</h1>
     <hr>
-    <div id="offers">
-        $listings
-    </div>
+    <div id="offers">$listings</div>
     HTML;
 };
 

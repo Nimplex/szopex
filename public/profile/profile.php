@@ -2,15 +2,13 @@
 
 session_start();
 
-/** @var PDO $db */
-require $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/check-auth.php';
 
+use App\Builder\AuthBuilder;
 use App\Builder\ListingBuilder;
-use App\Controller\UserController;
 
-$user = new UserController($db);
+$user = (new AuthBuilder())->make();
 $listingModel = (new ListingBuilder())->make();
 
 $id = $_GET['id'];
