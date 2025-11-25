@@ -74,6 +74,14 @@ $router->GET(
     true,
 );
 
+//==== MESSAGES =============================================================//
+
+$router->GET(
+    '/messages',
+    fn () => require __DIR__ . '/../resources/messages/messages.php',
+    true,
+);
+
 //==== STORAGE ==============================================================//
 
 $router->GET(

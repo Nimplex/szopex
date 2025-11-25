@@ -1,0 +1,18 @@
+main {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+section {
+  background: var(--gray-bg);
+}
+
+#chats-list {
+  max-width: 250px;
+  width: 100%;
+}
+
+#message-box {
+  flex: 1;
+}

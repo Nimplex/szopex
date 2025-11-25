@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 use App\Mailer;
 use App\Model\Activation;
 use App\Model\Favourites;

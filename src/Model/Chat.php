@@ -18,12 +18,23 @@ class Chat extends BaseDBModel
     public function find_by_user(int $user_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT *, (seller_id = :user_id) AS is_seller FROM chats WHERE seller_id = :user_id OR buyer_id = :user_id
+        SELECT
+            c.*,
+            b.display_name as buyer_name,
+            s.display_name as seller_name,
+            (c.seller_id = :user_id) AS is_seller
+        FROM chats c
+        JOIN users b
+            ON c.buyer_id = b.id
+        JOIN users s
+            ON c.seller_id = s.id
+        WHERE c.seller_id = :user_id
+            OR c.buyer_id = :user_id
         SQL);
         $stmt->execute([
             ':user_id' => $user_id
         ]);
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function find_standalone(int $seller_id, int $buyer_id): ?array

@@ -1,6 +1,4 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 use App\Helper\DateHelper;
 
 $listing = (new App\Builder\ListingBuilder())->make();

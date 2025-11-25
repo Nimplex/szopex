@@ -2,8 +2,6 @@
 
 namespace App;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 use PHPMailer\PHPMailer\PHPMailer;
 
 $dotenv = \Dotenv\Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/..');

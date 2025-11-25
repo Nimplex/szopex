@@ -1,6 +1,4 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 $lookup_table = [
     'Err' => 'Błąd',
     'Ok' => 'Sukces'
