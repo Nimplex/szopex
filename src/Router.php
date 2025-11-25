@@ -25,7 +25,7 @@ class Router
         }
 
         $route = new Route($callback, $check_auth);
-        $this->_registerRoute($method, $path, $route);
+        $this->_registerRoute($method, $path, $route, $check_auth);
 
         return $route;
     }
