@@ -1,9 +1,6 @@
 <?php
 
-// Ensure session is up
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+@session_start();
 
 /** @var PDO $db */
 require __DIR__ . '/../bootstrap.php';
@@ -19,14 +16,8 @@ $router->GET('/', function () {
     die;
 });
 
-$check_auth = function () {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: /401', true, 303);
-        die;
-    }
-};
 
-//=====LOGIN=================================================================//
+//==== LOGIN ================================================================//
 
 $router->GET(
     '/login',
@@ -37,53 +28,61 @@ $router->GET(
     fn () => require __DIR__ . '/../resources/register.php'
 );
 
-//=====LISTINGS==============================================================//
+//==== LISTINGS =============================================================//
 
 $router->GET(
     '/listings',
-    fn () => require __DIR__ . '/../resources/listings/all.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/listings/all.php',
+    true,
+);
 
 $router->GET(
     '/listings/new',
-    fn () => require __DIR__ . '/../resources/listings/new.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/listings/new.php',
+    true,
+);
 
 $router->GET(
     '/listings/:id:int',
-    fn () => require __DIR__ . '/../resources/listings/view.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/listings/view.php',
+    true,
+);
 
-//=====PROFILE===============================================================//
+//==== PROFILE ==============================================================//
 
 $router->GET(
     '/profile/favourites',
-    fn () => require __DIR__ . '/../resources/profile/@favourites.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/profile/@favourites.php',
+    true,
+);
 
 $router->GET(
     '/profile/listings',
-    fn () => require __DIR__ . '/../resources/profile/@listings.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/profile/@listings.php',
+    true,
+);
 
 $router->GET(
     '/profile/:id:int',
-    fn () => require __DIR__ . '/../resources/profile/profile.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/profile/profile.php',
+    true,
+);
 
-//=====STORAGE===============================================================//
+//==== STORAGE ==============================================================//
 
 $router->GET(
     '/storage/covers/:id',
-    fn () => require __DIR__ . '/../resources/covers.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/covers.php',
+    true,
+);
 
 $router->GET(
     '/storage/profile-pictures/:id',
-    fn () => require __DIR__ . '/../resources/profile-picture.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/profile-picture.php',
+    true,
+);
 
-//=====ERRORS================================================================//
+//==== ERRORS ===============================================================//
 
 $router->GET(
     '/401',
@@ -100,13 +99,13 @@ $router->GET(
     fn () => require __DIR__ . '/../resources/errors/404.php'
 );
 
-//=====API===================================================================//
+//==== API===================================================================//
 
 $router->GET('/api/logout', function () {
     session_destroy();
     header('Location: /?logout=1', true, 303);
     die;
-})->middleware($check_auth);
+});
 
 $router->GET(
     '/api/activate/:id/:token',
@@ -115,8 +114,9 @@ $router->GET(
 
 $router->POST(
     '/api/listings/favourite',
-    fn () => require __DIR__ . '/../resources/api/favourites.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/api/favourites.php',
+    true,
+);
 
 $router->POST(
     '/api/login',
@@ -130,8 +130,9 @@ $router->POST(
 
 $router->POST(
     '/api/new-listing',
-    fn () => require __DIR__ . '/../resources/api/new-listing.php'
-)->middleware($check_auth);
+    fn () => require __DIR__ . '/../resources/api/new-listing.php',
+    true,
+);
 
 $router->DEFAULT(function () {
     header('Location: /404', true, 303);

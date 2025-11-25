@@ -7,7 +7,7 @@ class Router
     private array $routes;
     private Route $defaultRoute;
 
-    private function _registerRoute(string $method, string $path, Route $route): void
+    private function _registerRoute(string $method, string $path, Route $route, bool $check_auth): void
     {
         $this->routes[$method][$path] = $route;
     }
@@ -18,7 +18,7 @@ class Router
      * @param callable(): void $callback
      * @throws \ErrorException
      */
-    private function _makeRoute(string $method, string $path, callable $callback): Route
+    private function _makeRoute(string $method, string $path, callable $callback, bool $check_auth): Route
     {
         if (isset($this->routes[$method][$path])) {
             throw new \ErrorException("'{$path}' has been already registered");
@@ -45,9 +45,9 @@ class Router
      *
      * @param callable(): void $callback
      */
-    public function GET(string $path, callable $callback): Route
+    public function GET(string $path, callable $callback, bool $check_auth): Route
     {
-        return $this->_makeRoute('GET', $path, $callback);
+        return $this->_makeRoute('GET', $path, $callback, $check_auth);
     }
 
     /**
@@ -55,14 +55,15 @@ class Router
      *
      * @param callable(): void $callback
      */
-    public function POST(string $path, callable $callback): Route
+    public function POST(string $path, callable $callback, bool $check_auth): Route
     {
-        return $this->_makeRoute('POST', $path, $callback);
+        return $this->_makeRoute('POST', $path, $callback, $check_auth);
     }
  
     /**
      * Register a default route, in case no other routes hit.
      *
+     * @throws \ErrorException
      * @param callable(): void $callback
      */
     public function DEFAULT(callable $callback): Route
@@ -71,7 +72,8 @@ class Router
             throw new \ErrorException("A default route has been already registered");
         }
 
-        $route = new Route($callback);
+        // never check auth on default route (it should be accessible to everyone)
+        $route = new Route($callback, $check_auth);
         $this->defaultRoute = $route;
 
         return $route;
@@ -127,17 +129,25 @@ class Router
 class Route
 {
     private \Closure $callback;
+    private bool $check_auth;
 
     /**
      * @param callable(): void $callback
      */
-    public function __construct(callable $callback)
+    public function __construct(callable $callback, bool $check_auth)
     {
+        $this->check_auth = $check_auth;
         $this->callback = $callback(...);
     }
 
     public function fire(): void
     {
+        @session_start();
+        if ($this->check_auth && !isset($_SESSION['user_id'])) {
+            require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/401.php';
+            die;
+        }
+
         ($this->callback)();
     }
 }
