@@ -2,8 +2,6 @@
 
 namespace App\Model;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 use PDO;
 
 class Favourites extends BaseDBModel

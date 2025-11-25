@@ -1,6 +1,5 @@
 <?php
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 use App\FlashMessage;
 
 /** @var \App\Controller\UserController $user */
@@ -11,5 +10,5 @@ try {
     header('Location: /?login=1', true, 303);
 } catch (\InvalidArgumentException $e) {
     (new FlashMessage())->fromException($e);
-    header('Location: /login.php', true, 303);
+    header('Location: /login', true, 303);
 }

@@ -1,7 +1,5 @@
 <?php
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 if (isset($_SERVER['HTTP_RAW_REQUEST'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/../resources/hx-templates/listings.php';
     die;

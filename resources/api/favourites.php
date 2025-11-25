@@ -1,7 +1,5 @@
 <?php
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 /** @var \App\Controller\UserController $user */
 global $user;
 

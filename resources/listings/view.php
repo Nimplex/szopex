@@ -2,8 +2,6 @@
 
 global $_ROUTE;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 $iso = new Matriphe\ISO639\ISO639();
 $listingBuilder = (new App\Builder\ListingBuilder())->make();
 
