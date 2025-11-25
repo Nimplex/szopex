@@ -6,7 +6,6 @@ class FlashMessage
 {
     public function set(string $msg, FlashMsgType $type): void
     {
-        @session_start();
         $_SESSION['_flashMessage'] = $msg;
         $_SESSION['_flashMessageType'] = $type->value;
     }
@@ -41,13 +40,11 @@ class FlashMessage
 
     public function exists(): bool
     {
-        @session_start();
         return isset($_SESSION['_flashMessageType'], $_SESSION['_flashMessage']);
     }
     
     public function peekMsg(): ?string
     {
-        @session_start();
         return $_SESSION['_flashMessage'];
     }
 
@@ -60,7 +57,6 @@ class FlashMessage
 
     public function peekType(): ?FlashMsgType
     {
-        @session_start();
         return FlashMsgType::from((int) $_SESSION['_flashMessageType']);
     }
 

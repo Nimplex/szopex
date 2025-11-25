@@ -198,8 +198,6 @@ class UserController
      */
     public function favourite_from_request(array $request): bool
     {
-        @session_start();
-
         if (!isset($_SESSION['user_id'])) {
             throw new \Exception('i18n:not_logged_in', 1);
         }

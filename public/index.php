@@ -1,5 +1,11 @@
 <?php
 
+session_set_cookie_params([
+    'samesite' => 'Strict',
+    'secure' => true,
+    'httponly' => true,
+]);
+
 @session_start();
 
 /** @var PDO $db */

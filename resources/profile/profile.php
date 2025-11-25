@@ -3,8 +3,6 @@
 /** @var \App\Controller\UserController $user */
 global $user, $_ROUTE;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 use App\Builder\ListingBuilder;
 
 $listingModel = (new ListingBuilder())->make();

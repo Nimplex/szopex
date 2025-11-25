@@ -1,4 +1,5 @@
 main {
+  position: relative;
   display: flex;
   flex-direction: row;
   gap: 2rem;
@@ -10,8 +11,10 @@ main {
   }
 
   #profile-info {
-    flex-direction: row;
-    align-items: center;
+    flex-direction: row !important;
+    align-items: center !important;
+    max-width: 100% !important;
+    position: revert !important;
   }
 
   #profile-picture {
@@ -27,6 +30,8 @@ section {
 }
 
 #profile-info {
+  position: sticky;
+  top: 8rem;
   display: flex;
   gap: 1.5rem;
   flex-direction: column;
