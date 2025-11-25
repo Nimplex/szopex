@@ -32,10 +32,36 @@ class Router
 
     private function _match(string $path, string $pattern): ?array
     {
-        $regex = preg_replace('#:([\w]+)#', '(?P<$1>[^/]+)', $pattern);
-        $regex = "#^{$regex}$#";
+        $types = [
+            'int' => '\d+',
+            'string' => '[a-zA-Z0-9_-]+',
+        ];
+
+        $regex = preg_replace_callback(
+            '#:(\w+)(?::(\w+))?#',
+            function ($matches) use ($types) {
+                $paramName = $matches[1];
+                $paramType = $matches[2] ?? null;
+                if ($paramType && isset($types[$paramType])) {
+                    $pattern = $types[$paramType];
+                } else {
+                    $pattern = '[^/]+';
+                }
+                return "(?P<{$paramName}>{$pattern})";
+            },
+            $pattern
+        );
+
+        $regex = "#^{$regex}$#i";
+        
         if (preg_match($regex, $path, $matches)) {
-            return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+            $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
+            foreach ($params as $key => $value) {
+                if (preg_match('/\(\?P<' . preg_quote($key) . '>' . $types['int'] . '\)/', $regex)) {
+                    $params[$key] = (int) $value;
+                }
+            }
+            return $params;
         }
         return null;
     }
