@@ -24,7 +24,7 @@ class Router
             throw new \ErrorException("'{$path}' has been already registered");
         }
 
-        $route = new Route($callback);
+        $route = new Route($callback, $check_auth);
         $this->_registerRoute($method, $path, $route);
 
         return $route;
