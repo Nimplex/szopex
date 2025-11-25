@@ -1,5 +1,11 @@
 <?php
 
+session_set_cookie_params([
+    'samesite' => 'Strict',
+    'secure' => true,
+    'httponly' => true,
+]);
+
 // Ensure session is up
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

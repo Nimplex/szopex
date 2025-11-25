@@ -1,6 +1,5 @@
 <?php
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 $favouritesModel = (new App\Builder\FavouritesBuilder())->make();
 
 $title = "Polubione";

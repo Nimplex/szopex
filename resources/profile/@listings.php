@@ -1,12 +1,10 @@
 <?php
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 $listingModel = (new App\Builder\ListingBuilder())->make();
 
 $title = "Oferty użytkownika {$_SESSION['user_display_name']}";
 
-$render_content = function () {
-    global $listingModel;
+$render_content = function () use ($listingModel) {
     $html = "<h1>Moje oferty</h1><div>";
     foreach ($listingModel->listByUser($_SESSION['user_id']) as $listing) {
         $html .= <<<HTML
