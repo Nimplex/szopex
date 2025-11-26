@@ -5,23 +5,6 @@ main {
   gap: 2rem;
 }
 
-@media (max-width: 1000px) {
-  main {
-    flex-direction: column;
-  }
-
-  #profile-info {
-    flex-direction: row !important;
-    align-items: center !important;
-    max-width: 100% !important;
-    position: revert !important;
-  }
-
-  #profile-picture {
-    max-width: 150px;
-  }
-}
-
 section {
   padding: 1rem;
   border-radius: var(--radius);
@@ -29,16 +12,38 @@ section {
   border: 1px solid var(--border-gray);
 }
 
-#profile-info {
+#profile-sidebar section {
+  width: 100%;
+}
+
+#profile-sidebar {
   position: sticky;
   top: calc(8rem + 2px);
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+  max-width: 300px;
+  height: fit-content;
+  flex: 1;
+}
+
+#profile-edit {
+  display: flex;
+}
+
+#profile-edit button {
+  flex: 1;
+}
+
+#profile-info {
+  width: 100%;
   display: flex;
   gap: 1.5rem;
   flex-direction: column;
   align-items: center;
   max-width: 300px;
   height: fit-content;
-  flex: 1;
 }
 
 #profile-picture {
@@ -48,6 +53,27 @@ section {
   aspect-ratio: 1;
   object-fit: cover;
   border: 2px solid var(--border-gray);
+}
+
+@media (max-width: 1000px) {
+  main {
+    flex-direction: column;
+  }
+
+  #profile-sidebar {
+    align-items: center !important;
+    max-width: 100% !important;
+    position: revert !important;
+  }
+
+  #profile-info {
+    flex-direction: row !important;
+    max-width: 100%;
+  }
+
+  #profile-picture {
+    max-width: 250px;
+  }
 }
 
 .details {
@@ -63,17 +89,13 @@ section {
   margin-bottom: 0.5rem;
 }
 
-.stat {
+.stat, .no-listings {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   color: #999;
   font-size: 0.95rem;
-}
-
-.stat i {
-  color: var(--accent);
 }
 
 #listings-section {
@@ -95,7 +117,7 @@ section {
   background: var(--main-bg);
   border: 1px solid var(--border-gray);
   border-radius: var(--radius);
-  transition: all 250ms;
+  transition: all 250ms, outline 0s;
   text-decoration: none;
   color: inherit;
 }
@@ -155,12 +177,6 @@ section {
   padding: 3rem 1rem;
   color: #999;
   font-size: 1.1rem;
-}
-
-.no-listings i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  display: block;
 }
 
 @media (max-width: 600px) {

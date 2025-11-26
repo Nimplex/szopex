@@ -7,6 +7,7 @@
   --border-hover: #808080;
   --white: #ebe9e9;
   --red: #dc3545;
+  --red-alt: #540812;
   --radius: 4px;
   --sel-color: var(--accent);
   --sel-outline: 2px solid var(--sel-color);
@@ -358,15 +359,21 @@ button:hover {
   border-color: var(--white);
 }
 
-.btn-no-border-red {
-  border: none !important;
-  background: none !important;
-  color: var(--red);
-}
-
 .btn-red {
   color: var(--white);
   background: var(--red);
+  border: 1px solid var(--red);
+}
+
+.btn-red-alt {
+  color: var(--white);
+  background: var(--red-alt);
+  border: 1px solid var(--border-gray);
+}
+
+.btn-red-alt:hover,
+.btn-red-alt:focus-visible {
+  background: var(--main-bg);
   border: 1px solid var(--red);
 }
 

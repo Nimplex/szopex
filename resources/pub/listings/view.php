@@ -165,7 +165,7 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
                         aria-label="Skontaktuj się z sprzedającym">
                             Napisz do ogłoszeniodawcy
                     </button>
-                    <button class="btn-no-border-red"><i data-lucide="flag"></i>Zgłoś</button>
+                    <button class="btn-red-alt"><i data-lucide="flag"></i>Zgłoś</button>
                 </div>
             </div>
         </div>

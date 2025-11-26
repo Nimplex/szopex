@@ -10,6 +10,10 @@ $listingModel = (new ListingBuilder())->make();
 $id = $_ROUTE['id'];
 
 $res = $user->user->get_profile($id);
+if (!$res) {
+    require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/404.php';
+}
+
 $listings = $listingModel->listByUser($id);
 
 $title = "Użytkownik {$res['display_name']}";
@@ -20,7 +24,7 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function () use ($res, $listings) {
+$render_content = function () use ($res, $listings, $id) {
     [
         'display_name' => $display_name,
         'created_at' => $created_at,
@@ -68,34 +72,45 @@ $render_content = function () use ($res, $listings) {
             $listings_html .= <<<HTML
             <a href="/listings/{$listing_id}" class="listing-card">
                 {$cover_html}
-                <div class="listing-info">
+                <article class="listing-info">
                     <h3>{$listing_title}</h3>
                     <div class="listing-meta">
                         <span><i data-lucide="calendar" aria-hidden="true"></i>{$listing_date}</span>
                         <span><i data-lucide="{$listing_status_icon}" aria-hidden="true"></i>{$listing_active}</span>
                     </div>
                     <div class="price">{$listing_price}</div>
-                </div>
+                </article>
             </a>
             HTML;
         }
     }
 
+    $profile_edit_section = ($_SESSION['user_id'] == $id) ? <<<HTML
+    <button>Edytuj profil</button>
+    HTML : <<<HTML
+    <button class="btn-red-alt">Zgłoś profil</button>
+    HTML;
+
     return <<<HTML
-    <section id="profile-info">
-        {$img_element}
-        <div class="details">
-            <h1>{$display_name}</h1>
-            <div class="stat">
-                <i data-lucide="calendar" aria-hidden="true"></i>
-                Dołączył {$created_at_formatted}
+    <div id="profile-sidebar">
+        <section id="profile-info">
+            {$img_element}
+            <div class="details">
+                <h1>{$display_name}</h1>
+                <div class="stat">
+                    <i data-lucide="calendar" aria-hidden="true"></i>
+                    Dołączył {$created_at_formatted}
+                </div>
+                <div class="stat">
+                    <i data-lucide="package" aria-hidden="true"></i>
+                    {$listing_count} ogłoszeń
+                </div>
             </div>
-            <div class="stat">
-                <i data-lucide="package" aria-hidden="true"></i>
-                {$listing_count} ogłoszeń
-            </div>
-        </div>
-    </section>
+        </section>
+        <section id="profile-edit">
+            {$profile_edit_section}
+        </section>
+    </div>
     <section id="listings-section">
         <h2>Ogłoszenia użytkownika</h2>
         {$listings_html}
