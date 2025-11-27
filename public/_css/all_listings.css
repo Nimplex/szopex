@@ -171,3 +171,18 @@ article footer button {
   color: #999;
   margin-top: 2rem;
 }
+
+button.favourited {
+  color: var(--white);
+  background: var(--red);
+  border: 1px solid var(--red);
+}
+
+button.favourited svg {
+  fill: var(--white);
+}
+
+button.favourited:hover {
+  background: var(--main-bg);
+  border: 1px solid var(--red);
+}
