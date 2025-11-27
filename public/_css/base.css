@@ -365,6 +365,11 @@ button:hover {
   border: 1px solid var(--red);
 }
 
+.btn-red:hover {
+  background: var(--main-bg);
+  border: 1px solid var(--red);
+}
+
 .btn-red-alt {
   color: var(--white);
   background: var(--red-alt);
@@ -373,11 +378,6 @@ button:hover {
 
 .btn-red-alt:hover,
 .btn-red-alt:focus-visible {
-  background: var(--main-bg);
-  border: 1px solid var(--red);
-}
-
-.btn-red:hover {
   background: var(--main-bg);
   border: 1px solid var(--red);
 }
