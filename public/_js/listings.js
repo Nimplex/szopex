@@ -1,7 +1,7 @@
 async function favourite(event) {
-  event.target.blur();
+  let target = event.target.closest("button");
 
-  const { listingId } = event.target.dataset;
+  const { listingId } = target.dataset;
 
   if (!listingId || listingId === "")
     return console.warn("No listingId found!");
@@ -23,11 +23,11 @@ async function favourite(event) {
   const isFavourited = body == "yes";
 
   if (isFavourited) {
-    event.target.classList.add("btn-red");
-    event.target.innerHTML = "Usuń z ulubionych";
+    target.classList.add("btn-red");
+    target.querySelector("span").innerHTML = "Usuń z ulubionych";
   } else {
-    event.target.classList.remove("btn-red");
-    event.target.innerHTML = "Dodaj do ulubionych";
+    target.classList.remove("btn-red");
+    target.querySelector("span").innerHTML = "Dodaj do ulubionych";
   }
 }
 
