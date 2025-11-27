@@ -26,13 +26,13 @@ if (!in_array($lang, $allowed, true)) {
     <meta name="color-scheme" content="dark">
     <title><?= $title ?? 'Helix enthusiasts club' ?> | Szopex</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="preload" href="/_css/base.css" as="style">
-    <link rel="preload" href="/_js/navbar.js" as="script">
+    <link rel="preload" href="/_dist/css/base.css" as="style">
+    <link rel="preload" href="/_dist/js/navbar.js" as="script">
     <link rel="preload" href="https://rsms.me/inter/inter.css" as="style">
     <link rel="preconnect" href="https://rsms.me/">
-    <link rel="stylesheet" href="/_css/base.css">
+    <link rel="stylesheet" href="/_dist/css/base.css">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script type="module" src="/_dist/js/icons.js"></script>
     <?php if (isset($render_head)) {
         echo $render_head();
     } ?>
@@ -55,11 +55,7 @@ if (!in_array($lang, $allowed, true)) {
         echo $render_scripts();
     } ?>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", lucide.createIcons);
-    </script>
-    
-    <script src="/_js/navbar.js"></script>
+    <script type="module" src="/_dist/js/navbar.js"></script>
 
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/footer.php'; ?>
 </body>

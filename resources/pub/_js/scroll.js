@@ -1,9 +1,17 @@
+import { renderIcons } from "./icons.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const offers = document.getElementById("offers");
   let loading = false;
 
   function clearSettling() {
-    setTimeout(() => [...document.getElementsByClassName("settling")].forEach(x => x.classList.remove("settling")), 100);
+    setTimeout(
+      () =>
+        [...document.getElementsByClassName("settling")].forEach((x) =>
+          x.classList.remove("settling"),
+        ),
+      100,
+    );
   }
 
   clearSettling();
@@ -21,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearSettling();
     throbber.remove();
     loading = false;
-    lucide.createIcons();
+    renderIcons();
   }
 
   document.addEventListener("scroll", async () => {

@@ -60,7 +60,7 @@ $key_lookup_table = [
 
 $render_head = function (): string {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/view.css">
+    <link rel="stylesheet" href="/_dist/css/view.css">
     HTML;
 };
 
@@ -151,7 +151,7 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
                     <h1>{$listing['price']}</h1>
                    <button
                         type="button"
-                        onclick="event.preventDefault(); event.stopPropagation(); favourite(event)"
+                        onclick="window.favourite(event)"
                         class="{$template_favourited_class}"
                         data-listing-id="{$listing_id}"
                         aria-label="{$template_label}">
@@ -160,7 +160,7 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
                     <button
                         type="button"
                         class="btn-accent"
-                        onclick="event.preventDefault(); event.stopPropagation(); message(event)"
+                        onclick="window.message(event)"
                         data-listing-id="{$listing_id}"
                         aria-label="Skontaktuj się z sprzedającym">
                             Napisz do ogłoszeniodawcy
@@ -177,8 +177,8 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
 
 $render_scripts = function () {
     return <<<HTML
-    <script src="/_js/listings.js"></script>
-    <script src="/_js/carousel.js"></script>
+    <script type="module" src="/_dist/js/listings.js"></script>
+    <script type="module" src="/_dist/js/carousel.js"></script>
     HTML;
 };
 

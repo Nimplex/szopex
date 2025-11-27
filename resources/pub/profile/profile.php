@@ -20,7 +20,7 @@ $title = "Użytkownik {$res['display_name']}";
 
 $render_head = function (): string {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/profile.css">
+    <link rel="stylesheet" href="/_dist/css/profile.css">
     HTML;
 };
 

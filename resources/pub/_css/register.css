@@ -8,7 +8,7 @@ body::before {
   top: 0;
   height: 100vh;
   width: 100vw;
-  background-image: url("/_assets/andrei-castanha-rKu4WK5UYw8-unsplash.webp");
+  background-image: url("../_assets/andrei-castanha-rKu4WK5UYw8-unsplash.webp");
   background-size: cover;
   pointer-events: none;
   background-repeat: no-repeat;

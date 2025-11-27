@@ -4,7 +4,7 @@ $title = 'Nowe ogłoszenie';
 
 $render_scripts = function (): string {
     return <<<HTML
-    <script src="/_js/file_picker.js"></script>
+    <script type="module" src="/_dist/js/file_picker.js"></script>
     HTML;
 };
 
@@ -70,7 +70,7 @@ $render_content = function (): string {
 
 $render_head = function (): string {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/new.css">
+    <link rel="stylesheet" href="/_dist/css/new.css">
     HTML;
 };
 

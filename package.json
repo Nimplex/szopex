@@ -1,0 +1,25 @@
+{
+  "name": "classchat",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Nimplex/classchat#readme",
+  "bugs": {
+    "url": "https://github.com/Nimplex/classchat/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nimplex/classchat.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "esbuild",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.27.0",
+    "lucide": "^0.555.0"
+  }
+}

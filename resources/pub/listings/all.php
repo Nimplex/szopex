@@ -11,7 +11,7 @@ $title = 'Ogłoszenia';
 
 $render_head = function () {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/all_listings.css">
+    <link rel="stylesheet" href="/_dist/css/all_listings.css">
     <noscript>
         <style>
             #throbber { display: none; }
@@ -36,8 +36,8 @@ $render_content = function () use ($lis) {
 
 $render_scripts = function () {
     return <<<HTML
-    <script src="/_js/listings.js"></script>
-    <script src="/_js/scroll.js"></script>
+    <script type="module" src="/_dist/js/listings.js"></script>
+    <script type="module" src="/_dist/js/scroll.js"></script>
     HTML;
 };
 

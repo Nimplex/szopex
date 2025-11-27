@@ -5,7 +5,7 @@ $no_navbar = true;
 
 $render_head = function (): string {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/login.css">
+    <link rel="stylesheet" href="/_dist/css/login.css">
     HTML;
 };
 

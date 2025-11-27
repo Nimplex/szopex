@@ -1,4 +1,4 @@
-async function favourite(event) {
+window.favourite = async function (event) {
   let target = event.target.closest("button");
 
   const { listingId } = target.dataset;
@@ -31,7 +31,7 @@ async function favourite(event) {
   }
 }
 
-function message(event) {
+window.message = function (event) {
   const { listingId } = event.target.dataset;
 
   if (!listingId || listingId === "")

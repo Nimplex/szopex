@@ -6,7 +6,7 @@ $title = '401';
 
 $render_head = function (): string {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/error.css">
+    <link rel="stylesheet" href="/_dist/css/error.css">
     HTML;
 };
 

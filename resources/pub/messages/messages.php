@@ -6,7 +6,7 @@ $title = "Wiadomości";
 
 $render_head = function (): string {
     return <<<HTML
-    <link rel="stylesheet" href="/_css/messages.css">
+    <link rel="stylesheet" href="/_dist/css/messages.css">
     HTML;
 };
 
@@ -37,7 +37,7 @@ $render_content = function () use ($chatsModel) {
 
 $render_scripts = function (): string {
     return <<<HTML
-    <script src="/_js/messages.js"></script>
+    <script type="module" src="/_dist/js/messages.js"></script>
     HTML;
 };
 
