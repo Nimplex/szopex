@@ -96,7 +96,7 @@ section {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #999;
+  color: var(--text-secondary);
   font-size: 0.95rem;
 }
 
@@ -164,7 +164,7 @@ section {
 .listing-meta {
   display: flex;
   gap: 1rem;
-  color: #999;
+  color: var(--text-secondary);
   font-size: 0.9rem;
 }
 
@@ -177,7 +177,7 @@ section {
 .no-listings {
   text-align: center;
   padding: 3rem 1rem;
-  color: #999;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 

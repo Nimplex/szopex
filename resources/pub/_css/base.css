@@ -8,6 +8,7 @@
   --white: #ebe9e9;
   --red: #dc3545;
   --red-alt: #540812;
+  --text-secondary: #999;
   --radius: 4px;
   --sel-color: var(--accent);
   --sel-outline: 2px solid var(--sel-color);
@@ -133,7 +134,6 @@ body > footer {
 */
 
 body > nav {
-  font-size: 1rem;
   background: var(--gray-bg);
   border-bottom: 2px solid var(--border-gray);
   position: sticky;
@@ -437,6 +437,12 @@ hr {
   border: 0;
 }
 
+.lucide.big-icon {
+  width: 64px;
+  height: 64px;
+  stroke-width: 1.25px;
+}
+
 /*
 * ==============================================================================
 * FOOTER
@@ -509,6 +515,6 @@ body > footer {
 #throbber {
   text-align: center;
   font-size: 2rem;
-  color: #999;
+  color: var(--text-secondary);
   margin-top: 2rem;
 }

@@ -108,7 +108,7 @@ article main ul li i {
 
 article main .small-text {
   margin-top: auto;
-  color: #999;
+  color: var(--text-secondary);
   font-size: 1rem;
   opacity: 0;
   transition: opacity 300ms;
@@ -168,7 +168,7 @@ article footer button {
 .content-end {
   text-align: center;
   font-size: 2rem;
-  color: #999;
+  color: var(--text-secondary);
   margin-top: 2rem;
 }
 
