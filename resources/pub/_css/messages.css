@@ -1,3 +1,24 @@
+#noscript {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+    gap: 1rem;
+}
+
+#noscript > * {
+    text-align: center;
+}
+
 body > main {
   display: flex;
   flex-direction: row;

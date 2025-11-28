@@ -35,6 +35,18 @@ $render_content = function () use ($chatsModel) {
     }
 
     return <<<HTML
+    <noscript>
+        <div id="noscript">
+            <h1>Ta strona wymaga działania skryptów JS do prawidłowego działania!</h1>
+            <p>Włącz działanie skryptów aby przejść dalej!</p>
+            <ul>
+                <li><a href="https://support.google.com/adsense/answer/12654">Google Chrome</a></li>
+                <li><a href="https://support.mozilla.org/en-US/kb/javascript-settings-for-interactive-web-pages">Firefox</a></li>
+                <li><a href="https://support.microsoft.com/en-us/microsoft-edge">Microsoft Edge</a></li>
+                <li><a href="https://support.apple.com/safari">Safari</a></li>
+            </ul>
+        </div>
+    </noscript>
     <div id="chats-sidebar">
         <section id="tabs">
             <ul>
