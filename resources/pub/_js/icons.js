@@ -4,12 +4,15 @@ import {
   Calendar,
   User,
   MessageCircle,
+  MessageCircleOff,
   Search,
   BookOpen,
-  Package,
   Inbox,
   Flag,
-  BadgeEuro,
+  LogOut,
+  Package,
+  PackageX,
+  PackageOpen,
 } from "lucide";
 
 export const iconRegistry = {
@@ -17,12 +20,15 @@ export const iconRegistry = {
   Calendar,
   User,
   MessageCircle,
+  MessageCircleOff,
   Search,
   BookOpen,
-  Package,
   Inbox,
   Flag,
-  BadgeEuro,
+  LogOut,
+  Package,
+  PackageX,
+  PackageOpen,
 };
 
 export function renderIcons() {

@@ -22,6 +22,13 @@ class UserController
         $this->favourites = new Favourites($db);
     }
 
+    /**
+     * This function checks if the password has:
+     * - at least 1 _lowercase letter_ (a-z),
+     * - at least 1 _uppercase letter_ (A-Z),
+     * - at least 1 _symbol_ [@, $, !, %, *, ?, &],
+     * - 8 or more of the characters described above
+     */
     private function _check_password_complexity(string $password): bool
     {
         $password_pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
@@ -102,7 +109,7 @@ class UserController
         $password = $request['password'] ?? null;
 
         if (!isset($login) || !isset($display_name) || !isset($email) || !isset($password)) {
-            throw new \InvalidArgumentException('i18n:missing_parameters');
+            throw new \InvalidArgumentException('i18n:missing_parameters', 1);
         }
 
         $login = strtolower(trim($login));

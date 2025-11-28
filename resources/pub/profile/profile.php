@@ -47,7 +47,7 @@ $render_content = function () use ($res, $listings, $id) {
     if (empty($listings)) {
         $listings_html = <<<HTML
         <div class="no-listings">
-            <i data-lucide="inbox" aria-hidden="true"></i>
+            <i class="big-icon" data-lucide="package-x" aria-hidden="true"></i>
             Ten użytkownik nie ma jeszcze żadnych ogłoszeń
         </div>
         HTML;
@@ -87,6 +87,12 @@ $render_content = function () use ($res, $listings, $id) {
 
     $profile_edit_section = ($_SESSION['user_id'] == $id) ? <<<HTML
     <button>Edytuj profil</button>
+    <form action="/api/logout" method="get">
+        <button class="btn-red-alt" type="submit">
+            <i class="flipped" data-lucide="log-out" aria-hidden="true"></i>
+            <span>Wyloguj się</span>
+        </button>
+    </form>
     HTML : <<<HTML
     <form action="/messages/new" method="get">
         <input type="hidden" name="user_id" value="{$id}">

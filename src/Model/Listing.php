@@ -101,7 +101,7 @@ class Listing extends BaseDBModel
             c.file_id AS cover_file_id
         FROM listings l
         LEFT JOIN covers c
-            ON c.listing_id = l.id
+            ON c.listing_id = l.id AND c.main = TRUE
         WHERE l.user_id = ?
         SQL);
         $stmt->execute([$user_id]);

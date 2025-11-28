@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
     $user_item .= <<<HTML
     <li>
         <a href="/listings">
-            <i data-lucide="badge-euro"></i>
+            <i data-lucide="package"></i>
             Ogłoszenia
         </a>
     </li>

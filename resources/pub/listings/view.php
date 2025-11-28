@@ -158,15 +158,6 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
                         onclick="window.favourite(event)"
                         data-listing-id="{$listing_id}"
                         aria-label="{$template_label}">
-                        {$template_label}
-                    </button>
-                    <button
-                        type="button"
-                        class="btn-accent"
-                        onclick="window.message(event)"
-                        data-listing-id="{$listing_id}"
-                        aria-pressed="{$is_favourited}"
-                        aria-label="<?=  ?>">
                         <i data-lucide="star" aria-hidden="true"></i>
                         <span>{$template_label}</span>
                     </button>
@@ -174,9 +165,10 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
                         <input type="hidden" name="listing-id" value="{$listing_id}">
                         <button
                             type="submit"
+                            onclick="window.message(event)"
                             class="btn-accent"
-                            data-listing-id="{$listing_id}?>"
-                            aria-label="Skontaktuj się z sprzedającym na temat '{$title}?>'">
+                            data-listing-id="{$listing_id}"
+                            aria-label="Skontaktuj się z sprzedającym na temat '{$title}'">
                             <i data-lucide="message-circle" aria-hidden="true"></i>
                             <span>Napisz do ogłoszeniodawcy</span>
                         </button>

@@ -75,7 +75,7 @@ $is_partial = $_SERVER['HTTP_PARTIAL_REQ'] ?? null;
 </noscript>
 <?php else: ?>
 <div class="content-end" role="status">
-    <i data-lucide="inbox" aria-hidden="true"></i>
+    <i class="big-icon" data-lucide="package-open" aria-hidden="true"></i>
     <p>Nic więcej tu nie ma!</p>
 </div>
 <?php endif; ?>
