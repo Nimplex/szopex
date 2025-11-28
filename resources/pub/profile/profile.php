@@ -101,7 +101,7 @@ $render_content = function () use ($res, $listings, $id) {
             <span>Napisz do użytkownika</span>
         </button>
     </form>
-    <button class="btn-red-alt"><i data-lucide="flag"></i>Zgłoś profil</button>
+    <button class="btn-red-alt"><i data-lucide="flag" aria-hidden="true"></i>Zgłoś profil</button>
     HTML;
 
     return <<<HTML

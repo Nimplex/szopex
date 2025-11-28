@@ -51,6 +51,13 @@ body {
 }
 
 body > main {
+  min-height: calc(100vh - 11rem);
+  max-width: 1400px;
+  margin: 2rem auto;
+  box-sizing: content-box;
+}
+
+body:not(:has(> nav)) > main {
   min-height: 100vh;
 }
 
@@ -214,7 +221,6 @@ nav .mobile {
   background: none;
   border: none;
   font-size: 1.5rem;
-  cursor: pointer;
 }
 
 #mobile-container {
@@ -331,6 +337,12 @@ input[type="submit"] {
   cursor: pointer;
 }
 
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  filter: brightness(60%) saturate(90%);
+}
+
 .inline-input {
   display: flex;
   gap: 0.25rem;
@@ -402,12 +414,6 @@ input[type="submit"]:focus-visible,
 * MAIN
 * ==============================================================================
 */
-
-body > main {
-  max-width: 1400px;
-  margin: 2rem auto;
-  box-sizing: content-box;
-}
 
 hr {
   border-color: var(--border-gray);

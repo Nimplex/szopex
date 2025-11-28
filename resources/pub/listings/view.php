@@ -66,7 +66,7 @@ $render_head = function (): string {
 
 $render_content = function () use ($title, $listing, $listing_covers, $key_lookup_table, $iso, $listing_id): string {
     $array_size = count($listing_covers);
-    $disabled = $array_size <= 1 ? "disabled" : null;
+    $img_controls_disabled = $array_size <= 1 ? "disabled" : null;
     $main_cover = "";
     $carousel = "<ul>";
     $attributes = "";
@@ -114,8 +114,8 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
         <section class="carousel" role="region" aria-roledescription="carousel" aria-label="Zdjęcia oferty">
             <div id="cover-container">
                 <img src="/api/storage/covers/{$main_cover}" id="main-cover">
-                <button class="left" aria-label="Poprzednie zdjęcie" tabindex="-1" $disabled>‹</button>
-                <button class="right" aria-label="Kolejne zdjęcie" tabindex="-1" $disabled>›</button>
+                <button class="left" aria-label="Poprzednie zdjęcie" tabindex="-1" $img_controls_disabled>‹</button>
+                <button class="right" aria-label="Kolejne zdjęcie" tabindex="-1" $img_controls_disabled>›</button>
             </div>
             <hr>
             {$carousel}
@@ -133,8 +133,24 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
     $template_favourited_class = ($listing['is_favourited'] ?? null) ? 'favourited' : '';
     $template_label = ($listing['is_favourited'] ?? null) ? "Usuń z ulubionych" : "Dodaj do ulubionych";
     $is_favourited = $listing['is_favourited'] ? 'true' : 'false';
-
+    $chat_btn_disabled = ($_SESSION['user_id'] == $listing['user_id']) ? 'disabled' : '';
     $aria_label = sprintf($listing['is_favourited'] ? 'Usuń %s z ulubionych' : 'Dodaj %s do ulubionych', $title);
+
+    $button_chat = ($_SESSION['user_id'] == $listing['user_id']) ? "" : <<<HTML
+    <form action="/messages/new" method="get">
+        <input type="hidden" name="listing-id" value="{$listing_id}">
+        <button
+            type="submit"
+            onclick="window.message(event)"
+            class="btn-accent"
+            data-listing-id="{$listing_id}"
+            aria-label="Skontaktuj się z sprzedającym na temat '{$title}'"
+            $chat_btn_disabled>
+            <i data-lucide="message-circle" aria-hidden="true"></i>
+            <span>Napisz do ogłoszeniodawcy</span>
+        </button>
+    </form>
+    HTML;
 
     $template = <<<HTML
     <div class="row">
@@ -161,18 +177,7 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
                         <i data-lucide="star" aria-hidden="true"></i>
                         <span>{$template_label}</span>
                     </button>
-                    <form action="/messages/new" method="get">
-                        <input type="hidden" name="listing-id" value="{$listing_id}">
-                        <button
-                            type="submit"
-                            onclick="window.message(event)"
-                            class="btn-accent"
-                            data-listing-id="{$listing_id}"
-                            aria-label="Skontaktuj się z sprzedającym na temat '{$title}'">
-                            <i data-lucide="message-circle" aria-hidden="true"></i>
-                            <span>Napisz do ogłoszeniodawcy</span>
-                        </button>
-                    </form>
+                    $button_chat
                     <button class="btn-red-alt"><i data-lucide="flag"></i>Zgłoś</button>
                 </div>
             </div>

@@ -55,9 +55,10 @@ $is_partial = $_SERVER['HTTP_PARTIAL_REQ'] ?? null;
                     type="submit"
                     class="btn-accent"
                     data-listing-id="<?= urlencode($lis['listing_id']) ?>"
-                    aria-label="Skontaktuj się z sprzedającym na temat '<?= htmlspecialchars($lis['title']) ?>'">
+                    aria-label="Skontaktuj się z sprzedającym na temat '<?= htmlspecialchars($lis['title']) ?>'"
+                    <?= ($_SESSION['user_id'] == $lis['user_id']) ? 'disabled' : ''?>>
                     <i data-lucide="message-circle" aria-hidden="true"></i>
-                    <span>Napisz do ogłoszeniodawcy</span>
+                    <span><?= ($_SESSION['user_id'] == $lis['user_id']) ? 'Nie możesz napisać sam do siebie' : 'Napisz do ogłoszeniodawcy' ?></span>
                 </button>
             </form>
         </div>
