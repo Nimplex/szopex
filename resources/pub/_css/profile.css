@@ -1,8 +1,10 @@
-main {
+body > main {
   position: relative;
+  flex: 1;
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  min-height: calc(100vh - 11rem - 2px);
 }
 
 section {
@@ -98,6 +100,7 @@ section {
   gap: 0.5rem;
   color: var(--text-secondary);
   font-size: 0.95rem;
+  margin: auto 0;
 }
 
 #listings-section {
