@@ -24,11 +24,20 @@ $render_content = function () use ($chatsModel) {
         HTML;
     } else {
         foreach ($chats as $chat) {
-            $img = "";
-            $display_name = $chat['is_seller'] ? $chat['buyer_name'] : $chat['seller_name'];
+            $is_seller = $chat['is_seller'];
+            $refers_to_listing = $chat['contains_listing'];
+
+            $top_text = $refers_to_listing ? $chat['listing_title'] : ($chat['is_seller'] ? $chat['buyer_name'] : $chat['seller_name']);
+            $bottom_text = $refers_to_listing ? ($chat['is_seller'] ? $chat['buyer_name'] : $chat['seller_name']) : '';
+            $img = sprintf("/api/storage/%s", $refers_to_listing ? sprintf('covers/%s', $chat['cover_file_id']) : sprintf('profile-pictures/%s', $is_seller ? $chat['buyer_profile_file_id'] : $chat['seller_profile_file_id']));
+        
             $list .= <<<HTML
             <div class="chat">
-                <p>{$display_name}</p>
+                <img src="{$img}">
+                <div class="chat-details">
+                    <h3>{$top_text}</h3>
+                    <p>{$bottom_text}</p>
+                </div>
             </div>
             HTML;
         }

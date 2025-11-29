@@ -29,12 +29,16 @@ class Chat extends BaseDBModel
             l.price AS listing_price,
             cv.file_id AS cover_file_id,
             (c.seller_id = :user_id) AS is_seller,
-            (c.listing_id IS NOT NULL) AS contains_listing
+            (c.listing_id IS NOT NULL) AS contains_listing,
+            sp.file_id AS seller_profile_file_id,
+            bp.file_id AS buyer_profile_file_id
         FROM chats c
         LEFT JOIN users s ON c.seller_id = s.id
         LEFT JOIN users b ON c.buyer_id = b.id
         LEFT JOIN listings l ON c.listing_id = l.id
         LEFT JOIN covers cv ON cv.listing_id = l.id AND cv.main = TRUE
+        LEFT JOIN profile_pictures sp ON sp.user_id = s.id
+        LEFT JOIN profile_pictures bp ON bp.user_id = b.id
         WHERE s.id = :user_id OR b.id = :user_id; 
         SQL);
         $stmt->execute([
