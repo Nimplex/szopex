@@ -105,7 +105,7 @@ body > main {
   border-top: 1px solid var(--border-gray);
 }
 
-.chat > * {
+.chat * {
   overflow: hidden;
   text-overflow: ellipsis;
 }

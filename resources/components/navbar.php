@@ -22,6 +22,12 @@ if (!isset($_SESSION['user_id'])) {
         </a>
     </li>
     <li>
+        <a href="/messages">
+            <i data-lucide="message-circle"></i>
+            Wiadomości
+        </a>
+    </li>
+    <li>
         <a href="/profile/{$_SESSION['user_id']}">
             <i data-lucide="user"></i>
             Witaj {$_SESSION['user_login']}
