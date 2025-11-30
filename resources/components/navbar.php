@@ -8,6 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     </li>
     HTML;
 } else {
+    $user_login = htmlspecialchars($_SESSION['user_login']);
     $user_item .= <<<HTML
     <li>
         <a href="/listings">
@@ -30,7 +31,7 @@ if (!isset($_SESSION['user_id'])) {
     <li>
         <a href="/profile/{$_SESSION['user_id']}">
             <i data-lucide="user" aria-hidden="true"></i>
-            Witaj {$_SESSION['user_login']}
+            Witaj {$user_login}
         </a>
     </li>
     HTML;
