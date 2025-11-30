@@ -15,8 +15,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "node build.js --prod",
+    "dev": "node build.js --watch",
+    "build:dev": "node build.js"
   },
   "devDependencies": {
     "esbuild": "^0.27.0",

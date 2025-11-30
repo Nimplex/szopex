@@ -1,8 +1,20 @@
 <?php
 
+/** @var \App\Controller\UserController $user */
+global $user;
+
+$listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
 $title = "Wiadomości";
+
+$req_user_id = $_GET['user_id'];
+$req_listing_id = $_GET['listing_id'];
+$new_chat = isset($req_user_id) || isset($req_listing_id);
+
+if ($new_chat) {
+    $title = "Nowy czat";
+}
 
 $render_head = function (): string {
     return <<<HTML
@@ -10,51 +22,102 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function () use ($chats_model) {
+$render_content = function () use ($user, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat) {
     $chats = $chats_model->find_by_user($_SESSION['user_id']);
 
     $list = "";
 
     if (!isset($chats) || empty($chats)) {
         $list = <<<HTML
-            <div id="no-chats">
-                <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
-                <span>Nie znaleziono czatów</span>
-            </div>
+        <div id="no-chats">
+            <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
+            <span>Nie znaleziono czatów</span>
+        </div>
         HTML;
     } else {
         foreach ($chats as $chat) {
+            $id = $chat['id'];
             $is_seller = $chat['is_seller'];
             $refers_to_listing = $chat['contains_listing'];
 
-            $top_text = $refers_to_listing
-                ? $chat['listing_title']
-                : (
-                    $chat['is_seller']
+            $top_text = $is_seller
                     ? htmlspecialchars($chat['buyer_name'])
-                    : htmlspecialchars($chat['seller_name'])
-                );
+                    : htmlspecialchars($chat['seller_name']);
 
             $bottom_text = $refers_to_listing
-                ? (
-                    $chat['is_seller']
-                    ? htmlspecialchars($chat['buyer_name'])
-                    : htmlspecialchars($chat['seller_name'])
-                )
+                ? $chat['listing_title']
                 : '';
 
             $img = sprintf("/api/storage/%s", $refers_to_listing ? sprintf('covers/%s', $chat['cover_file_id']) : sprintf('profile-pictures/%s', $is_seller ? $chat['buyer_pfp_file_id'] : $chat['seller_pfp_file_id']));
         
             $list .= <<<HTML
-            <div class="chat">
+            <button class="chat" onclick="window.openChat(event)" data-chat-id="{$id}">
                 <img src="{$img}">
                 <div class="chat-details">
                     <h3>{$top_text}</h3>
                     <p>{$bottom_text}</p>
                 </div>
-            </div>
+            </button>
             HTML;
         }
+    }
+
+    $message_box = "";
+
+    if ($new_chat) {
+        $destination = "";
+        $image_source = "";
+        $title = "";
+        $hidden_input = "";
+        $href = "";
+
+        if (isset($req_listing_id)) {
+            $res = $listing_model->get($req_listing_id, -1);
+
+            if (!isset($res)) {
+                header('Location: /404', true, 303);
+                die;
+            }
+
+            $href = "/listings/{$req_listing_id}";
+            $image_source = "/api/storage/covers/{$res['cover_file_id']}";
+            $title = htmlspecialchars($res["title"]);
+            $hidden_input = "<input type='hidden' name='listing_id' value='{$req_listing_id}'>";
+        }
+
+        if (isset($req_user_id)) {
+            $res = $user->user->get_profile($req_user_id);
+
+            if (!isset($res)) {
+                header('Location: /404', true, 303);
+                die;
+            }
+
+            $href = "/profile/{$req_user_id}";
+            $image_source = "/api/storage/profile-pictures/{$res['picture_id']}";
+            $title = htmlspecialchars($res['display_name']);
+            $hidden_input = "<input type='hidden' name='user_id' value='{$req_user_id}'>";
+        }
+
+        $message_box .= <<<HTML
+        <a href="{$href}" id="message-to">
+            <img src="{$image_source}" alt="Zdjęcie czatu">
+            <span>{$title}</span>
+        </a>
+        <section id="new-message">
+            <i data-lucide="message-square-dashed" aria-hidden="true"></i>
+            <h3>Napisz pierwszą wiadomość!</h3>
+        </section>
+        <section id="message-input">
+            <form method="GET" action="/api/new-message">
+                {$hidden_input}
+                <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
+                <button type="submit">
+                    <i data-lucide="send" aria-hidden="true"></i>
+                </button>
+            </form>
+        </section>
+        HTML;
     }
 
     return <<<HTML
@@ -65,11 +128,14 @@ $render_content = function () use ($chats_model) {
             <ul>
                 <li><a href="https://support.google.com/adsense/answer/12654">Google Chrome</a></li>
                 <li><a href="https://support.mozilla.org/en-US/kb/javascript-settings-for-interactive-web-pages">Firefox</a></li>
-                <li><a href="https://support.microsoft.com/en-us/microsoft-edge">Microsoft Edge</a></li>
+                <li><a href="https://support.microsoft.com/en-us/office/enable-javascript-7bb9ee74-6a9e-4dd1-babf-b0a1bb136361">Microsoft Edge</a></li>
                 <li><a href="https://support.apple.com/safari">Safari</a></li>
             </ul>
         </div>
     </noscript>
+    <template id="chat-template">
+        
+    </template>
     <div id="chats-sidebar">
         <section id="tabs">
             <ul>
@@ -83,7 +149,7 @@ $render_content = function () use ($chats_model) {
         </section>
     </div>
     <section id="message-box">
-
+        {$message_box}
     </section>
     HTML;
 };

@@ -51,7 +51,7 @@ $is_partial = $_SERVER['HTTP_PARTIAL_REQ'] ?? null;
             </button>
             <form action="/messages" method="get">
                 <input type="hidden" name="new_message" value="t">
-                <input type="hidden" name="listing-id" value="<?= urlencode($lis['listing_id']) ?>">
+                <input type="hidden" name="listing_id" value="<?= urlencode($lis['listing_id']) ?>">
                 <button
                     type="submit"
                     class="btn-accent"

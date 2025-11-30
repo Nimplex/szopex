@@ -1,0 +1,3 @@
+window.openChat = function (event) {
+
+}

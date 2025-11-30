@@ -139,7 +139,7 @@ $render_content = function () use ($title, $listing, $listing_covers, $key_looku
     $button_chat = ($_SESSION['user_id'] == $listing['user_id']) ? "" : <<<HTML
     <form action="/messages" method="get">
         <input type="hidden" name="new_message" value="t">
-        <input type="hidden" name="listing-id" value="{$listing_id}">
+        <input type="hidden" name="listing_id" value="{$listing_id}">
         <button
             type="submit"
             onclick="window.message(event)"

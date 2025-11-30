@@ -77,6 +77,7 @@ class User extends BaseDBModel
     {
         $stmt = $this->db->prepare(<<<SQL
         SELECT
+            u.id,
             u.display_name,
             u.created_at,
             (
