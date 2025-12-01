@@ -72,6 +72,14 @@ class User extends BaseDBModel
         return false;
     }
 
+    public function exists(int $id): bool
+    {
+        $stmt = $this->db->prepare('SELECT 1 FROM users WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->rowCount() >= 1;
+    }
+
+
     // I think it will be much safer not to expose password hashes etc. in responses even if it's not shown to user
     public function get_profile(int $id): ?array
     {

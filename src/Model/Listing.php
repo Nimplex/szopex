@@ -108,7 +108,6 @@ class Listing extends BaseDBModel
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-
     /**
      * @return int<1,max>|false
      */
@@ -191,6 +190,13 @@ class Listing extends BaseDBModel
     }
 
     // --- public methods ---
+
+    public function exists(int $id): bool
+    {
+        $stmt = $this->db->prepare('SELECT 1 FROM listings WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->rowCount() >= 1;
+    }
 
     public function count(): int
     {

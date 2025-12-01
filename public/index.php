@@ -83,6 +83,12 @@ $router->GET(
     true,
 );
 
+$router->POST(
+    '/api/new-chat',
+    fn () => require __DIR__ . '/../resources/api/new-chat.php',
+    true
+);
+
 //==== ERRORS ===============================================================//
 
 $router->GET(

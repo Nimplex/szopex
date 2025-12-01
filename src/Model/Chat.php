@@ -50,7 +50,7 @@ class Chat extends BaseDBModel
     public function find_standalone(int $seller_id, int $buyer_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM chats WHERE seller_id = ? AND buyer_id = ? AND listing = null
+        SELECT * FROM chats WHERE seller_id = ? AND buyer_id = ? AND listing_id = null
         SQL);
         $stmt->execute([$seller_id, $buyer_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -59,7 +59,7 @@ class Chat extends BaseDBModel
     public function find_listings(int $seller_id, int $buyer_id, int $listing_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM chats WHERE seller_id = ? AND buyer_id = ? AND listing = ?
+        SELECT * FROM chats WHERE seller_id = ? AND buyer_id = ? AND listing_id = ?
         SQL);
         $stmt->execute([$seller_id, $buyer_id, $listing_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
@@ -83,13 +83,28 @@ class Chat extends BaseDBModel
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
-    public function create(int $seller_id, int $buyer_id): int | bool
+    public function create(int $seller_id, int $buyer_id, int|null $listing_id = null): int | bool
     {
         $stmt = $this->db->prepare(<<<SQL
-        INSERT INTO chats(seller_id, buyer_id) VALUES(?, ?)
+        INSERT INTO chats(seller_id, buyer_id, listing_id) VALUES(?, ?, ?)
         SQL);
         
-        $res = $stmt->execute([$seller_id, $buyer_id]);
+        $res = $stmt->execute([$seller_id, $buyer_id, $listing_id]);
+
+        if ($res) {
+            return $this->db->lastInsertId();
+        }
+
+        return false;
+    }
+
+    public function add_message(int $chat_id, int $sender_id, string $content): int | bool
+    {
+        $stmt = $this->db->prepare(<<<SQL
+        INSERT INTO messages(chat_id, sender_id, content) VALUES(?, ?, ?);
+        SQL);
+
+        $res = $stmt->execute([$chat_id, $sender_id, $content]);
 
         if ($res) {
             return $this->db->lastInsertId();

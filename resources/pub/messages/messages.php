@@ -109,7 +109,7 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
             <h3>Napisz pierwszą wiadomość!</h3>
         </section>
         <section id="message-input">
-            <form method="POST" action="/api/new-message">
+            <form method="POST" action="/api/new-chat">
                 {$hidden_input}
                 <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
                 <button type="submit">
