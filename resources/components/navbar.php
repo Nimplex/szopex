@@ -4,7 +4,10 @@ $user_item = "";
 if (!isset($_SESSION['user_id'])) {
     $user_item .= <<<HTML
     <li>
-        <a href="/login">Zaloguj się</a>
+        <a href="/login">
+            <i data-lucide="key-square" aria-hidden="true"></i>
+            Zaloguj się
+        </a>
     </li>
     HTML;
 } else {

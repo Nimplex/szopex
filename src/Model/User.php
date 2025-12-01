@@ -91,7 +91,7 @@ class User extends BaseDBModel
             (
                 SELECT COUNT(*) FROM listings l WHERE l.user_id = u.id
             ) as listing_count,
-            p.file_id as picture_id
+            COALESCE(p.file_id, 'default') as picture_id
         FROM users u
         LEFT JOIN profile_pictures p ON p.user_id = u.id
         WHERE u.id = ?

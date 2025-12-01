@@ -1,4 +1,4 @@
-function previewFile(input) {
+window.previewFile = input => {
   const file = input.files[0];
   const reader = new FileReader();
 
@@ -39,6 +39,4 @@ function previewFile(input) {
   }
 }
 
-function removeFile(close) {
-  close.parentNode.remove();
-}
+window.removeFile = close => close.parentNode.remove();

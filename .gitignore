@@ -1,6 +1,6 @@
-/vendor/
 .env
-storage
-public/_assets
-public/_dist
-node_modules
+/vendor/
+/storage/
+/public/_assets/
+/public/_dist/
+/node_modules/

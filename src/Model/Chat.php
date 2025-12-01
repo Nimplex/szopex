@@ -30,8 +30,8 @@ class Chat extends BaseDBModel
             cv.file_id AS cover_file_id,
             (c.seller_id = :user_id) AS is_seller,
             (c.listing_id IS NOT NULL) AS contains_listing,
-            sp.file_id AS seller_pfp_file_id,
-            bp.file_id AS buyer_pfp_file_id
+            COALESCE(sp.file_id, 'default') AS seller_pfp_file_id,
+            COALESCE(bp.file_id, 'default') AS buyer_pfp_file_id
         FROM chats c
         LEFT JOIN users s ON c.seller_id = s.id
         LEFT JOIN users b ON c.buyer_id = b.id
@@ -39,7 +39,7 @@ class Chat extends BaseDBModel
         LEFT JOIN covers cv ON cv.listing_id = l.id AND cv.main = TRUE
         LEFT JOIN profile_pictures sp ON sp.user_id = s.id
         LEFT JOIN profile_pictures bp ON bp.user_id = b.id
-        WHERE s.id = :user_id OR b.id = :user_id; 
+        WHERE s.id = :user_id OR b.id = :user_id
         SQL);
         $stmt->execute([
             ':user_id' => $user_id
@@ -101,7 +101,7 @@ class Chat extends BaseDBModel
     public function add_message(int $chat_id, int $sender_id, string $content): int | bool
     {
         $stmt = $this->db->prepare(<<<SQL
-        INSERT INTO messages(chat_id, sender_id, content) VALUES(?, ?, ?);
+        INSERT INTO messages(chat_id, sender_id, content) VALUES(?, ?, ?)
         SQL);
 
         $res = $stmt->execute([$chat_id, $sender_id, $content]);

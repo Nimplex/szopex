@@ -3,11 +3,22 @@
 global $_ROUTE;
 
 $filename = $_ROUTE['id'] ?? '';
-$baseDir = realpath($_SERVER['DOCUMENT_ROOT'] . '/../storage/profile-pictures') . DIRECTORY_SEPARATOR;
 
-$filepath = realpath($baseDir . $filename);
+$filepath = "";
 
-if (!$filepath || !str_starts_with($filepath, $baseDir) || !is_file($filepath)) {
+if ($filename === "default") {
+    $filepath = realpath($_SERVER['DOCUMENT_ROOT'] . '/_assets/no-pfp.svg');
+} else {
+    $baseDir = realpath($_SERVER['DOCUMENT_ROOT'] . '/../storage/profile-pictures') . DIRECTORY_SEPARATOR;
+    $filepath = realpath($baseDir . $filename);
+
+    if (!$filepath || !str_starts_with($filepath, $baseDir) || !is_file($filepath)) {
+        require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/404.php';
+        die;
+    }
+}
+
+if (!is_file($filepath)) {
     require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/404.php';
     die;
 }

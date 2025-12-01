@@ -38,13 +38,10 @@ $render_content = function () use ($res, $listings, $id) {
     $display_name = htmlspecialchars($display_name);
     $created_at_formatted = date('d.m.Y', strtotime($created_at));
     
-    $img_element = "";
-    if (isset($picture_id)) {
-        $picture_id_encoded = urlencode($picture_id);
-        $img_element = <<<HTML
-        <img src="/api/storage/profile-pictures/{$picture_id_encoded}" id="profile-picture" alt="Zdjęcie profilowe {$display_name}">
-        HTML;
-    }
+    $picture_id_encoded = urlencode($picture_id);
+    $img_element = <<<HTML
+    <img src="/api/storage/profile-pictures/{$picture_id_encoded}" id="profile-picture" alt="Zdjęcie profilowe użytkownika {$display_name}">
+    HTML;
 
     $listings_html = "";
     if (empty($listings)) {
@@ -108,6 +105,15 @@ $render_content = function () use ($res, $listings, $id) {
     <button class="btn-red-alt"><i data-lucide="flag" aria-hidden="true"></i>Zgłoś profil</button>
     HTML;
 
+    $new_listing_button = ($_SESSION['user_id'] == $id) ? <<<HTML
+    <form action="/listings/new" method="GET">
+        <button class="btn-accent" type="submit">
+            <i data-lucide="package-plus" aria-hidden="true"></i>
+            Nowe ogłoszenie
+        </button>
+    </form>
+    HTML : "";
+
     return <<<HTML
     <div id="profile-sidebar">
         <section id="profile-info">
@@ -131,12 +137,7 @@ $render_content = function () use ($res, $listings, $id) {
     <section id="listings-section">
         <div id="heading">
             <h2>Ogłoszenia użytkownika</h2>
-            <form action="/listings/new" method="GET">
-                <button class="btn-accent" type="submit">
-                    <i data-lucide="package-plus" aria-hidden="true"></i>
-                    Nowe ogłoszenie
-                </button>
-            </form>
+            {$new_listing_button}
         </div>
         {$listings_html}
     </section>

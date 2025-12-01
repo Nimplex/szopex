@@ -23,4 +23,3 @@ $db->exec("
 ");
 
 echo "Migration 20 applied\n";
-

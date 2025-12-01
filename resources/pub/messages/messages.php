@@ -67,7 +67,7 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
 
     if (!isset($chats) || empty($chats)) {
         $list = <<<HTML
-        <div id="no-chats">
+        <div class="no-chats">
             <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
             <span>Nie znaleziono czatów</span>
         </div>
@@ -78,38 +78,54 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
             $is_seller = $chat['is_seller'];
             $refers_to_listing = $chat['contains_listing'];
 
-            $top_text = $is_seller
-                    ? htmlspecialchars($chat['buyer_name'])
-                    : htmlspecialchars($chat['seller_name']);
+            $chat_details = "";
+            $target_user_name = $is_seller
+                ? htmlspecialchars($chat['buyer_name'])
+                : htmlspecialchars($chat['seller_name']);
+            
+            if ($refers_to_listing) {
+                $chat_details = <<<HTML
+                    <h3>{$chat['listing_title']}</h3>
+                    <span><i data-lucide="user" aria-hidden="true"></i>
+                    {$target_user_name}</span>
+                HTML;
+            } else {
+                $chat_details = sprintf("<h3>%s</h3>", $target_user_name);
+            }
 
-            $bottom_text = $refers_to_listing
-                ? $chat['listing_title']
-                : '';
+            $img = '/api/storage/' . (
+                $refers_to_listing
+                ? sprintf('covers/%s', $chat['cover_file_id'])
+                : sprintf(
+                    'profile-pictures/%s',
+                    $is_seller
+                    ? $chat['buyer_pfp_file_id']
+                    : $chat['seller_pfp_file_id']
+                )
+            );
 
-            $img = sprintf("/api/storage/%s", $refers_to_listing ? sprintf('covers/%s', $chat['cover_file_id']) : sprintf('profile-pictures/%s', $is_seller ? $chat['buyer_pfp_file_id'] : $chat['seller_pfp_file_id']));
-
-            $active = $req_chat_id ? ($req_chat_id == $id ? "active" : "" ): "";
+            $active = ($req_chat_id === $id) ? ' active' : '';
+            $pfp_class = $refers_to_listing ? '' : 'class="pfp" ';
 
             $list .= <<<HTML
-            <button class="chat {$active}" onclick="window.openChat(event)" data-chat-id="{$id}">
-                <img src="{$img}">
+            <button class="chat{$active}" onclick="window.openChat(event)" data-chat-id="{$id}">
+                <img {$pfp_class}src="{$img}">
                 <div class="chat-details">
-                    <h3>{$top_text}</h3>
-                    <p>{$bottom_text}</p>
+                    {$chat_details}
                 </div>
             </button>
             HTML;
         }
     }
 
-    $message_box = "";
+    $message_box = '';
 
     if ($new_chat) {
-        $destination = "";
-        $image_source = "";
-        $title = "";
-        $hidden_input = "";
-        $href = "";
+        $destination = '';
+        $image_source = '';
+        $title = '';
+        $hidden_input = '';
+        $href = '';
 
         if (isset($req_listing_id)) {
             $res = $listing_model->get($req_listing_id, -1);
@@ -133,8 +149,9 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
                 die;
             }
 
+            $pic_id = $res['picture_id'] ?: "nil";
             $href = "/profile/{$req_user_id}";
-            $image_source = "/api/storage/profile-pictures/{$res['picture_id']}";
+            $image_source = "/api/storage/profile-pictures/{$pic_id}";
             $title = htmlspecialchars($res['display_name']);
             $hidden_input = "<input type='hidden' name='user_id' value='{$req_user_id}'>";
         }
@@ -160,8 +177,10 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
         HTML;
     } elseif (!$req_chat_id) {
         $message_box .= <<<HTML
-            <i data-lucide="arrow-big-down-dash" id="no-chat-open"></i>
-            <h3 class="small-text">Tutaj znajdzie się twój czat!</h3>
+            <div class="no-chats">
+                <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
+                <span>Tutaj znajdzie się twój czat!</span>
+            </div>
         HTML;
     }
 
