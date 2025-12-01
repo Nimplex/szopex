@@ -51,7 +51,7 @@ if ($listing_id) {
         header("Location: /messages/{$res['id']}", true, 303);
         die;
     }
-} else {
+} elseif ($user_id) {
     $res = $chats_model->find_standalone($seller_id, $current_user_id);
     if ($res) {
         header("Location: /messages/{$res['id']}", true, 303);
