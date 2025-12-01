@@ -1,16 +1,54 @@
 <?php
 
 /** @var \App\Controller\UserController $user */
-global $user;
+global $_ROUTE, $user;
 
 $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
 $title = "Wiadomości";
 
-$req_user_id = $_GET['user_id'];
-$req_listing_id = $_GET['listing_id'];
+$current_user_id = $_SESSION['user_id'] ?: null;
+$req_chat_id = $_ROUTE['id'] ?: null;
+$req_user_id = $_GET['user_id'] ?: null;
+$req_listing_id = $_GET['listing_id'] ?: null;
 $new_chat = isset($req_user_id) || isset($req_listing_id);
+
+$listing = null;
+
+if ($req_listing_id) {
+    $listing = $listing_model->get($req_listing_id, -1);
+    if (!$listing) {
+        // todo: error handling, inform user
+        header('Location: /messages', true, 303);
+        die;
+    }
+}
+
+if ($req_user_id) {
+    $exists = $user->user->exists($req_user_id);
+    if (!$exists) {
+        // todo: error handling, inform user
+        header('Location: /messages', true, 303);
+        die;
+    }
+}
+
+$seller_id = $req_listing_id ? $listing['user_id'] : $req_user_id;
+
+if ($req_listing_id) {
+    $res = $chats_model->find_listings($seller_id, $current_user_id, $req_listing_id);
+    if ($res) {
+        header("Location: /messages/{$res['id']}", true, 303);
+        die;
+    }
+} elseif ($req_user_id) {
+    $res = $chats_model->find_standalone($seller_id, $current_user_id);
+    if ($res) {
+        header("Location: /messages/{$res['id']}", true, 303);
+        die;
+    }
+}
 
 if ($new_chat) {
     $title = "Nowy czat";
@@ -22,7 +60,7 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function () use ($user, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat) {
+$render_content = function () use ($user, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat, $req_chat_id) {
     $chats = $chats_model->find_by_user($_SESSION['user_id']);
 
     $list = "";
@@ -117,6 +155,11 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
                 </button>
             </form>
         </section>
+        HTML;
+    } elseif (!$req_chat_id) {
+        $message_box .= <<<HTML
+            <i data-lucide="arrow-big-down-dash" id="no-chat-open"></i>
+            <h3 class="small-text">Tutaj znajdzie się twój czat!</h3>
         HTML;
     }
 
