@@ -50,6 +50,19 @@ if ($req_listing_id) {
     }
 }
 
+if ($req_chat_id) {
+    $res = $chats_model->find_by_id($req_chat_id);
+    if ($res) {
+        if ($res['buyer_id'] != $current_user_id && $res['seller_id'] != $current_user_id) {
+            header('Location: /messages', true, 303);
+            die;
+        }
+    } else {
+        header('Location: /messages', true, 303);
+        die;
+    }
+}
+
 if ($new_chat) {
     $title = "Nowy czat";
 }
@@ -60,7 +73,7 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function () use ($user, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat, $req_chat_id) {
+$render_content = function () use ($user, $current_user_id, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat, $req_chat_id) {
     $chats = $chats_model->find_by_user($_SESSION['user_id']);
 
     $list = "";
@@ -158,29 +171,89 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
 
         $message_box .= <<<HTML
         <a href="{$href}" id="message-to">
-            <img src="{$image_source}" alt="Zdjęcie czatu">
+            <img src="{$image_source}" alt="zdjęcie czatu">
             <span>{$title}</span>
         </a>
         <section id="new-message">
             <i data-lucide="message-square-dashed" aria-hidden="true"></i>
-            <h3>Napisz pierwszą wiadomość!</h3>
+            <h3>napisz pierwszą wiadomość!</h3>
         </section>
         <section id="message-input">
-            <form method="POST" action="/api/new-chat">
+            <form method="post" action="/api/new-chat">
                 {$hidden_input}
-                <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
+                <input type="text" name="content" placeholder="treść wiadomości..." minlength="1" required>
                 <button type="submit">
                     <i data-lucide="send" aria-hidden="true"></i>
                 </button>
             </form>
         </section>
         HTML;
-    } elseif (!$req_chat_id) {
+    }
+    
+    if (!$req_chat_id) {
         $message_box .= <<<HTML
-            <div class="no-chats">
-                <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
-                <span>Tutaj znajdzie się twój czat!</span>
+        <div class="no-chats">
+            <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
+            <span>Tutaj znajdzie się twój czat!</span>
+        </div>
+        HTML;
+    } else {
+        $messages = $chats_model->get_messages($req_chat_id);
+        $chat = $chats_model->find_by_id($req_chat_id);
+        $listing_id = $chat['listing_id'];
+        $is_seller = $chat['seller_id'] == $current_user_id;
+        
+        $title = null;
+        $image_source = null;
+        $href = null;
+
+
+        if ($chat['contains_listing']) {
+            $title = $chat['listing_title'];
+            $href = "/listings/{$chat['listing_id']}";
+            $image_source = sprintf('/api/storage/covers/%s', $chat['cover_file_id']);
+        } else {
+            $title = $is_seller ? $chat['buyer_name'] : $chat['seller_name'];
+            $href = sprintf('/profile/%d', $is_seller ? $chat['buyer_id'] : $chat['seller_id']);
+            $image_source = sprintf('/api/storage/profile-pictures/%s', $is_seller ? $chat['buyer_pfp_file_id'] : $chat['seller_pfp_file_id']);
+        }
+
+        $template = "";
+
+        foreach ($messages as $message) {
+            [
+                'content' => $content,
+                'display_name' => $display_name,
+                'is_seller' => $is_seller,
+            ] = $message;
+
+            $class = $is_seller ? 'seller' : '';
+
+            $template .= <<<HTML
+            <div class="{$class}">
+                <p>{$display_name}</p>
+                <p>{$content}</p>
             </div>
+            HTML;
+        }
+
+        $message_box .= <<<HTML
+        <a href="{$href}" id="message-to">
+            <img src="{$image_source}" alt="zdjęcie czatu">
+            <span>{$title}</span>
+        </a>
+        <section id="new-message">
+            {$template}
+        </section>
+        <section id="message-input">
+            <form method="post" action="/api/new-chat">
+                {$hidden_input}
+                <input type="text" name="content" placeholder="treść wiadomości..." minlength="1" required>
+                <button type="submit">
+                    <i data-lucide="send" aria-hidden="true"></i>
+                </button>
+            </form>
+        </section>
         HTML;
     }
 
