@@ -8,10 +8,10 @@ $chats_model = (new App\Builder\ChatsBuilder())->make();
 
 $title = "Wiadomości";
 
-$current_user_id = (int)$_SESSION['user_id'] ?: null;
-$req_chat_id = (int)$_ROUTE['id'] ?: null;
-$req_user_id = (int)$_GET['user_id'] ?: null;
-$req_listing_id = (int)$_GET['listing_id'] ?: null;
+$current_user_id = (int)($_SESSION['user_id'] ?? null) ?: null;
+$req_chat_id = (int)($_ROUTE['id'] ?? null) ?: null;
+$req_user_id = (int)($_GET['user_id'] ?? null) ?: null;
+$req_listing_id = (int)($_GET['listing_id'] ?? null) ?: null;
 $new_chat = isset($req_user_id) || isset($req_listing_id);
 
 $listing = null;
@@ -100,8 +100,9 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
                 : htmlspecialchars($chat['seller_name']);
             
             if ($refers_to_listing) {
+                $lis_title = htmlspecialchars($chat['listing_title']);
                 $chat_details = <<<HTML
-                    <h3>{$chat['listing_title']}</h3>
+                    <h3>{$lis_title}</h3>
                     <span><i data-lucide="user" aria-hidden="true"></i>
                     {$target_user_name}</span>
                 HTML;
@@ -120,7 +121,7 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
                 )
             );
 
-            $img = ($refers_to_listing && !$chat['cover_file_id']) ? '' : sprintf('<img src="%s" class="%s" alt="Okładka czatu">', $img_source, $refers_to_listing ? '' : 'pfp');
+            $img = ($refers_to_listing && !$chat['cover_file_id']) ? '' : sprintf('<img src="%s"%s alt="Okładka czatu">', $img_source, $refers_to_listing ? '' : ' class="pfp"');
 
             $active = ($req_chat_id == $id) ? ' active' : '';
 
@@ -178,10 +179,10 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
             {$img}
             <span>{$title}</span>
         </a>
-        <section id="new-message">
-            <i data-lucide="message-square-dashed" aria-hidden="true"></i>
-            <h3>napisz pierwszą wiadomość!</h3>
-        </section>
+        <div class="no-chats">
+            <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
+            <span>Napisz pierwszą wiadomość</span>
+        </div>
         <section id="message-input">
             <form method="POST" action="/api/new-chat">
                 {$hidden_input}
@@ -214,18 +215,25 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
         $title = '';
 
         if ($chat['contains_listing']) {
-            $title = $chat['listing_title'];
+            $title = htmlspecialchars($chat['listing_title']);
             $href = "/listings/{$chat['listing_id']}";
             $image_source = sprintf('/api/storage/covers/%s', $chat['cover_file_id']);
             $img = $chat['cover_file_id'] ? sprintf('<img src="%s" alt="Zdjęcie czatu">', $image_source) : '';
         } else {
-            $title = $is_seller ? $chat['buyer_name'] : $chat['seller_name'];
-            $href = sprintf('/profile/%d', $is_seller ? $chat['buyer_id'] : $chat['seller_id']);
-            $image_source = sprintf('/api/storage/profile-pictures/%s', $is_seller ? $chat['buyer_pfp_file_id'] : $chat['seller_pfp_file_id']);
+            $title = htmlspecialchars($is_seller ? $chat['buyer_name'] : $chat['seller_name']);
+            $href = '/profile/' . ($is_seller ? $chat['buyer_id'] : $chat['seller_id']);
+            $image_source = '/api/storage/profile-pictures/' . ($is_seller ? $chat['buyer_pfp_file_id'] : $chat['seller_pfp_file_id']);
             $img = sprintf('<img src="%s" alt="Zdjęcie czatu">', $image_source);
         }
 
         $template = "";
+
+        $no_chats = empty($messages) ? <<<HTML
+        <div class="no-chats">
+            <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
+            <span>Napisz pierwszą wiadomość</span>
+        </div>
+        HTML : '';
 
         foreach ($messages as $message) {
             [
@@ -235,11 +243,11 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
             ] = $message;
 
             $is_author = $current_user_id == $user_id;
-
-            $class = $is_author ? 'author' : '';
+            $class = $is_author ? ' author' : '';
+            $display_name = htmlspecialchars($display_name);
 
             $template .= <<<HTML
-            <div class="message {$class}">
+            <div class="message{$class}">
                 <p class="message-author">{$display_name}</p>
                 <p class="message-content">{$content}</p>
             </div>
@@ -252,11 +260,10 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
             <span>{$title}</span>
         </a>
         <section id="message-list">
-            {$template}
+            {$no_chats}{$template}
         </section>
         <section id="message-input">
             <form method="POST" action="/api/new-message">
-                {$hidden_input}
                 <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
                 <button type="submit">
                     <i data-lucide="send" aria-hidden="true"></i>

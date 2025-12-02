@@ -17,7 +17,7 @@ if (!$res) {
 
 $listings = $listingModel->listByUser($id);
 
-$title = "Użytkownik {$res['display_name']}";
+$title = 'Użytkownik ' . htmlspecialchars($res['display_name']);
 
 $render_head = function (): string {
     return <<<HTML
@@ -35,12 +35,12 @@ $render_content = function () use ($res, $listings, $id) {
 
     $listing_count_text = DateHelper::pluralize($listing_count, "ogłoszenie", "ogłoszenia", "ogłoszeń");
 
-    $display_name = htmlspecialchars($display_name);
+    $display_name_clean = htmlspecialchars($display_name);
     $created_at_formatted = date('d.m.Y', strtotime($created_at));
     
     $picture_id_encoded = urlencode($picture_id);
     $img_element = <<<HTML
-    <img src="/api/storage/profile-pictures/{$picture_id_encoded}" id="profile-picture" alt="Zdjęcie profilowe użytkownika {$display_name}">
+    <img src="/api/storage/profile-pictures/{$picture_id_encoded}" id="profile-picture" alt="Zdjęcie profilowe użytkownika {$display_name_clean}">
     HTML;
 
     $listings_html = "";
@@ -119,7 +119,7 @@ $render_content = function () use ($res, $listings, $id) {
         <section id="profile-info">
             {$img_element}
             <div class="details">
-                <h1>{$display_name}</h1>
+                <h1>{$display_name_clean}</h1>
                 <div class="stat">
                     <i data-lucide="calendar" aria-hidden="true"></i>
                     Dołączył {$created_at_formatted}

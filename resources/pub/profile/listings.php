@@ -2,7 +2,7 @@
 
 $listingModel = (new App\Builder\ListingBuilder())->make();
 
-$title = "Oferty użytkownika {$_SESSION['user_display_name']}";
+$title = 'Oferty użytkownika ' . htmlspecialchars($_SESSION['user_display_name']);
 
 $render_content = function () use ($listingModel) {
     $html = "<h1>Moje oferty</h1><div>";

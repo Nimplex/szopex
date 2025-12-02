@@ -96,8 +96,8 @@ class Chat extends BaseDBModel
             u.id as user_id,
             (c.seller_id = u.id) AS is_seller
         FROM chats c
-        LEFT JOIN messages m ON m.chat_id = c.id
-        LEFT JOIN users u ON m.sender_id = u.id
+        JOIN messages m ON m.chat_id = c.id
+        JOIN users u ON m.sender_id = u.id
         WHERE c.id = ?
         SQL);
         $stmt->execute([$chat_id]);

@@ -23,6 +23,7 @@ body > main {
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  height: calc(100vh - 11rem);
 }
 
 #chats-list,
@@ -129,6 +130,10 @@ body > main {
   width: 100%;
 }
 
+.chat-details h3 {
+  text-align: left;
+}
+
 .chat:hover,
 .chat.active {
   background: var(--accent);
@@ -186,10 +191,11 @@ body > main {
   flex-direction: column;
   gap: 1rem;
   padding: 1rem;
+  overflow-y: scroll;
 }
 
 .message {
-  place-self: flex-end;
+  place-self: flex-start;
   background: var(--main-bg);
   color: var(--white);
   padding: 1rem;
@@ -197,13 +203,17 @@ body > main {
 }
 
 .message.author {
-  place-self: flex-start;
+  place-self: flex-end;
   background: var(--accent);
   color: var(--main-bg);
 }
 
 .message .message-author {
   font-weight: 700;
+}
+
+.message.author p {
+  text-align: end;
 }
 
 #message-to {
