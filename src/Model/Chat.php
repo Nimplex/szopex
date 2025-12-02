@@ -93,6 +93,7 @@ class Chat extends BaseDBModel
             m.content,
             m.created_at,
             u.display_name,
+            u.id as user_id,
             (c.seller_id = u.id) AS is_seller
         FROM chats c
         LEFT JOIN messages m ON m.chat_id = c.id

@@ -178,6 +178,33 @@ body > main {
   justify-content: center;
 }
 
+#message-list {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.message {
+  place-self: flex-end;
+  background: var(--main-bg);
+  color: var(--white);
+  padding: 1rem;
+  border-radius: var(--radius);
+}
+
+.message.author {
+  place-self: flex-start;
+  background: var(--accent);
+  color: var(--main-bg);
+}
+
+.message .message-author {
+  font-weight: 700;
+}
+
 #message-to {
   padding: 1rem;
   display: flex;

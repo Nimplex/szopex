@@ -181,7 +181,7 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
         <section id="message-input">
             <form method="post" action="/api/new-chat">
                 {$hidden_input}
-                <input type="text" name="content" placeholder="treść wiadomości..." minlength="1" required>
+                <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
                 <button type="submit">
                     <i data-lucide="send" aria-hidden="true"></i>
                 </button>
@@ -224,15 +224,17 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
             [
                 'content' => $content,
                 'display_name' => $display_name,
-                'is_seller' => $is_seller,
+                'user_id' => $user_id,
             ] = $message;
 
-            $class = $is_seller ? 'seller' : '';
+            $is_author = $current_user_id == $user_id;
+
+            $class = $is_author ? 'author' : '';
 
             $template .= <<<HTML
-            <div class="{$class}">
-                <p>{$display_name}</p>
-                <p>{$content}</p>
+            <div class="message {$class}">
+                <p class="message-author">{$display_name}</p>
+                <p class="message-content">{$content}</p>
             </div>
             HTML;
         }
@@ -242,13 +244,13 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
             <img src="{$image_source}" alt="zdjęcie czatu">
             <span>{$title}</span>
         </a>
-        <section id="new-message">
+        <section id="message-list">
             {$template}
         </section>
         <section id="message-input">
-            <form method="post" action="/api/new-chat">
+            <form method="post" action="/api/new-message">
                 {$hidden_input}
-                <input type="text" name="content" placeholder="treść wiadomości..." minlength="1" required>
+                <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
                 <button type="submit">
                     <i data-lucide="send" aria-hidden="true"></i>
                 </button>
