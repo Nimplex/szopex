@@ -104,7 +104,7 @@ $render_content = function () use ($user, $listing_model, $chats_model, $req_use
                 )
             );
 
-            $active = ($req_chat_id === $id) ? ' active' : '';
+            $active = ($req_chat_id == $id) ? ' active' : '';
             $pfp_class = $refers_to_listing ? '' : 'class="pfp" ';
 
             $list .= <<<HTML
