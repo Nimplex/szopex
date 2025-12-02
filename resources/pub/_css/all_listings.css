@@ -21,6 +21,10 @@ main hr {
   justify-content: space-between;
 }
 
+#heading form {
+  margin: auto 0;
+}
+
 article {
   display: flex;
   padding: 1rem;
