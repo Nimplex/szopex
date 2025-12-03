@@ -15,7 +15,7 @@ if (!in_array($lang, $allowed, true)) {
 /** @var bool $no_navbar */
 /** @var function $render_head */
 /** @var function $render_content */
-/** @var function $render_scripts */
+/** @var string $render_scripts */
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +57,7 @@ if (!in_array($lang, $allowed, true)) {
 
     <main>
     <?php if (isset($render_content)) {
-        echo $render_content();
+        echo $render_content;
     } ?>
     </main>
 

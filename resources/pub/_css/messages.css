@@ -173,13 +173,10 @@ body > main {
 }
 
 .no-chats {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  align-items: center !important;
   color: var(--text-secondary);
   font-size: 0.95rem;
-  margin: auto;
+  justify-content: center;
 }
 
 #message-list {

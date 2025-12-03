@@ -15,7 +15,7 @@ require __DIR__ . '/../bootstrap.php';
 
 use App\Controller\UserController;
 
-$user = new UserController($db);
+$user_controller = new UserController($db);
 $router = new App\Router();
 
 $router->GET('/', function () {
@@ -89,10 +89,15 @@ $router->GET(
     true,
 );
 
-
 $router->POST(
     '/api/new-chat',
     fn () => require __DIR__ . '/../resources/api/new-chat.php',
+    true
+);
+
+$router->POST(
+    '/api/new-message',
+    fn () => require __DIR__ . '/../resources/api/new-message.php',
     true
 );
 

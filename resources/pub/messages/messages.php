@@ -1,72 +1,114 @@
 <?php
 
+use App\FlashMessage;
+
 /** @var \App\Controller\UserController $user */
-global $_ROUTE, $user;
+global $_ROUTE, $user_controller;
 
 $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
-$title = "Wiadomości";
+$title = 'Wiadomości';
 
-$current_user_id = (int)($_SESSION['user_id'] ?? null) ?: null;
-$req_chat_id = (int)($_ROUTE['id'] ?? null) ?: null;
-$req_user_id = (int)($_GET['user_id'] ?? null) ?: null;
-$req_listing_id = (int)($_GET['listing_id'] ?? null) ?: null;
-$new_chat = isset($req_user_id) || isset($req_listing_id);
+// I've tried FILTER_NULL_ON_FAILURE, but for whatever reason it started returning false
+$req_chat_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+$req_user_id = filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+$req_listing_id = filter_input(INPUT_GET, 'listing_id', FILTER_VALIDATE_INT);
 
-$listing = null;
-
-if ($req_listing_id) {
-    unset($req_user_id);
-
-    $listing = $listing_model->get($req_listing_id, $current_user_id);
-    if (!$listing) {
-        // todo: error handling, inform user
-        header('Location: /messages', true, 303);
-        die;
-    }
-}
-
-if ($req_user_id) {
-    $user = $user->user->find_by_id($req_user_id);
-    if (!$user || $current_user_id == $user['id']) {
-        // todo: error handling, inform user
-        header('Location: /messages', true, 303);
-        die;
-    }
-}
-
-$seller_id = $req_listing_id ? $listing['user_id'] : $req_user_id;
-
-if ($req_listing_id) {
-    $res = $chats_model->find_listings($seller_id, $current_user_id, $req_listing_id);
-    if ($res) {
-        header("Location: /messages/{$res['id']}", true, 303);
-        die;
-    }
-} elseif ($req_user_id) {
-    $res = $chats_model->find_standalone($seller_id, $current_user_id);
-    if ($res) {
-        header("Location: /messages/{$res['id']}", true, 303);
-        die;
-    }
-}
-
-if (!$new_chat && $req_chat_id) {
-    $res = $chats_model->find_by_id($req_chat_id);
-    if ($res) {
-        if ($res['buyer_id'] != $current_user_id && $res['seller_id'] != $current_user_id) {
-            header('Location: /messages', true, 303);
-            die;
-        }
-    } else {
-        header('Location: /messages', true, 303);
-        die;
-    }
-}
+$new_chat = ($_ROUTE['id'] ?? null) == 'new' && (isset($req_user_id) || isset($req_listing_id));
+$show_ui = $new_chat || $req_chat_id;
 
 if ($new_chat) {
-    $title = "Nowy czat";
+    $title = 'Nowy czat';
+}
+
+// Check if user has provided both queries
+if (
+    isset($req_listing_id) &&
+    isset($req_user_id)
+) {
+    (new FlashMessage())->setErr('i18n:invalid_query_parameters');
+    header('Location: /messages', true, 303);
+    die;
+}
+
+$listing = null;
+$user = null;
+
+if ($new_chat && $req_listing_id) {
+    $listing = $listing_model->get($req_listing_id, $_SESSION['user_id']);
+    $error = false;
+
+    // check if listing exists
+    if (!$listing) {
+        $error = true;
+        (new FlashMessage())->setErr('i18n:listing_not_found');
+    }
+
+    // check if the user tries to message himself
+    if ($listing['user_id'] == $_SESSION['user_id']) {
+        $error = true;
+        (new FlashMessage())->setErr('i18n:do_not_message_yourself');
+    }
+
+    if ($error) {
+        header('Location: /messages', true, 303);
+        die;
+    }
+
+    $existing = $chats_model->find_listings($listing['user_id'], $_SESSION['user_id'], $listing['id']);
+
+    if ($existing) {
+        header("Location: /messages/{$existing['id']}", true, 303);
+        die;
+    }
+}
+
+if ($new_chat && $req_user_id) {
+    $user = $user_controller->user->get_profile($req_user_id);
+    $error = false;
+
+    // check if user exists
+    if (!$user) {
+        $error = true;
+        (new FlashMessage())->setErr('i18n:user_not_found');
+    }
+
+    // check if the user tries to message himself
+    if ($user['id'] == $_SESSION['user_id']) {
+        $error = true;
+        (new FlashMessage())->setErr('i18n:do_not_message_yourself');
+    }
+
+    if ($error) {
+        header('Location: /messages', true, 303);
+        die;
+    }
+
+    $existing = $chats_model->find_standalone($user['id'], $_SESSION['user_id']);
+    
+    if ($existing) {
+        header("Location: /messages/{$existing['id']}", true, 303);
+        die;
+    }
+}
+
+$chat = null;
+$chats = $chats_model->find_by_user($_SESSION['user_id']);
+$no_chats = empty($chats);
+
+if ($req_chat_id) {
+    $chat = $chats_model->find_by_id($req_chat_id);
+
+    if (
+        ($chat && (
+            $chat['buyer_id'] != $_SESSION['user_id'] &&
+            $chat['seller_id'] != $_SESSION['user_id']
+        )) || !isset($chat)
+    ) {
+        header('Location: /messages', true, 303);
+        die;
+    }
 }
 
 $render_head = function (): string {
@@ -75,67 +117,8 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function () use ($user, $current_user_id, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat, $req_chat_id) {
-    $chats = $chats_model->find_by_user($_SESSION['user_id']);
 
-    //===== SIDEBAR =========================================================//
-    $list = '';
-
-    if (!isset($chats) || empty($chats)) {
-        $list = <<<HTML
-        <div class="no-chats">
-            <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
-            <span>Nie znaleziono czatów</span>
-        </div>
-        HTML;
-    } else {
-        foreach ($chats as $chat) {
-            $id = $chat['chat_id'];
-            $is_seller = $chat['is_seller'];
-            $refers_to_listing = $chat['contains_listing'];
-
-            $chat_details = "";
-            $target_user_name = $is_seller
-                ? htmlspecialchars($chat['buyer_name'])
-                : htmlspecialchars($chat['seller_name']);
-            
-            if ($refers_to_listing) {
-                $lis_title = htmlspecialchars($chat['listing_title']);
-                $chat_details = <<<HTML
-                    <h3>{$lis_title}</h3>
-                    <span><i data-lucide="user" aria-hidden="true"></i>
-                    {$target_user_name}</span>
-                HTML;
-            } else {
-                $chat_details = sprintf("<h3>%s</h3>", $target_user_name);
-            }
-
-            $img_source = '/api/storage/' . (
-                $refers_to_listing
-                ? sprintf('covers/%s', $chat['cover_file_id'])
-                : sprintf(
-                    'profile-pictures/%s',
-                    $is_seller
-                    ? $chat['buyer_pfp_file_id']
-                    : $chat['seller_pfp_file_id']
-                )
-            );
-
-            $img = ($refers_to_listing && !$chat['cover_file_id']) ? '' : sprintf('<img src="%s"%s alt="Okładka czatu">', $img_source, $refers_to_listing ? '' : ' class="pfp"');
-
-            $active = ($req_chat_id == $id) ? ' active' : '';
-
-            $list .= <<<HTML
-            <button class="chat{$active}" onclick="window.openChat(event)" data-chat-id="{$id}">
-                {$img}
-                <div class="chat-details">
-                    {$chat_details}
-                </div>
-            </button>
-            HTML;
-        }
-    }
-
+$x = function () use ($user, $current_user_id, $listing_model, $chats_model, $req_user_id, $req_listing_id, $new_chat, $req_chat_id) {
     //===== NEW CHAT ========================================================//
     $message_box = '';
 
@@ -147,18 +130,6 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
         $hidden_input = '';
 
         if (isset($req_listing_id)) {
-            $res = $listing_model->get($req_listing_id, $current_user_id);
-
-            if (!isset($res)) {
-                header('Location: /404', true, 303);
-                die;
-            }
-
-            if ($res['user_id'] == $current_user_id) {
-                header('Location: /messages', true, 303);
-                die;
-            }
-
             $href = "/listings/{$req_listing_id}";
             $img = $res['cover_file_id'] ? sprintf('<img src="/api/storage/covers/%s" alt="Okładka czatu">', $res['cover_file_id']) : '';
             $title = htmlspecialchars($res["title"]);
@@ -303,7 +274,6 @@ $render_content = function () use ($user, $current_user_id, $listing_model, $cha
             </ul>
         </section>
         <section id="chats-list">
-            {$list}
         </section>
     </div>
     <section id="message-box">
@@ -318,4 +288,94 @@ $render_scripts = function (): string {
     HTML;
 };
 
+
+ob_start();
+
+?>
+
+<section id="chats-sidebar">
+    <section id="tabs">
+        <ul>
+            <li><label>Wszystkie<input type="radio" class="sr-only" name="tab" value="all" checked></label></li>
+            <li><label>Kupno<input type="radio" class="sr-only" name="tab" value="buy"></label></li>
+            <li><label>Sprzedaż<input type="radio" class="sr-only" name="tab" value="sell"></label></li>
+        </ul>
+    </section>
+    <section id="chats-list">
+        <?php if ($no_chats): ?>
+            <div class="no-chats">
+                <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
+                <span>Nie znaleziono czatów</span>
+            </div>
+        <?php else: ?>
+            <?php foreach ($chats as $chat): ?>
+                <button class="chat <?= $req_chat_id == $chat['chat_id'] ? 'active' : '' ?>" onclick="window.openChat(event)" data-chat-id="<?= $chat['chat_id'] ?>">
+                    <?php if (!$chat['contains_listing']): ?>
+                        <img src="/api/storage/profile-pictures/<?= $chat['is_seller'] ? $chat['buyer_pfp_file_id'] : $chat['seller_pfp_file_id'] ?>" alt="Okładka czatu">
+                    <?php elseif ($chat['cover_file_id']): ?>
+                        <img src="/api/storage/covers/<?= $chat['cover_file_id'] ?>" alt="Okładka czatu">
+                    <?php endif ?>
+                    <div class="chat-details">
+                        <?php if (!$chat['contains_listing']): ?>
+                            <h3><?= htmlspecialchars($chat['is_seller'] ? $chat['buyer_name'] : $chat['seller_name']) ?></h3>
+                        <?php else: ?>
+                            <h3><?= htmlspecialchars($chat['listing_title']) ?></h3>
+                            <span><i data-lucide="user" aria-hidden="true"></i> <?= htmlspecialchars($chat['is_seller'] ? $chat['buyer_name'] : $chat['seller_name']) ?></span>
+                        <?php endif ?>
+                    </div>
+                </button>
+            <?php endforeach ?>
+        <?php endif ?>
+    </section>
+</section>
+<section id="message-box">
+    <?php if ($show_ui): ?>
+        <a id="message-to" href="<?= isset($req_listing_id) ? "/listings/{$listing['id']}" : "/profile/{$user['id']}" ?>">
+            <?php if (isset($req_listing_id)): ?>
+                <?php if ($listing['cover_file_id']): ?>
+                    <img src="/api/storage/covers/<?= $listing['cover_file_id'] ?>" alt="Okładka czatu">
+                    <span><?= $listing['title'] ?></span>
+                <?php endif ?>
+            <?php elseif (isset($req_user_id)): ?>
+                    <img src="/api/storage/profile-pictures/<?= $user['picture_id'] ?>" alt="Okładka czatu">
+                    <span><?= $user['display_name'] ?></span>
+            <?php endif ?>
+        </a>
+    <?php endif ?>
+    <div id="message-list" class="<?= $new_chat ? '' : 'no-chats' ?>">
+        <?php if ($new_chat): ?>
+            <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
+            <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
+            <span>Tutaj znajdzie się twój czat!</span>
+            <span>Napisz swoją pierwszą wiadomość</span>
+        <?php endif ?>
+    </div>
+    <?php if ($show_ui): ?> 
+        <div id="message-input">
+            <form method="POST" action="/api/new-chat">
+                <?php if (isset($req_listing_id)): ?>
+                    <input type="hidden" name="listing_id" value="<?= $listing['id'] ?>">
+                <?php elseif (isset($req_user_id)): ?>
+                    <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+                <?php elseif (isset($req_chat_id)): ?>
+                    <input type="hidden" name="chat_id" value="<?= $chat['id'] ?>">
+<?= var_dump($chat) ?>
+                <?php endif ?>
+
+                <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
+                <button type="submit">
+                    <i data-lucide="send" aria-hidden="true"></i>
+                </button>
+            </form>
+        </div>
+    <?php endif ?>
+</section>
+
+<?php
+
+$🫃 = 'test';
+$render_content = ob_get_clean();
+
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
+
+?>
