@@ -8,7 +8,6 @@ global $_ROUTE, $user_controller;
 $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
-$title = 'Wiadomości';
 
 // I've tried FILTER_NULL_ON_FAILURE, but for whatever reason it started returning false
 $req_chat_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
@@ -18,15 +17,10 @@ $req_listing_id = filter_input(INPUT_GET, 'listing_id', FILTER_VALIDATE_INT);
 $new_chat = ($_ROUTE['id'] ?? null) == 'new' && (isset($req_user_id) || isset($req_listing_id));
 $show_ui = $new_chat || $req_chat_id;
 
-if ($new_chat) {
-    $title = 'Nowy czat';
-}
+$title = $new_chat ? 'Nowy czat' : 'Wiadomości';
 
 // Check if user has provided both queries
-if (
-    isset($req_listing_id) &&
-    isset($req_user_id)
-) {
+if (isset($req_listing_id) && isset($req_user_id)) {
     (new FlashMessage())->setErr('i18n:invalid_query_parameters');
     header('Location: /messages', true, 303);
     die;

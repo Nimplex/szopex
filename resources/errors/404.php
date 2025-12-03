@@ -10,10 +10,8 @@ $render_head = function (): string {
     HTML;
 };
 
-$render_content = function (): string {
-    return <<<HTML
-    <h1>Not found</h1>
-    HTML;
-};
+$render_content = <<<HTML
+<h1>Not found</h1>
+HTML;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
