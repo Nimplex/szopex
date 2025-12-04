@@ -9,29 +9,30 @@ class User extends BaseDBModel
     public function find_by_id(int $id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM users WHERE id = ?
+        SELECT * FROM users WHERE id = :id
         SQL);
-        $stmt->execute([$id]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function find_by_email(string $email): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM users WHERE email = ?
+        SELECT * FROM users WHERE email = :email
         SQL);
-
-        $stmt->execute([$email]);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
     
     public function find_by_login(string $login): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM users WHERE login = ?
+        SELECT * FROM users WHERE login = :login
         SQL);
-
-        $stmt->execute([$login]);
+        $stmt->bindValue(':login', $login, PDO::PARAM_STR);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -58,12 +59,12 @@ class User extends BaseDBModel
             'threads' => 2,
         ]);
 
-        $res = $stmt->execute([
-            ':login' => $login,
-            ':display_name' => $display_name,
-            ':email' => $email,
-            ':password_hash' => $hash
-        ]);
+        $stmt->bindValue(':login', $login, PDO::PARAM_STR);
+        $stmt->bindValue(':display_name', $display_name, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':password_hash', $hash, PDO::PARAM_STR);
+
+        $res = $stmt->execute();
 
         if ($res) {
             return $this->db->lastInsertId();
@@ -86,9 +87,10 @@ class User extends BaseDBModel
             COALESCE(p.file_id, 'default') as picture_id
         FROM users u
         LEFT JOIN profile_pictures p ON p.user_id = u.id
-        WHERE u.id = ?
+        WHERE u.id = :id
         SQL);
-        $stmt->execute([$id]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 }

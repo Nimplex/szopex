@@ -33,9 +33,10 @@ class Chat extends BaseDBModel
         LEFT JOIN covers cv ON cv.listing_id = l.id AND cv.main = TRUE
         LEFT JOIN profile_pictures sp ON sp.user_id = s.id
         LEFT JOIN profile_pictures bp ON bp.user_id = b.id
-        WHERE c.id = ?
+        WHERE c.id = :id
         SQL);
-        $stmt->execute([$id]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -65,27 +66,31 @@ class Chat extends BaseDBModel
         LEFT JOIN profile_pictures bp ON bp.user_id = b.id
         WHERE s.id = :user_id OR b.id = :user_id
         SQL);
-        $stmt->execute([
-            ':user_id' => $user_id
-        ]);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function find_standalone(int $seller_id, int $buyer_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM chats WHERE seller_id = ? AND buyer_id = ? AND listing_id = null
+        SELECT * FROM chats WHERE seller_id = :seller_id AND buyer_id = :buyer_id AND listing_id = null
         SQL);
-        $stmt->execute([$seller_id, $buyer_id]);
+        $stmt->bindValue(':seller_id', $seller_id, PDO::PARAM_INT);
+        $stmt->bindValue(':buyer_id', $buyer_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function find_listings(int $seller_id, int $buyer_id, int $listing_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM chats WHERE seller_id = ? AND buyer_id = ? AND listing_id = ?
+        SELECT * FROM chats WHERE seller_id = :seller_id AND buyer_id = :buyer_id AND listing_id = :listing_id
         SQL);
-        $stmt->execute([$seller_id, $buyer_id, $listing_id]);
+        $stmt->bindValue(':seller_id', $seller_id, PDO::PARAM_INT);
+        $stmt->bindValue(':buyer_id', $buyer_id, PDO::PARAM_INT);
+        $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
  
@@ -117,10 +122,12 @@ class Chat extends BaseDBModel
     public function create(int $seller_id, int $buyer_id, int|null $listing_id = null): int | bool
     {
         $stmt = $this->db->prepare(<<<SQL
-        INSERT INTO chats(seller_id, buyer_id, listing_id) VALUES(?, ?, ?)
+        INSERT INTO chats(seller_id, buyer_id, listing_id) VALUES(:seller_id, :buyer_id, :listing_id)
         SQL);
-        
-        $res = $stmt->execute([$seller_id, $buyer_id, $listing_id]);
+        $stmt->bindValue(':seller_id', $seller_id, PDO::PARAM_INT);
+        $stmt->bindValue(':buyer_id', $buyer_id, PDO::PARAM_INT);
+        $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+        $res = $stmt->execute();
 
         if ($res) {
             return $this->db->lastInsertId();
@@ -135,7 +142,10 @@ class Chat extends BaseDBModel
         INSERT INTO messages(chat_id, sender_id, content) VALUES(?, ?, ?)
         SQL);
 
-        $res = $stmt->execute([$chat_id, $sender_id, $content]);
+        $stmt->bindValue(':chat_id', $chat_id, PDO::PARAM_INT);
+        $stmt->bindValue(':sender_id', $sender_id, PDO::PARAM_INT);
+        $stmt->bindValue(':content', $content, PDO::PARAM_STR);
+        $res = $stmt->execute();
 
         if ($res) {
             return $this->db->lastInsertId();

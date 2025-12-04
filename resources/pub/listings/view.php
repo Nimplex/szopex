@@ -5,7 +5,13 @@ global $_ROUTE;
 $iso = new Matriphe\ISO639\ISO639();
 $listingBuilder = (new App\Builder\ListingBuilder())->make();
 
-$listing_id = $_ROUTE['id'];
+$listing_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+// Just in case
+if (!isset($listing_id)) {
+    header('Location: /', true, 303);
+    die;
+}
+
 $listing = $listingBuilder->get($listing_id, $_SESSION['user_id']);
 $listing_covers = $listingBuilder->getCovers($listing_id);
 

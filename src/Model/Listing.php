@@ -243,7 +243,6 @@ class Listing extends BaseDBModel
     /**
      * @param array<int,mixed> $images
      */
-    // TODO: finish recieving files
     public function create(string $title, string $price, string $description, array $images): void
     {
         if (!$title || !$price || !$description) {

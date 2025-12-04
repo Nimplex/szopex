@@ -2,10 +2,15 @@
 
 global $_ROUTE;
 
-$filename = $_ROUTE['id'] ?? '';
+$id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+// Just in case
+if (!isset($id)) {
+    header('Location: /', true, 303);
+    die;
+}
 
 $baseDir = realpath($_SERVER['DOCUMENT_ROOT'] . '/../storage/covers') . DIRECTORY_SEPARATOR;
-$filepath = realpath($baseDir . $filename);
+$filepath = realpath($baseDir . $id);
 
 if (!$filepath || !str_starts_with($filepath, $baseDir) || !is_file($filepath)) {
     require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/404.php';

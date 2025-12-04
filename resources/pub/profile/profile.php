@@ -8,7 +8,13 @@ use App\Helper\DateHelper;
 
 $listingModel = (new ListingBuilder())->make();
 
-$id = htmlspecialchars($_ROUTE['id']);
+$id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+
+// Just in case
+if (!isset($id)) {
+    header('Location: /', true, 303);
+    die;
+}
 
 $res = $user_controller->user->get_profile($id);
 if (!$res) {

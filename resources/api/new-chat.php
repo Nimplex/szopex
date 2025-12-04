@@ -9,9 +9,9 @@ $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
 $current_user_id = $_SESSION['user_id'];
-$content = $_POST['content'] ?: null;
-$listing_id = $_POST['listing_id'] ?: null;
-$user_id = $_POST['user_id'] ?: null;
+$content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+$listing_id = filter_input(INPUT_POST, 'listing_id', FILTER_VALIDATE_INT);
+$user_id = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
 
 $listing = null;
 
@@ -66,7 +66,6 @@ $chat_id = $chats_model->create($seller_id, $current_user_id, $listing_id);
 // == false because ! will also match ID 0
 if ($chat_id == false) {
     (new FlashMessage())->setErr('i18n:database_fail');
-    // todo: proper error handling, inform user about database error
     header('Location: /messages', true, 303);
     die;
 }

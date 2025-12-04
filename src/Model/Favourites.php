@@ -9,10 +9,10 @@ class Favourites extends BaseDBModel
     public function find_by_id(int $id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM favourites WHERE id = ?
+        SELECT * FROM favourites WHERE id = :id
         SQL);
-
-        $stmt->execute([$id]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -37,21 +37,22 @@ class Favourites extends BaseDBModel
             ON f.user_id = u.id
         LEFT JOIN covers c
             ON c.listing_id = l.id AND c.main = TRUE
-        WHERE f.user_id = ?
+        WHERE f.user_id = :user_id
         ORDER BY f.created_at DESC
         SQL);
-
-        $stmt->execute([$user_id]);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: null;
     }
 
     public function exists(int $listing_id, int $user_id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
-        SELECT * FROM favourites WHERE user_id = ? AND listing_id = ?
+        SELECT * FROM favourites WHERE user_id = :user_id AND listing_id = :listing_id
         SQL);
-
-        $stmt->execute([$user_id, $listing_id]);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -61,10 +62,10 @@ class Favourites extends BaseDBModel
             $this->db->beginTransaction();
  
             $stmt = $this->db->prepare(<<<SQL
-            DELETE FROM favourites WHERE id = ?
+            DELETE FROM favourites WHERE id = :id
             SQL);
-            $stmt->execute([$id]);
-
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             $this->db->commit();
             return true;
         } catch (\Throwable $e) {
@@ -81,14 +82,13 @@ class Favourites extends BaseDBModel
      */
     public function create(int $listing_id, int $user_id): bool
     {
-        $sql = "INSERT INTO favourites (user_id, listing_id) VALUES (:user_id, :listing_id)";
-        $stmt = $this->db->prepare($sql);
-
+        $stmt = $this->db->prepare(<<<SQL
+        INSERT INTO favourites (user_id, listing_id) VALUES (:user_id, :listing_id)
+        SQL);
         try {
-            $stmt->execute([
-                ':user_id' => $user_id,
-                ':listing_id' => $listing_id
-            ]);
+            $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+            $stmt->execute();
             return true;
         } catch (\PDOException $e) {
             if ($e->getCode() === '23505') {

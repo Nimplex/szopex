@@ -14,10 +14,10 @@ class Activation extends BaseDBModel
             user_id,
             code_hash,
             NOW() > activation.expires_at as expired
-        FROM activation WHERE code_hash = ?
+        FROM activation WHERE code_hash = :code_hash
         SQL);
-        
-        $stmt->execute([$token]);
+        $stmt->bindValue(':code_hash', $token, PDO::PARAM_STR);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -32,10 +32,10 @@ class Activation extends BaseDBModel
         FROM users
         INNER JOIN activation
             ON users.id = activation.user_id
-        WHERE users.email = ?
+        WHERE users.email = :email
         SQL);
-
-        $stmt->execute([$email]);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -47,10 +47,10 @@ class Activation extends BaseDBModel
             user_id,
             code_hash,
             NOW() > activation.expires_at as expired
-        FROM activation WHERE user_id = ?
+        FROM activation WHERE user_id = :user_id
         SQL);
-        
-        $stmt->execute([$user_id]);
+        $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -62,10 +62,10 @@ class Activation extends BaseDBModel
             user_id,
             code_hash,
             NOW() > activation.expires_at as expired
-        FROM activation WHERE id = ?
+        FROM activation WHERE id = :id
         SQL);
-
-        $stmt->execute([$id]);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
 
@@ -75,12 +75,10 @@ class Activation extends BaseDBModel
         INSERT INTO activation (user_id, code_hash, expires_at)
         VALUES (:user_id, :token, NOW() + INTERVAL '15 minutes')
         SQL);
-
         $token = bin2hex(random_bytes(32));
         $hash = hash('sha256', $token);
         $stmt->bindValue(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindValue(':token', $hash, PDO::PARAM_STR);
-
         $stmt->execute();
         return $hash;
     }
@@ -95,12 +93,11 @@ class Activation extends BaseDBModel
 
         try {
             $this->db->beginTransaction();
-
             $stmt = $this->db->prepare(<<<SQL
-            DELETE FROM activation WHERE id = ?
+            DELETE FROM activation WHERE id = :id
             SQL);
-            $stmt->execute([$id]);
-
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
             $this->db->commit();
         } catch (\Throwable $e) {
             if ($this->db->inTransaction()) {
@@ -115,11 +112,9 @@ class Activation extends BaseDBModel
     public function regenerate_expired(int $id): string | bool
     {
         $res = $this->delete($id);
- 
         if (!$res) {
             return false;
         }
-
         return $this->create($res['user_id']);
     }
 
@@ -135,14 +130,15 @@ class Activation extends BaseDBModel
             $this->db->beginTransaction();
 
             $stmt = $this->db->prepare(<<<SQL
-            UPDATE users SET active = true WHERE id = ?
+            UPDATE users SET active = true WHERE id = :user_id
             SQL);
-            $stmt->execute([$res['user_id']]);
+            $stmt->bindValue(':user_id', $res['user_id'], PDO::PARAM_INT);
 
             $stmt = $this->db->prepare(<<<SQL
-            DELETE FROM activation WHERE id = ?
+            DELETE FROM activation WHERE id = :id
             SQL);
-            $stmt->execute([$id]);
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
 
             $this->db->commit();
             return true;
