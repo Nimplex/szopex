@@ -6,6 +6,10 @@ use PDO;
 
 class Chat extends BaseDBModel
 {
+    public const int PER_PAGE = 10;
+    public const int MIN_PAGE = 1;
+    public const int MAX_PAGE = 1000;
+
     public function find_by_id(int $id): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
@@ -84,9 +88,10 @@ class Chat extends BaseDBModel
         $stmt->execute([$seller_id, $buyer_id, $listing_id]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-
-    public function get_messages(int $chat_id): ?array
+ 
+    public function get_messages(int $chat_id, int $page, int $limit = Chat::PER_PAGE): ?array
     {
+        $offset = ($page - 1) * $limit;
         $stmt = $this->db->prepare(<<<SQL
         SELECT
             m.id,
@@ -98,9 +103,14 @@ class Chat extends BaseDBModel
         FROM chats c
         JOIN messages m ON m.chat_id = c.id
         JOIN users u ON m.sender_id = u.id
-        WHERE c.id = ?
+        WHERE c.id = :chat_id
+        ORDER BY m.created_at DESC
+        LIMIT :limit OFFSET :offset
         SQL);
-        $stmt->execute([$chat_id]);
+        $stmt->bindValue(':chat_id', $chat_id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: null;
     }
 

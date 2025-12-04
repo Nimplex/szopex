@@ -8,7 +8,6 @@ global $_ROUTE, $user_controller;
 $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
-
 // I've tried FILTER_NULL_ON_FAILURE, but for whatever reason it started returning false
 $req_chat_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
 $req_new_chat = filter_input(INPUT_GET, 'new_chat', FILTER_VALIDATE_BOOLEAN);
@@ -103,14 +102,17 @@ if ($req_chat_id) {
         header('Location: /messages', true, 303);
         die;
     }
-
-    $messages = $chats_model->get_messages($chat['chat_id']);
 }
 
+$is_partial = isset($_SERVER['HTTP_PARTIAL_REQ']);
+
+if (isset($_SERVER['HTTP_PARTIAL_REQ'])) {
+    require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/templates/messages.php';
+    die;
+}
 
 $chats = $chats_model->find_by_user($_SESSION['user_id']);
 $no_chats = empty($chats);
-$no_messages = empty($messages);
 
 $display_image = "";
 $href = "";
@@ -212,42 +214,36 @@ ob_start();
         <span><?= $title ?></span>
     </a>
     <?php endif ?>
-    <div id="message-list" class="<?= (!$show_ui || $new_chat) ? 'no-chats' : '' ?>">
-        <?php if ($new_chat): ?>
-        <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
-        <span>Napisz swoją pierwszą wiadomość</span>
-        <?php elseif (!$show_ui): ?>
-        <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
-        <span>Tutaj znajdzie się twój czat!</span>
-        <?php elseif ($no_messages): ?>
-        <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
-        <span>Napisz pierwszą wiadomość</span>
-        <?php else: ?>
-            <?php foreach ($messages as $message): ?>
-            <div class="message <?= $_SESSION['user_id'] == $message['user_id'] ? 'author' : '' ?>">
-                <p class="message-author"><?= htmlspecialchars($message['display_name']) ?></p>
-                <p class="message-content"><?= htmlspecialchars($message['content']) ?></p>
-            </div>
-            <?php endforeach ?>
-        <?php endif ?>
-    </div>
-    <?php if ($show_ui): ?>
-    <div id="message-input">
-        <form method="POST" action="<?= $new_chat ? '/api/new-chat' : '/api/new-message' ?>">
-            <?php if (isset($chat)): ?>
-            <input type="hidden" name="chat_id" value="<?= $chat['chat_id'] ?>">
-            <?php elseif (isset($listing)): ?>
-            <input type="hidden" name="listing_id" value="<?= $listing['listing_id'] ?>">
-            <?php elseif (isset($user)): ?>
-            <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-            <?php endif ?>
-            <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
-            <button type="submit">
-                <i data-lucide="send" aria-hidden="true"></i>
-            </button>
-        </form>
-    </div>
+
+<div id="message-list" class="<?= (!$show_ui || $new_chat) ? 'no-chats' : '' ?>">
+    <?php if ($new_chat): ?>
+    <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
+    <span>Napisz swoją pierwszą wiadomość</span>
+    <?php elseif (!$show_ui): ?>
+    <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
+    <span>Tutaj znajdzie się twój czat!</span>
+    <?php else: ?>
+    <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/templates/messages.php'; ?>
     <?php endif ?>
+</div>
+
+<?php if ($show_ui): ?>
+<div id="message-input">
+    <form method="POST" action="<?= $new_chat ? '/api/new-chat' : '/api/new-message' ?>">
+        <?php if (isset($chat)): ?>
+        <input type="hidden" name="chat_id" value="<?= $chat['chat_id'] ?>">
+        <?php elseif (isset($listing)): ?>
+        <input type="hidden" name="listing_id" value="<?= $listing['listing_id'] ?>">
+        <?php elseif (isset($user)): ?>
+        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+        <?php endif ?>
+        <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
+        <button type="submit">
+            <i data-lucide="send" aria-hidden="true"></i>
+        </button>
+    </form>
+</div>
+<?php endif ?>
 </section>
 
 <?php

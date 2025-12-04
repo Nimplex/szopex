@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const rect = sentinel.getBoundingClientRect();
     if (rect.top <= window.innerHeight) {
-      const nextPage = sentinel.dataset.nextPage;
+      const { nextPage } = sentinel.dataset.nextPage;
       sentinel.remove();
       await loadNextPage(nextPage);
     }
