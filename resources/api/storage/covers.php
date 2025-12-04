@@ -2,10 +2,10 @@
 
 global $_ROUTE;
 
-$id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
-// Just in case
+$id = $_ROUTE['id'] ?? null;
+
 if (!isset($id)) {
-    header('Location: /', true, 303);
+    require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/404.php';
     die;
 }
 
