@@ -2,7 +2,7 @@
 use App\Helper\DateHelper;
 
 $listing = (new App\Builder\ListingBuilder())->make();
-$page = max($_GET['page'] ?? 1, 1);
+$page = max(filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT) ?? 1, 1);
 $is_partial = $_SERVER['HTTP_PARTIAL_REQ'] ?? null;
 ?>
 

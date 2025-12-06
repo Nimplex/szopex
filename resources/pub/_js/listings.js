@@ -1,5 +1,8 @@
 window.favourite = async function (event) {
-  const target = event.target.type === "button" ? event.target : event.target.closest("button");
+  const target =
+    event.target.type === "button"
+      ? event.target
+      : event.target.closest("button");
 
   const { listingId } = target.dataset;
 
@@ -11,7 +14,7 @@ window.favourite = async function (event) {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: new URLSearchParams({ listingId }),
+    body: new URLSearchParams({ listing_id: listingId }),
   });
 
   const contentType = res.headers.get("Content-Type");
@@ -29,4 +32,4 @@ window.favourite = async function (event) {
     target.classList.remove("favourited");
     target.querySelector("span").innerHTML = "Dodaj do ulubionych";
   }
-}
+};

@@ -104,8 +104,8 @@ class UserController
     public function register_from_request(array $request): int
     {
         $login = $request['login'] ?? null;
-        $display_name = $request['display_name'] ?? null;
-        $email = $request['email'] ?? null;
+        $display_name = filter_var($request['display_name'] ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_var($request['email'] ?? null, FILTER_VALIDATE_EMAIL);
         $password = $request['password'] ?? null;
 
         if (!isset($login) || !isset($display_name) || !isset($email) || !isset($password)) {
@@ -228,8 +228,8 @@ class UserController
      */
     public function activate_from_request(array $request): bool
     {
-        $id = $request['id'] ?? null;
-        $token = $request['token'] ?? null;
+        $id = filter_var($request['id'] ?? null, FILTER_VALIDATE_INT);
+        $token = filter_var($request['token'] ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!isset($id) || !isset($token)) {
             throw new \InvalidArgumentException('i18n:missing_parameters', 1);
@@ -263,8 +263,8 @@ class UserController
             throw new \Exception('i18n:not_logged_in', 1);
         }
 
-        $listing_id = $request['listingId'];
-        
+        $listing_id = filter_var($request['listing_id'] ?? null, FILTER_VALIDATE_INT);
+
         if (!isset($listing_id)) {
             throw new \InvalidArgumentException('i18n:missing_parameters', 1);
         }
