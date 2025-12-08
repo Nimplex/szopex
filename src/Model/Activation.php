@@ -124,9 +124,11 @@ class Activation extends BaseDBModel
 
         if (!$res) {
             return false;
-	}
+        }
 
         try {
+            var_dump($res);
+            die;
             $this->db->beginTransaction();
 
             $stmt = $this->db->prepare(<<<SQL

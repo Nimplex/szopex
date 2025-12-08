@@ -112,8 +112,12 @@ class Router
     public function handle(): void
     {
         global $_ROUTE;
-        $path = $_SERVER['REQUEST_URI'] ?? '/';
-        $method = $_SERVER['REQUEST_METHOD'];
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $path = parse_url($uri);
+        $path = $path === false ? '/' : $path['path'];
+	$method = $_SERVER['REQUEST_METHOD'];
+
+
 
         if (isset($this->routes[$method])) {
             foreach ($this->routes[$method] as $pattern => $route) {
