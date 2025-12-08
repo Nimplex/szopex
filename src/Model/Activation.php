@@ -124,7 +124,7 @@ class Activation extends BaseDBModel
 
         if (!$res) {
             return false;
-        }
+	}
 
         try {
             $this->db->beginTransaction();
@@ -133,6 +133,7 @@ class Activation extends BaseDBModel
             UPDATE users SET active = true WHERE id = :user_id
             SQL);
             $stmt->bindValue(':user_id', $res['user_id'], PDO::PARAM_INT);
+            $stmt->execute();
 
             $stmt = $this->db->prepare(<<<SQL
             DELETE FROM activation WHERE id = :id

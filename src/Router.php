@@ -112,7 +112,7 @@ class Router
     public function handle(): void
     {
         global $_ROUTE;
-        $path = $_SERVER['PATH_INFO'] ?? '/';
+        $path = $_SERVER['REQUEST_URI'] ?? '/';
         $method = $_SERVER['REQUEST_METHOD'];
 
         if (isset($this->routes[$method])) {
