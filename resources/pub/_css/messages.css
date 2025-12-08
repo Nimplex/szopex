@@ -178,6 +178,7 @@ body > main {
   color: var(--text-secondary);
   font-size: 0.95rem;
   justify-content: center;
+  gap: 1rem;
 }
 
 #message-list {
