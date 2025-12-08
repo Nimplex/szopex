@@ -120,7 +120,7 @@ ob_start();
                         <?php
                         foreach ($attrib_list as $attribute => $value):
                             $a = htmlspecialchars($attribute);
-                            $v = ($a = "language")
+                            $v = ($a == "language")
                                 ? sprintf("%s (%s)", $iso->languageByCode2t($value), $iso->nativeByCode2t($value, true))
                                 : htmlspecialchars($value);
                             ?>
@@ -129,7 +129,7 @@ ob_start();
                                     <i data-lucide="<?= $key_lookup_table[$attribute]['icon'] ?>" aria-hidden="true"></i>
                                     <?= $key_lookup_table[$attribute]['display'] ?>
                                 </th>
-                                <td><?= $value ?></td>
+                                <td><?= $v ?></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
