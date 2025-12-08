@@ -31,6 +31,7 @@ ob_start();
                         pattern="\d{1,4}((,|\.)\d\d)?"
                         name="price"
                         placeholder="5,00"
+                        step=".01"
                         required
                     >
                     <span>zł</span>
