@@ -139,7 +139,7 @@ class Chat extends BaseDBModel
     public function add_message(int $chat_id, int $sender_id, string $content): int | bool
     {
         $stmt = $this->db->prepare(<<<SQL
-        INSERT INTO messages(chat_id, sender_id, content) VALUES(?, ?, ?)
+        INSERT INTO messages(chat_id, sender_id, content) VALUES(:chat_id, :sender_id, :content)
         SQL);
 
         $stmt->bindValue(':chat_id', $chat_id, PDO::PARAM_INT);
