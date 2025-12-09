@@ -249,6 +249,16 @@ class Listing extends BaseDBModel
             throw new \InvalidArgumentException('Not enough arguments');
         }
 
+        $images_count = count(
+            array_filter(
+                $images['images']['name']
+            )
+        );
+
+        if ($images_count > 10) {
+            throw new \InvalidArgumentException('i18n:too_many_files');
+        }
+
         if (strlen($title) < Listing::MIN_TITLE_LEN || strlen($title) > Listing::MAX_TITLE_LEN) {
             throw new \InvalidArgumentException(
                 sprintf(
