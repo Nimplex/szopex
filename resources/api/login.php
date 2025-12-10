@@ -5,10 +5,19 @@ use App\FlashMessage;
 /** @var \App\Controller\UserController $user_controller */
 global $user_controller;
 
+$target = $_POST['redir'] ?? '/';
+// echo '<pre>' . var_dump(str_split($target), '') . '</pre>';
+// die;
+
+if (!preg_match('/^[\w\/]+(?:\?.*)?$/', $target)) {
+    $target = '/';
+}
+
 try {
     $user_controller->login_from_request($_POST);
-    header('Location: /?login=1', true, 303);
+    header("Location: {$target}", true, 303);
 } catch (\InvalidArgumentException $e) {
     (new FlashMessage())->fromException($e);
-    header('Location: /login', true, 303);
+    $uri = urlencode($_POST['redir']);
+    header("Location: /login?redir={$uri}", true, 303);
 }

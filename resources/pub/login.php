@@ -10,6 +10,7 @@ ob_start();
 <div role="presentation" id="inner-container">
     <form action="/api/login" method="POST">
         <h1>Zaloguj się</h1>
+        <?= $_GET['redir'] ? sprintf('<input type="hidden" name="redir" value="%s">', $_GET['redir']) : '' ?>
         <label>E-mail: <input type="email" name="email" placeholder="E-mail lub login" maxlength="255" required></label><br>
         <label>Hasło: <input type="password" name="password" placeholder="Hasło" minlength="8" required></label><br>
         <input type="submit" value="Zaloguj się">

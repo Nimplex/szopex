@@ -2,9 +2,10 @@
 $user_item = "";
 
 if (!isset($_SESSION['user_id'])) {
+    $uri = urlencode($_SERVER['REQUEST_URI'] ?? '/');
     $user_item .= <<<HTML
     <li>
-        <a href="/login">
+        <a href="/login?redir={$uri}">
             <i data-lucide="key-square" aria-hidden="true"></i>
             Zaloguj się
         </a>
