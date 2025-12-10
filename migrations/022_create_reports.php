@@ -9,7 +9,7 @@ CREATE TABLE user_reports (
     reporter_id INT NOT NULL REFERENCES users(id),
     reported_id INT NOT NULL REFERENCES users(id),
     listing_id INT REFERENCES listings(id),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 SQL;
 

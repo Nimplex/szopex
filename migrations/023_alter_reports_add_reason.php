@@ -4,7 +4,7 @@
 require __DIR__ . '/../bootstrap.php';
 
 $sql = <<<SQL
-ALTER TABLE reports
+ALTER TABLE user_reports
 ADD COLUMN reason VARCHAR(255);
 SQL;
 
