@@ -1,6 +1,7 @@
 <?php
 
-$favourites_model = (new App\Builder\FavouritesBuilder())->make();
+/** @var \App\Controller\UserController $user_controller */
+global $user_controller;
 
 $TITLE = "Polubione";
 
@@ -9,7 +10,7 @@ ob_start();
 
 <h1>Polubione</h1>
 <div>
-    <?php foreach ($favourites_model->find_by_user_id($_SESSION['user_id']) as $listing): ?>
+    <?php foreach ($user_controller->favourites->find_by_user_id($_SESSION['user_id']) as $listing): ?>
     <div class="listing">
         <div class="listing-title"><?= $listing['title'] ?></div>
         <div class="listing-price"><?= $listing['price'] ?></div>

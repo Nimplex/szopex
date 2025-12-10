@@ -40,17 +40,19 @@ if ($res == false) {
     (new FlashMessage())->setErr('i18n:database_fail');
 }
 
-$mailer = new Mailer();
-$mailer->send(
-    $recipant['email'],
-    'Nowa wiadomość',
-    'message',
-    [
-        'name' => $is_seller ? $chat['seller_name'] : $chat['buyer_name'],
-        'messager' => $is_seller ? $chat['buyer_name'] : $chat['seller_name'],
-        'content' => mb_strimwidth($content, 0, 24, '...'),
-        'chat_id' => $chat['chat_id'],
-    ],
-);
+if (isset($_ENV['SMTP_HOST'])) {
+    $mailer = new Mailer();
+    $mailer->send(
+        $recipant['email'],
+        'Nowa wiadomość',
+        'message',
+        [
+            'name' => $is_seller ? $chat['seller_name'] : $chat['buyer_name'],
+            'messager' => $is_seller ? $chat['buyer_name'] : $chat['seller_name'],
+            'content' => mb_strimwidth($content, 0, 24, '...'),
+            'chat_id' => $chat['chat_id'],
+        ],
+    );
+}
 
 header("Location: /messages/{$chat_id}", true, 303);
