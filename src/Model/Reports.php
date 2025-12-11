@@ -101,14 +101,18 @@ class Reports extends BaseDBModel
      * @throws \PDOException
      * @return bool success - false if exists
      */
-    public function create(int $reporter_id, int $reported_id, int $listing_id, string $reason): bool
+    public function create(int $reporter_id, int $reported_id, ?int $listing_id, string $reason): void
     {
         $stmt = $this->db->prepare(<<<SQL
-        INSERT INTO user_reports (reported_id, reported_id, listing_id, reason) VALUES (:reporter_id, :reported_id, :listing_id, :reason)
+        INSERT INTO user_reports (reporter_id, reported_id, listing_id, reason) VALUES (:reporter_id, :reported_id, :listing_id, :reason)
         SQL);
-        $stmt->bindValue(':reporter_id', $reported_id, PDO::PARAM_INT);
+        $stmt->bindValue(':reporter_id', $reporter_id, PDO::PARAM_INT);
         $stmt->bindValue(':reported_id', $reported_id, PDO::PARAM_INT);
-        $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+        if ($listing_id == null) {
+            $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(':listing_id', $listing_id, PDO::PARAM_INT);
+        }
         $stmt->bindValue(':reason', $reason, PDO::PARAM_INT);
         $stmt->execute();
     }

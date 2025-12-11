@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Mailer;
 use App\Model\Activation;
 use App\Model\Favourites;
-use App\Model\User;
 use App\Model\Reports;
+use App\Model\User;
 use PDO;
 
 class UserController
