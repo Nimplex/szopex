@@ -76,6 +76,14 @@ $router->GET(
     true,
 );
 
+//==== ADMIN ================================================================//
+
+$router->GET(
+    '/admin',
+    fn () => require __DIR__ . '/../resources/pub/admin/index.php',
+    true,
+);
+
 //==== SETTINGS =============================================================//
 
 $router->GET(
