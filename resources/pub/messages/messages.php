@@ -19,6 +19,7 @@ $show_ui = $new_chat || $req_chat_id;
 
 $TITLE = $new_chat ? 'Nowy czat' : 'Wiadomości';
 $HEAD = '<link rel="stylesheet" href="/_dist/css/messages.css">';
+$SCRIPTS = ['/_dist/js/messages.js'];
 
 // Check if user has provided both queries
 if (isset($req_listing_id) && isset($req_user_id)) {
@@ -246,6 +247,5 @@ ob_start();
 
 <?php
 $CONTENT = ob_get_clean();
-$SCRIPTS = ['/_dist/js/messages.js'];
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';

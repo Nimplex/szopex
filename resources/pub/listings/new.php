@@ -2,6 +2,7 @@
 
 $TITLE = 'Nowe ogłoszenie';
 $HEAD = '<link rel="stylesheet" href="/_dist/css/new.css">';
+$SCRIPTS = ['/_dist/js/file_picker.js'];
 
 ob_start();
 ?>
@@ -65,6 +66,5 @@ ob_start();
 
 <?php
 $CONTENT = ob_get_clean();
-$SCRIPTS = ['/_dist/js/file_picker.js'];
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';

@@ -5,6 +5,7 @@ global $user_controller;
 
 $TITLE = 'Edytuj profil';
 $HEAD = '<link rel="stylesheet" href="/_dist/css/edit_profile.css">';
+$SCRIPTS = ['/_dist/js/edit_profile.js'];
 
 $res = $user_controller->user->get_profile($_SESSION['user_id']);
 if (!$res) {
@@ -63,6 +64,5 @@ ob_start();
 
 <?php
 $CONTENT = ob_get_clean();
-$SCRIPTS = ['/_dist/js/edit_profile.js'];
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';

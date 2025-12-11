@@ -26,6 +26,11 @@ $listing_covers = $listingBuilder->getCovers($listing_id);
 
 $TITLE = htmlspecialchars($listing['title']);
 $HEAD = '<link rel="stylesheet" href="/_dist/css/view.css">';
+$SCRIPTS = [
+    '/_dist/js/listings.js',
+    '/_dist/js/carousel.js',
+    '/_dist/js/report.js',
+];
 
 $main_cover = "";
 foreach ($listing_covers as $cover) {
@@ -171,10 +176,5 @@ ob_start();
 
 <?php
 $CONTENT = ob_get_clean();
-$SCRIPTS = [
-    '/_dist/js/listings.js',
-    '/_dist/js/carousel.js',
-    '/_dist/js/report.js',
-];
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';

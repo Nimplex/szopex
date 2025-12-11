@@ -6,6 +6,7 @@ $new_pat = substr($pat, 2, strlen($pat) - 4);
 $TITLE = 'Rejestracja';
 $NO_NAVBAR = true;
 $HEAD = '<link rel="stylesheet" href="/_dist/css/register.css">';
+$SCRIPTS = ['/_dist/js/register.js'];
 
 ob_start();
 ?>
@@ -39,6 +40,5 @@ ob_start();
 
 <?php
 $CONTENT = ob_get_clean();
-$SCRIPTS = ['/_dist/js/register.js'];
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';

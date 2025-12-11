@@ -16,6 +16,10 @@ $HEAD = <<<HTML
     </style>
 </noscript>
 HTML;
+$SCRIPTS = [
+    '/_dist/js/listings.js',
+    '/_dist/js/scroll.js',
+];
 
 $total_pages = $lis->countPages();
 
@@ -38,9 +42,5 @@ ob_start();
 
 <?php
 $CONTENT = ob_get_clean();
-$SCRIPTS = [
-    '/_dist/js/listings.js',
-    '/_dist/js/scroll.js',
-];
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
