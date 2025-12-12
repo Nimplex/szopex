@@ -7,7 +7,7 @@ class Router
     private array $routes;
     private Route $defaultRoute;
 
-    private function _registerRoute(string $method, string $path, Route $route, bool $check_auth): void
+    private function _registerRoute(string $method, string $path, Route $route): void
     {
         $this->routes[$method][$path] = $route;
     }
@@ -25,43 +25,17 @@ class Router
         }
 
         $route = new Route($callback, $check_auth);
-        $this->_registerRoute($method, $path, $route, $check_auth);
+        $this->_registerRoute($method, $path, $route);
 
         return $route;
     }
 
     private function _match(string $path, string $pattern): ?array
     {
-        $types = [
-            'int' => '\d+',
-            'string' => '[a-zA-Z0-9_-]+',
-        ];
-
-        $regex = preg_replace_callback(
-            '#:(\w+)(?::(\w+))?#',
-            function ($matches) use ($types) {
-                $paramName = $matches[1];
-                $paramType = $matches[2] ?? null;
-                if ($paramType && isset($types[$paramType])) {
-                    $pattern = $types[$paramType];
-                } else {
-                    $pattern = '[^/]+';
-                }
-                return "(?P<{$paramName}>{$pattern})";
-            },
-            $pattern
-        );
-
-        $regex = "#^{$regex}$#i";
-        
+        $regex = preg_replace('#:([\w]+)#', '(?P<$1>[^/]+)', $pattern);
+        $regex = "#^{$regex}$#";
         if (preg_match($regex, $path, $matches)) {
-            $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
-            foreach ($params as $key => $value) {
-                if (preg_match('/\(\?P<' . preg_quote($key) . '>' . $types['int'] . '\)/', $regex)) {
-                    $params[$key] = (int) $value;
-                }
-            }
-            return $params;
+            return array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
         }
         return null;
     }
@@ -85,7 +59,7 @@ class Router
     {
         return $this->_makeRoute('POST', $path, $callback, $check_auth);
     }
- 
+
     /**
      * Register a default route, in case no other routes hit.
      *

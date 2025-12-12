@@ -8,7 +8,8 @@ use Matriphe\ISO639\ISO639;
 $iso = new ISO639();
 $listingBuilder = (new ListingBuilder())->make();
 
-$listing_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+$listing_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+
 // Just in case
 if (!isset($listing_id)) {
     header('Location: /', true, 303);

@@ -50,7 +50,7 @@ $router->GET(
 );
 
 $router->GET(
-    '/listings/:id:int',
+    '/listings/:id',
     fn () => require __DIR__ . '/../resources/pub/listings/view.php',
     true,
 );
@@ -71,7 +71,7 @@ $router->GET(
 
 
 $router->GET(
-    '/profile/:id:int',
+    '/profile/:id',
     fn () => require __DIR__ . '/../resources/pub/profile/profile.php',
     true,
 );
@@ -87,6 +87,12 @@ $router->GET(
 $router->GET(
     '/admin/reports',
     fn () => require __DIR__ . '/../resources/pub/admin/reports.php',
+    true,
+);
+
+$router->GET(
+    '/admin/reports/:id',
+    fn () => require __DIR__ . '/../resources/pub/admin/report.php',
     true,
 );
 
@@ -107,7 +113,7 @@ $router->GET(
 );
 
 $router->GET(
-    '/messages/:id:int',
+    '/messages/:id',
     fn () => require __DIR__ . '/../resources/pub/messages/messages.php',
     true,
 );

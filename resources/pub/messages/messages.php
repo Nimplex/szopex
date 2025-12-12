@@ -9,7 +9,7 @@ $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
 
 // I've tried FILTER_NULL_ON_FAILURE, but for whatever reason it started returning false
-$req_chat_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+$req_chat_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 $req_new_chat = filter_input(INPUT_GET, 'new_chat', FILTER_VALIDATE_BOOLEAN);
 $req_user_id = filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 $req_listing_id = filter_input(INPUT_GET, 'listing_id', FILTER_VALIDATE_INT);

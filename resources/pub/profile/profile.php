@@ -8,7 +8,7 @@ use App\Helper\DateHelper;
 
 $listingModel = (new ListingBuilder())->make();
 
-$id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT);
+$id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
 // Just in case
 if (!isset($id)) {

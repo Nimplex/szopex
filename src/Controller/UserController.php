@@ -231,7 +231,7 @@ class UserController
      */
     public function activate_from_request(array $request): bool
     {
-        $id = filter_var($request['id'] ?? null, FILTER_VALIDATE_INT);
+        $id = filter_var($request['id'] ?? null, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
         $token = filter_var($request['token'] ?? null, FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!isset($id) || !isset($token)) {
@@ -266,7 +266,7 @@ class UserController
             throw new \Exception('i18n:not_logged_in', 1);
         }
 
-        $listing_id = filter_var($request['listing_id'] ?? null, FILTER_VALIDATE_INT);
+        $listing_id = filter_var($request['listing_id'] ?? null, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
         if (!isset($listing_id)) {
             throw new \InvalidArgumentException('i18n:missing_parameters', 1);
