@@ -23,21 +23,6 @@ ob_start();
 
 <form action="/api/update-profile" method="POST" enctype="multipart/form-data">
     <div class="row">
-        <section id="user_name_values">
-            <label>
-                Nazwa wyświetlana:
-                <div>
-                    <input type="text" name="user_name" value="<?= $display_name ?>">
-                </div>
-            </label>
-            <br>
-            <label>
-                Login:
-                <div>
-                    <input type="text" name="user_login" value="<?= htmlspecialchars($_SESSION['user_login']); ?>">
-                </div>
-            </label>
-        </section>
         <section id="set-pfp">
             <label id="set-pfp-inner">
                 <input
@@ -57,7 +42,23 @@ ob_start();
             </label>
             Naciśnij, aby zmienić zdjęcie profilowe
         </section>
+        <section id="user_name_values">
+            <label>
+                Nazwa wyświetlana:
+                <div>
+                    <input type="text" name="user_name" value="<?= $display_name ?>">
+                </div>
+            </label>
+            <br>
+            <label>
+                Login:
+                <div>
+                    <input type="text" name="user_login" value="<?= htmlspecialchars($_SESSION['user_login']); ?>">
+                </div>
+            </label>
+        </section>
     </div>
+    <br>
     <button type="submit" class="btn-accent">
         <i data-lucide="save" aria-hidden="true"></i>
         <span>Zapisz zmiany</span>
