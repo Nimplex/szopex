@@ -7,7 +7,19 @@
   text-align: center;
 }
 
+#set-pfp div.check-updates {
+  position: relative;
+}
+
+#set-pfp div.check-updates .edit-indicator {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  line-height: 0.5rex;
+}
+
 #set-pfp-inner {
+  box-sizing: content-box;
   position: relative;
   display: flex;
   align-items: center;
@@ -15,6 +27,10 @@
   border-radius: 100%;
   aspect-ratio: 1;
   margin-bottom: 1rem;
+}
+
+#set-pfp-inner:has(:hover) {
+  border: 1px solid var(--white);
 }
 
 #set-pfp-inner svg {
@@ -51,11 +67,18 @@
   object-fit: cover;
 }
 
-section#user_name_values div:has(input)::after {
-  content: "*";
+.edit-indicator {
+  display: none;
+  color: var(--accent);
+  font-feature-settings: 'case';
+  scale: 2;
 }
 
-section#user_name_values div {
+.edit-indicator.show {
+  display: inline-block;
+}
+
+section#user-name-values div {
   display: flex;
 }
 

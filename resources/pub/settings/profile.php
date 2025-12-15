@@ -7,16 +7,19 @@ $SETTINGS_PAGE = [
     'self-url' => '/settings/profile',
     'head' => '<link rel="stylesheet" href="/_dist/css/settings/edit_profile.css">',
     'title' => 'Edytuj profil',
-    'scripts' => ['/_dist/js/edit_profile.js'],
+    'scripts' => [
+        '/_dist/js/settings/profile.js',
+        '/_dist/js/form_modified.js',
+    ],
 ];
 
-$res = $user_controller->user->get_profile($_SESSION['user_id']);
-if (!$res) {
+$profile = $user_controller->user->get_profile($_SESSION['user_id']);
+if (!$profile) {
     require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/404.php';
     die;
 }
 
-$display_name = htmlspecialchars($res['display_name']);
+$edit_indicator = '<span class="edit-indicator" aria-hidden="true">&nbsp;•</span>';
 
 ob_start();
 ?>
@@ -24,45 +27,49 @@ ob_start();
 <form action="/api/update-profile" method="POST" enctype="multipart/form-data">
     <div class="row">
         <section id="set-pfp">
-            <label id="set-pfp-inner">
-                <input
-                    type="file"
-                    class="sr-only"
-                    onchange="setPreview(this)"
-                    name="pfp"
-                    accept="image/jpeg,image/png"
-                >
-                <img
-                    src="/api/storage/profile-pictures/<?= urlencode($res['picture_id']); ?>"
-                    id="profile-picture"
-                    alt="Obecne zdjęcie profilowe"
-                >
-                <i data-lucide="pen" aria-hidden="true"></i>
-                <span class="sr-only">Zmień zdjęcie profilowe</span>
-            </label>
+            <div class="check-updates">
+                <span class="edit-indicator" aria-hidden="true">•</span>
+                <label id="set-pfp-inner">
+                    <input
+                        type="file"
+                        class="sr-only"
+                        onchange="setPreview(this)"
+                        name="pfp"
+                        accept="image/jpeg,image/png"
+                    >
+                    <img
+                        src="/api/storage/profile-pictures/<?= urlencode($profile['picture_id']) ?>"
+                        id="profile-picture"
+                        alt="Obecne zdjęcie profilowe"
+                    >
+                    <i data-lucide="pen" aria-hidden="true"></i>
+                    <span class="sr-only">Zmień zdjęcie profilowe</span>
+                </label>
+            </div>
             Naciśnij, aby zmienić zdjęcie profilowe
         </section>
-        <section id="user_name_values">
-            <label>
+        <section id="user-name-values">
+            <label class="check-updates">
                 Nazwa wyświetlana:
-                <div>
-                    <input type="text" name="user_name" value="<?= $display_name ?>">
-                </div>
+                <?= $edit_indicator ?>
+                <input type="text" name="user_name" value="<?= htmlspecialchars($profile['display_name']) ?>">
             </label>
             <br>
-            <label>
-                Login:
-                <div>
-                    <input type="text" name="user_login" value="<?= htmlspecialchars($_SESSION['user_login']); ?>">
-                </div>
+            <label class="check-updates">
+                Opis:
+                <?= $edit_indicator ?>
+                <textarea type="text" name="user_description"><?= htmlspecialchars($profile['description']) ?></textarea>
             </label>
         </section>
     </div>
     <br>
-    <button type="submit" class="btn-accent">
-        <i data-lucide="save" aria-hidden="true"></i>
-        <span>Zapisz zmiany</span>
-    </button>
+    <div id="counter-wrapper">
+        <button type="submit" class="btn-accent">
+            <i data-lucide="save" aria-hidden="true"></i>
+            <span>Zapisz zmiany</span>
+        </button>
+        <span id="update-counter"></span>
+    </div>
 </form>
 
 <?php

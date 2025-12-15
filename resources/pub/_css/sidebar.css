@@ -35,7 +35,7 @@
 }
 
 #sidebar li {
-  padding: 1rem 0;
+  padding: 1rem 0 0.75rem;
 }
 
 #sidebar li:not(:last-child) {
@@ -46,6 +46,7 @@
   display: flex;
   align-items: center;
   gap: 0.5em;
+  padding-bottom: 0.25rem;
   text-decoration: inherit;
   color: inherit;
   border-bottom: 2px solid transparent;
