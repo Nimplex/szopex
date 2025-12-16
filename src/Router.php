@@ -2,6 +2,12 @@
 
 namespace App;
 
+$ROLES = [
+    'moderator' => 2,
+    'administrator' => 3,
+    'superadministrator' => 4
+];
+
 class Router
 {
     private array $routes;
@@ -18,13 +24,13 @@ class Router
      * @param callable(): void $callback
      * @throws \ErrorException
      */
-    private function _makeRoute(string $method, string $path, callable $callback, bool $check_auth): Route
+    private function _makeRoute(string $method, string $path, callable $callback, bool $check_auth = false, ?string $role = null): Route
     {
         if (isset($this->routes[$method][$path])) {
             throw new \ErrorException("'{$path}' has been already registered");
         }
 
-        $route = new Route($callback, $check_auth);
+        $route = new Route($callback, $check_auth, $role);
         $this->_registerRoute($method, $path, $route);
 
         return $route;
@@ -45,9 +51,9 @@ class Router
      *
      * @param callable(): void $callback
      */
-    public function GET(string $path, callable $callback, bool $check_auth = false): Route
+    public function GET(string $path, callable $callback, ?bool $check_auth = false, ?string $role = null): Route
     {
-        return $this->_makeRoute('GET', $path, $callback, $check_auth);
+        return $this->_makeRoute('GET', $path, $callback, $check_auth, $role);
     }
 
     /**
@@ -55,9 +61,9 @@ class Router
      *
      * @param callable(): void $callback
      */
-    public function POST(string $path, callable $callback, bool $check_auth = false): Route
+    public function POST(string $path, callable $callback, ?bool $check_auth = false, ?string $role = null): Route
     {
-        return $this->_makeRoute('POST', $path, $callback, $check_auth);
+        return $this->_makeRoute('POST', $path, $callback, $check_auth, $role);
     }
 
     /**
@@ -78,7 +84,6 @@ class Router
 
         return $route;
     }
-
 
     /**
      * Handle all requests
@@ -136,16 +141,29 @@ class Route
     /**
      * @param callable(): void $callback
      */
-    public function __construct(callable $callback, bool $check_auth)
+    public function __construct(callable $callback, bool $check_auth = false, ?string $role = null)
     {
-        $this->check_auth = $check_auth;
+        $this->role = $role;
+        $this->check_auth = isset($role) || $check_auth;
         $this->callback = $callback(...);
     }
 
     public function fire(): void
     {
         @session_start();
+    
         if ($this->check_auth && !isset($_SESSION['user_id'])) {
+            require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/401.php';
+            die;
+        }
+
+        if (
+            isset($this->role) &&
+            (
+                !isset($_SESSION['user_role']) ||
+                $ROLE[$_SESSION['user_role']] < $ROLE[$role]
+            )
+        ) {
             require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/401.php';
             die;
         }

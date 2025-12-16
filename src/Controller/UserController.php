@@ -217,6 +217,7 @@ class UserController
             throw new \InvalidArgumentException('i18n:resent_code', 1);
         }
 
+        $_SESSION['user_role'] = $user['role'];
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_display_name'] = $user['display_name'];

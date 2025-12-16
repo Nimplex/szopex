@@ -82,18 +82,21 @@ $router->GET(
     '/admin',
     fn () => require __DIR__ . '/../resources/pub/admin/index.php',
     true,
+    "moderator"
 );
 
 $router->GET(
     '/admin/reports',
     fn () => require __DIR__ . '/../resources/pub/admin/reports.php',
     true,
+    "moderator"
 );
 
 $router->GET(
     '/admin/reports/:id',
     fn () => require __DIR__ . '/../resources/pub/admin/report.php',
     true,
+    "moderator"
 );
 
 //==== SETTINGS =============================================================//
@@ -101,6 +104,18 @@ $router->GET(
 $router->GET(
     '/settings/profile',
     fn () => require __DIR__ . '/../resources/pub/settings/profile.php',
+    true,
+);
+
+$router->GET(
+    '/settings/notifications',
+    fn () => require __DIR__ . '/../resources/pub/settings/notifications.php',
+    true,
+);
+
+$router->GET(
+    '/settings/security',
+    fn () => require __DIR__ . '/../resources/pub/settings/security.php',
     true,
 );
 
