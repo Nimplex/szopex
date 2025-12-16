@@ -17,8 +17,8 @@ $SIDEBAR_CFG = [
     'groups' => [
         [
             ['Edytuj profil', '/settings/profile', 'user'],
-            ['Ahmed', '/abdul', 'book'],
-            ['Ahmed', '/abdul', 'book'],
+            ['Powiadomienia', '/settings/notifications', 'bell'],
+            ['Zabezpieczenia', '/settings/security', 'lock'],
             ['Ahmed', '/abdul', 'book'],
             ['Ahmed', '/abdul', 'book'],
             ['Ahmed', '/abdul', 'book'],

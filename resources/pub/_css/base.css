@@ -76,6 +76,7 @@ body {
 }
 
 body > main {
+  position: relative;
   min-height: calc(100vh - 11rem);
   max-width: 1400px;
   margin: 2rem auto;

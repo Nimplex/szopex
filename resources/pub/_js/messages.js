@@ -10,7 +10,39 @@ window.openChat = function (event) {
   window.location.assign(locationUrl.toString());
 };
 
+window.openSidebar = function (event) {
+  const sidebarToggle = document.getElementById("sidebar-toggle");
+  const sidebar = document.getElementById("chats-sidebar");
+  const messageBox = document.getElementById("message-box");
+  const rightDash = document.getElementById("right-dash");
+  const isOpen = sidebar.dataset.open == "true";
+
+  sidebar.dataset.open = isOpen ? "false" : "true";
+  rightDash.style.transform = isOpen ? "" : "rotate(-180deg) translateX(1rem)";
+  sidebar.style.display = isOpen ? "none" : "flex";
+  messageBox.style.display = isOpen ? "flex" : "none";
+}
+
+window.addEventListener("resize", (event) => {
+  const sidebarToggle = document.getElementById("sidebar-toggle");
+  const sidebar = document.getElementById("chats-sidebar");
+  const messageBox = document.getElementById("message-box");
+  const isOpen = sidebar.dataset.open == "true";
+
+  if (window.innerWidth > 768) {
+    sidebar.style.display = "flex";
+    messageBox.style.display = "flex";
+  } else if (isOpen) {
+    sidebar.style.display = "flex";
+    messageBox.style.display = "none";
+  } else {
+    sidebar.style.display = "none";
+    messageBox.style.display = "flex";
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.getElementById("chats-sidebar");
   const messageList = document.getElementById("message-list");
 
   messageList.scrollTop = messageList.scrollHeight;

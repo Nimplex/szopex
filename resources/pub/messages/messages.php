@@ -174,6 +174,10 @@ ob_start();
     </div>
 </noscript>
 
+<div id="sidebar-toggle" aria-expanded="false" aria-controls="chats-sidebar" aria-label="Toggle chats sidebar" onclick="window.openSidebar(event)">
+    <i data-lucide="arrow-big-right-dash" aria-hidden="true" id="right-dash"></i>
+</div>
+
 <section id="chats-sidebar">
     <section id="tabs">
         <ul>
@@ -214,35 +218,35 @@ ob_start();
     </a>
     <?php endif ?>
 
-<div id="message-list" class="<?= (!$show_ui || $new_chat) ? 'no-chats' : '' ?>">
-    <?php if ($new_chat): ?>
-    <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
-    <span>Napisz swoją pierwszą wiadomość</span>
-    <?php elseif (!$show_ui): ?>
-    <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
-    <span>Tutaj znajdzie się twój czat!</span>
-    <?php else: ?>
-    <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/templates/messages.php'; ?>
-    <?php endif ?>
-</div>
-
-<?php if ($show_ui): ?>
-<div id="message-input">
-    <form method="POST" action="<?= $new_chat ? '/api/new-chat' : '/api/new-message' ?>">
-        <?php if (isset($chat)): ?>
-        <input type="hidden" name="chat_id" value="<?= $chat['chat_id'] ?>">
-        <?php elseif (isset($listing)): ?>
-        <input type="hidden" name="listing_id" value="<?= $listing['listing_id'] ?>">
-        <?php elseif (isset($user)): ?>
-        <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+    <div id="message-list" class="<?= (!$show_ui || $new_chat) ? 'no-chats' : '' ?>">
+        <?php if ($new_chat): ?>
+        <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
+        <span>Napisz swoją pierwszą wiadomość</span>
+        <?php elseif (!$show_ui): ?>
+        <i class="big-icon" data-lucide="arrow-big-down-dash"></i>
+        <span>Tutaj znajdzie się twój czat!</span>
+        <?php else: ?>
+        <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/templates/messages.php'; ?>
         <?php endif ?>
-        <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
-        <button type="submit">
-            <i data-lucide="send" aria-hidden="true"></i>
-        </button>
-    </form>
-</div>
-<?php endif ?>
+    </div>
+
+    <?php if ($show_ui): ?>
+    <div id="message-input">
+        <form method="POST" action="<?= $new_chat ? '/api/new-chat' : '/api/new-message' ?>">
+            <?php if (isset($chat)): ?>
+            <input type="hidden" name="chat_id" value="<?= $chat['chat_id'] ?>">
+            <?php elseif (isset($listing)): ?>
+            <input type="hidden" name="listing_id" value="<?= $listing['listing_id'] ?>">
+            <?php elseif (isset($user)): ?>
+            <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
+            <?php endif ?>
+            <input type="text" name="content" placeholder="Treść wiadomości..." minlength="1" required>
+            <button type="submit">
+                <i data-lucide="send" aria-hidden="true"></i>
+            </button>
+        </form>
+    </div>
+    <?php endif ?>
 </section>
 
 <?php

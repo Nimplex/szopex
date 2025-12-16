@@ -71,7 +71,7 @@
 
     <div class="footer">
       <p>
-        Jeśli nie życzysz sobie otrzymywać powiadomień -- zmień swoje ustawienia powiadomień w <a href="https://szopex.nimplex.xyz/settings#notifications">panelu Szopex</a>.
+        Jeśli nie życzysz sobie otrzymywać powiadomień -- zmień swoje ustawienia powiadomień w <a href="https://szopex.nimplex.xyz/settings/notifications">panelu Szopex</a>.
       </p>
       <p>
         &copy; <?= date('Y') ?> Szopex. Wszelkie prawa zastrzeżone.
