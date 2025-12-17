@@ -17,82 +17,82 @@ ob_start();
     <table>
         <tbody>
             <tr>
-                <td>Powiadomienia o przychodzących wiadomościach</td>
+                <td><label for="notifications_message">Powiadomienia o przychodzących wiadomościach</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_message">
+                        <input type="checkbox" name="notifications_message" id="notifications_message">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia dotyczące zgłoszeń (werdykty, przyjęcie)</td>
+                <td><label for="notifications_reports">Powiadomienia dotyczące zgłoszeń (werdykty, przyjęcie)</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_reports">
+                        <input type="checkbox" name="notifications_reports" id="notifications_reports">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia o logowaniu</td>
+                <td><label for="notifications_login">Powiadomienia o logowaniu</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_login">
+                        <input type="checkbox" name="notifications_login" id="notifications_login">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia o ogłoszeniach (dodawanie)</td>
+                <td><label for="notifications_listings">Powiadomienia o ogłoszeniach (dodawanie)</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_listings">
+                        <input type="checkbox" name="notifications_listings" id="notifications_listings">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia administracyjne (ważne powiadomienia)</td>
+                <td><label for="notifications_administrative">Powiadomienia administracyjne (ważne powiadomienia)</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_administrative">
+                        <input type="checkbox" name="notifications_administrative" id="notifications_administrative">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Ogłoszenia ogólne</td>
+                <td><label for="notifications_contact">Ogłoszenia ogólne</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_contact">
+                        <input type="checkbox" name="notifications_contact" id="notifications_contact">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia marketingowe</td>
+                <td><label for="notifications_marketing">Powiadomienia marketingowe</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_marketing">
+                        <input type="checkbox" name="notifications_marketing" id="notifications_marketing">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia push (aplikacja)</td>
+                <td><label for="mobile_app_notifications">Powiadomienia push (aplikacja)</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="mobile_app_notifications">
+                        <input type="checkbox" name="mobile_app_notifications" id="mobile_app_notifications">
                         <span class="slider"></span>
                     </label>
                 </td>
             </tr>
             <tr>
-                <td>Powiadomienia mailowe</td>
+                <td><label for="email_notifications">Powiadomienia mailowe</label></td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="email_notifications">
+                        <input type="checkbox" name="email_notifications" id="email_notifications">
                         <span class="slider"></span>
                     </label>
                 </td>
