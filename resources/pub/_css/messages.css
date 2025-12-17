@@ -251,6 +251,11 @@ body > main {
   border: 1px solid var(--border-gray);
 }
 
+#message-to img.pfp,
+.chat img.pfp {
+  border-radius: 100%;
+}
+
 #new-message {
   color: var(--border-gray);
   display: flex;

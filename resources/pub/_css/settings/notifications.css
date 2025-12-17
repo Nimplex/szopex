@@ -33,10 +33,9 @@ table {
   right: 0;
   bottom: 0;
   background-color: var(--gray-bg);
-  transition: .4s;
 }
 
-.slider:before {
+.slider::before {
   position: absolute;
   content: "";
   height: 1.5rem;
@@ -45,8 +44,13 @@ table {
   left: 0.25rem;
   bottom: 0.25rem;
   background-color: var(--white);
-  -webkit-transition: .4s;
-  transition: .4s;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slider::before,
+  .slider {
+    transition: .4s;
+  }
 }
 
 input:checked + .slider {
