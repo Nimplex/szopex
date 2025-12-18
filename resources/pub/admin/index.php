@@ -1,16 +1,15 @@
 <?php
-$TITLE = 'Panel administratora';
-$HEAD = '<link rel="stylesheet" href="/_dist/css/admin.css">';
+$SETTINGS_PAGE = [
+    'self-url' => '/admin',
+    'head' => '',
+    'title' => 'Strona główna',
+    'scripts' => ''
+];
 
 ob_start();
 ?>
 
-<?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/pub/admin/components/sidebar.php' ?>
-
-<div id="content">
-</div>
-
 <?php
 $CONTENT = ob_get_clean();
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/admin.php';

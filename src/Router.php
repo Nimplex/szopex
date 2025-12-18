@@ -2,11 +2,8 @@
 
 namespace App;
 
-$ROLES = [
-    'moderator' => 2,
-    'administrator' => 3,
-    'superadministrator' => 4
-];
+/** @var \App\Controller\UserController $user_controller */
+global $user_controller;
 
 class Router
 {
@@ -93,7 +90,7 @@ class Router
         global $_ROUTE;
         $uri = $_SERVER['REQUEST_URI'] ?? '/';
         $path = parse_url($uri);
-        $path = $path === false ? '/' : $path['path'];
+        $path = rtrim($path === false ? '/' : $path['path'], '/');
         $method = $_SERVER['REQUEST_METHOD'];
 
         if (isset($this->routes[$method])) {
@@ -151,6 +148,7 @@ class Route
     public function fire(): void
     {
         @session_start();
+        global $user_controller;
     
         if ($this->check_auth && !isset($_SESSION['user_id'])) {
             require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/401.php';
@@ -159,10 +157,7 @@ class Route
 
         if (
             isset($this->role) &&
-            (
-                !isset($_SESSION['user_role']) ||
-                $ROLE[$_SESSION['user_role']] < $ROLE[$role]
-            )
+            !$user_controller->has_permissions($this->role)
         ) {
             require $_SERVER['DOCUMENT_ROOT'] . '/../resources/errors/401.php';
             die;

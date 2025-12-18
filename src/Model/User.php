@@ -94,4 +94,24 @@ class User extends BaseDBModel
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
+
+    // implementation to be used only in administrator panel
+    public function admin_get_all(): array
+    {
+        $stmt = $this->db->prepare(<<<SQL
+        SELECT
+            u.id,
+            u.login,
+            u.display_name,
+            u.email,
+            u.role,
+            u.created_at,
+            (
+                SELECT COUNT(*) FROM listings l WHERE l.user_id = u.id
+            ) as listing_count
+        FROM users u
+        SQL);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: null;
+    }
 }

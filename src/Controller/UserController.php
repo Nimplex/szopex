@@ -17,7 +17,11 @@ class UserController
     public Reports $reports;
     public const int MAX_PFP_FILE_SIZE = 5_000_000;
     public const string PASSWORD_PATTERN = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/';
-
+    public $ROLES = [
+        'moderator' => 2,
+        'administrator' => 3,
+        'superadministrator' => 4
+    ];
 
     public function __construct(PDO $db)
     {
@@ -25,6 +29,25 @@ class UserController
         $this->activation = new Activation($db);
         $this->favourites = new Favourites($db);
         $this->reports = new Reports($db);
+    }
+
+    public function has_permissions(string $role): bool
+    {
+        @session_start();
+        
+        if (!isset($_SESSION['user_role'])) {
+            return false;
+        }
+
+        if (
+            !array_key_exists($role, $this->ROLES) ||
+            !array_key_exists($_SESSION['user_role'], $this->ROLES)
+        ) {
+            echo 'invalid key';
+            return false;
+        }
+
+        return $this->ROLES[$role] <= $this->ROLES[$_SESSION['user_role']];
     }
 
     /**

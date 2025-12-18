@@ -1,3 +1,7 @@
+main hr {
+  margin: 2rem 0;
+}
+
 #sidebar-wrapper {
   display: flex;
   gap: 2rem;
@@ -17,7 +21,7 @@
   flex: 1;
 }
 
-#sidebar-pane > h2 {
+#sidebar-pane>h2 {
   font-size: 1.75rem;
   margin-bottom: 1rem;
 }
@@ -65,8 +69,7 @@
 
 }
 
-#sidebar .selected > *::before {
+#sidebar .selected>*::before {
   content: "»";
   color: var(--accent);
 }
-

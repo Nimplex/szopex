@@ -17,4 +17,3 @@ ob_start();
 $CONTENT = ob_get_clean();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/settings.php';
-

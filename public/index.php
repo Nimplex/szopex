@@ -82,21 +82,28 @@ $router->GET(
     '/admin',
     fn () => require __DIR__ . '/../resources/pub/admin/index.php',
     true,
-    "moderator"
+    'moderator'
 );
 
 $router->GET(
     '/admin/reports',
     fn () => require __DIR__ . '/../resources/pub/admin/reports.php',
     true,
-    "moderator"
+    'moderator'
 );
 
 $router->GET(
     '/admin/reports/:id',
     fn () => require __DIR__ . '/../resources/pub/admin/report.php',
     true,
-    "moderator"
+    'moderator'
+);
+
+$router->GET(
+    '/admin/users',
+    fn () => require __DIR__ . '/../resources/pub/admin/users.php',
+    true,
+    'moderator'
 );
 
 //==== SETTINGS =============================================================//

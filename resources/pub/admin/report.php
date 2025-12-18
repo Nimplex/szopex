@@ -20,26 +20,29 @@ if (!isset($report)) {
     die;
 }
 
-$HEAD = <<<HTML
-<style>
-table {
-    margin-top: 1rem;
-}
-table, tr, th, td {
-    border: 1px solid var(--border-gray);
-}
+$SETTINGS_PAGE = [
+    'self-url' => '/admin/reports',
+    'head' => <<<HTML
+    <style>
+    table {
+        margin-top: 1rem;
+    }
+    table, tr, th, td {
+        border: 1px solid var(--border-gray);
+    }
 
-th, td {
-    padding: 0.5rem;
-    text-align:left;
-}
-</style>
-HTML;
+    th, td {
+        padding: 0.5rem;
+        text-align:left;
+    }
+    </style>
+    HTML,
+    'title' => "Zgłoszenie #{$report['id']}",
+    'scripts' => ''
+];
 
 ob_start();
 ?>
-
-<h1>Zgłoszenie #<?= $report['id'] ?></h1>
 
 <table>
     <tbody>
@@ -51,26 +54,30 @@ ob_start();
                     if ($key == 'reporter_id') {
                         $url = "/profile/{$value}";
                     }
-                    if ($key == 'reported_id') {
-                        $url = "/profile/{$value}";
-                    }
-                    if ($key == 'listing_id') {
-                        $url = "/listings/{$value}";
-                    }
-                    if (isset($url)) {
-                        echo "<a href=\"{$url}\">{$value}</a>";
-                        unset($url);
-                    } else {
-                        echo htmlspecialchars($value);
-                    }
-                    ?>
+            if ($key == 'reported_id') {
+                $url = "/profile/{$value}";
+            }
+            if ($key == 'listing_id') {
+                $url = "/listings/{$value}";
+            }
+            if (isset($url)) {
+                echo "<a href=\"{$url}\">{$value}</a>";
+                unset($url);
+            } else {
+                echo htmlspecialchars($value);
+            }
+            ?>
                 </td>
             </tr>
         <?php endforeach ?>
     </tbody>
 </table>
 
+<button>Akceptuj zgłoszenie</button>
+<button>Odrzuć zgłoszenie</button>
+<p>Podjęcie jakiejkolwiek akcji spowoduje automatyczne wysłanie wiadomości e-mail do zgłaszającego. Akceptacja zgłoszenia wymaga podjęcia decyzji o usunięciu lub modyfikacji zgłoszonej treści. Informacja o podjętych działaniach zostanie przekazana użytkownikowi, którego dotyczy zgłoszenie</p>
+
 <?php
 $CONTENT = ob_get_clean();
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/admin.php';

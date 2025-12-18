@@ -8,14 +8,16 @@ if (isset($_SERVER['HTTP_PARTIAL_REQ'])) {
 /** @var \App\Controller\UserController $user_controller */
 global $user_controller;
 
-$TITLE = 'Zgłoszenia';
-$HEAD = '<link rel="stylesheet" href="/_dist/css/reports.css">';
+$SETTINGS_PAGE = [
+    'self-url' => '/admin/reports',
+    'head' => '<link rel="stylesheet" href="/_dist/css/reports.css">',
+    'title' => 'Zgłoszenia',
+    'scripts' => ''
+];
 
 ob_start();
 ?>
 
-<h1>Zgłoszenia</h1>
-<hr>
 <div id="reports">
     <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/templates/reports.php'; ?>
 </div>
@@ -23,4 +25,4 @@ ob_start();
 <?php
 $CONTENT = ob_get_clean();
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/container.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/admin.php';
