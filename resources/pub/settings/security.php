@@ -13,6 +13,14 @@ $SETTINGS_PAGE = [
 ob_start();
 ?>
 
+<button>Zmień adres e-mail</button>
+<br>
+<button>Zmień hasło</button>
+<br>
+<button>Dodaj weryfikacje dwuetapową</button>
+<br>
+<button>Usuń konto</button>
+
 <?php
 $CONTENT = ob_get_clean();
 
