@@ -9,7 +9,6 @@ main hr {
 #sidebar-wrapper {
   display: flex;
   gap: 2rem;
-  --w: 250px;
   min-height: 100%;
 }
 
@@ -23,64 +22,6 @@ main hr {
 
 #sidebar-pane {
   flex: 1;
-}
-
-#sidebar-pane > h2 {
-  font-size: 1.75rem;
-  margin-bottom: 1rem;
-}
-
-#sidebar-heading {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-#sidebar ul {
-  margin-bottom: 0.5rem;
-  list-style: none;
-  border-radius: var(--radius);
-}
-
-#sidebar li {
-  padding: 1rem 0 0.75rem;
-}
-
-#sidebar li:not(:last-child) {
-  border-bottom: 1px solid var(--border-gray);
-}
-
-#sidebar a {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  padding-bottom: 0.25rem;
-  text-decoration: inherit;
-  color: inherit;
-  border-bottom: 2px solid transparent;
-  transition:
-    all 250ms,
-    outline 0s;
-}
-
-#sidebar a:hover {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-
-#sidebar .group-title {
-  color: var(--text-secondary);
-}
-
-#sidebar .selected > *::before {
-  content: "»";
-  color: var(--accent);
-}
-
-#heading {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
 }
 
 #sidebar-close-button {
@@ -111,14 +52,6 @@ main hr {
     background-color: var(--gray-bg);
     z-index: 1;
     translate: 0px;
-  }
-
-  #sidebar-heading {
-    width: var(--w);
-  }
-
-  #sidebar + .vr {
-    display: none;
   }
 
   #sidebar-close-button {

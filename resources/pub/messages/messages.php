@@ -7,6 +7,7 @@ global $_ROUTE, $user_controller;
 
 $listing_model = (new App\Builder\ListingBuilder())->make();
 $chats_model = (new App\Builder\ChatsBuilder())->make();
+$flash_msg = new FlashMessage();
 
 // I've tried FILTER_NULL_ON_FAILURE, but for whatever reason it started returning false
 $req_chat_id = filter_var($_ROUTE['id'] ?? null, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -18,12 +19,15 @@ $new_chat = $req_new_chat && (isset($req_user_id) || isset($req_listing_id));
 $show_ui = $new_chat || $req_chat_id;
 
 $TITLE = $new_chat ? 'Nowy czat' : 'Wiadomości';
-$HEAD = '<link rel="stylesheet" href="/_dist/css/messages.css">';
-$SCRIPTS = ['/_dist/js/messages.js'];
+$HEAD = <<<HTML
+<link rel="stylesheet" href="/_dist/css/messages.css">
+<link rel="stylesheet" href="/_dist/css/sidebar_raw.css">
+HTML;
+$SCRIPTS = ['/_dist/js/messages.js', '/_dist/js/sidebar.js'];
 
 // Check if user has provided both queries
 if (isset($req_listing_id) && isset($req_user_id)) {
-    (new FlashMessage())->setErr('i18n:invalid_query_parameters');
+    $flash_msg->setErr('i18n:invalid_query_parameters');
     header('Location: /messages', true, 303);
     die;
 }
@@ -35,21 +39,17 @@ $messages = null;
 
 if ($new_chat && $req_listing_id) {
     $listing = $listing_model->get($req_listing_id, $_SESSION['user_id']);
-    $error = false;
 
     // check if listing exists
     if (!$listing) {
-        $error = true;
-        (new FlashMessage())->setErr('i18n:listing_not_found');
+        $flash_msg->setErr('i18n:listing_not_found');
+        header('Location: /messages', true, 303);
+        die;
     }
 
-    // check if the user tries to message himself
+    // check if the user tries to message themself
     if ($listing['user_id'] == $_SESSION['user_id']) {
-        $error = true;
-        (new FlashMessage())->setErr('i18n:do_not_message_yourself');
-    }
-
-    if ($error) {
+        $flash_msg->setErr('i18n:do_not_message_yourself');
         header('Location: /messages', true, 303);
         die;
     }
@@ -64,21 +64,17 @@ if ($new_chat && $req_listing_id) {
 
 if ($new_chat && $req_user_id) {
     $user = $user_controller->user->get_profile($req_user_id);
-    $error = false;
 
     // check if user exists
     if (!$user) {
-        $error = true;
-        (new FlashMessage())->setErr('i18n:user_not_found');
+        $flash_msg->setErr('i18n:user_not_found');
+        header('Location: /messages', true, 303);
+        die;
     }
 
-    // check if the user tries to message himself
+    // check if the user tries to message themself
     if ($user['id'] == $_SESSION['user_id']) {
-        $error = true;
-        (new FlashMessage())->setErr('i18n:do_not_message_yourself');
-    }
-
-    if ($error) {
+        $flash_msg->setErr('i18n:do_not_message_yourself');
         header('Location: /messages', true, 303);
         die;
     }
@@ -164,6 +160,58 @@ if ($show_ui) {
 ob_start();
 ?>
 
+<div id="sidebar-header">
+    <h2>Wiadomości</h2>
+    <button id="sidebar-close-button" onclick="window.closeSidebar()">×</button>
+</div>
+<section id="tabs">
+    <ul>
+        <li><label>Wszystkie<input type="radio" class="sr-only" name="tab" value="all" checked></label></li>
+        <li><label>Kupno<input type="radio" class="sr-only" name="tab" value="buy"></label></li>
+        <li><label>Sprzedaż<input type="radio" class="sr-only" name="tab" value="sell"></label></li>
+    </ul>
+</section>
+<section id="chats-list"<?= $no_chats ? ' class="no-chats"' : "" ?>>
+    <?php if ($no_chats): ?>
+    <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
+    <span>Nie znaleziono czatów</span>
+    <?php else: foreach ($chats as $listing_chat): ?>
+    <button
+        class="chat<?= $req_chat_id == $listing_chat['chat_id'] ? ' active' : '' ?>"
+        onclick="window.openChat(event)"
+        data-chat-id="<?= $listing_chat['chat_id'] ?>"
+    >
+        <?php if (!$listing_chat['contains_listing']): ?>
+        <img class="pfp" src="/api/storage/profile-pictures/<?= $listing_chat['is_seller'] ? $listing_chat['buyer_pfp_file_id'] : $listing_chat['seller_pfp_file_id'] ?>" alt="Okładka czatu">
+        <?php elseif ($listing_chat['cover_file_id']): ?>
+        <img src="/api/storage/covers/<?= $listing_chat['cover_file_id'] ?>" alt="Okładka czatu">
+        <?php endif; ?>
+        <div class="chat-details">
+            <?php if (!$listing_chat['contains_listing']): ?>
+            <h3><?= htmlspecialchars($listing_chat['is_seller'] ? $listing_chat['buyer_name'] : $listing_chat['seller_name']) ?></h3>
+            <?php else: ?>
+            <h3><?= htmlspecialchars($listing_chat['listing_title']) ?></h3>
+            <span>
+                <i data-lucide="user" aria-hidden="true"></i>
+                <?= htmlspecialchars($listing_chat['is_seller'] ? $listing_chat['buyer_name'] : $listing_chat['seller_name']) ?>
+            </span>
+            <?php endif; ?>
+        </div>
+    </button>
+    <?php endforeach; endif;?>
+</section>
+
+<?php
+$content = ob_get_clean();
+
+$SIDEBAR_CFG = [
+    'type' => 'raw',
+    'content' => $content,
+];
+
+ob_start();
+?>
+
 <noscript>
     <div id="noscript">
         <h1>Ta strona wymaga działania skryptów JS do prawidłowego działania!</h1>
@@ -176,50 +224,24 @@ ob_start();
         </ul>
     </div>
 </noscript>
-<div id="sidebar-toggle" aria-expanded="false" aria-controls="chats-sidebar" aria-label="Toggle chats sidebar" onclick="window.openSidebar(event)">
-    <i data-lucide="arrow-big-right-dash" aria-hidden="true" id="right-dash"></i>
-</div>
-<div id="sidebar-anim-container">
-    <section id="chats-sidebar">
-        <section id="tabs">
-            <ul>
-                <li><label>Wszystkie<input type="radio" class="sr-only" name="tab" value="all" checked></label></li>
-                <li><label>Kupno<input type="radio" class="sr-only" name="tab" value="buy"></label></li>
-                <li><label>Sprzedaż<input type="radio" class="sr-only" name="tab" value="sell"></label></li>
-            </ul>
-        </section>
-        <section id="chats-list" <?= $no_chats ? 'class="no-chats"' : "" ?>>
-            <?php if ($no_chats): ?>
-            <i class="big-icon" data-lucide="message-circle-off" aria-hidden="true"></i>
-            <span>Nie znaleziono czatów</span>
-            <?php else: foreach ($chats as $listing_chat): ?>
-            <button class="chat<?= $req_chat_id == $listing_chat['chat_id'] ? ' active' : '' ?>" onclick="window.openChat(event)" data-chat-id="<?= $listing_chat['chat_id'] ?>">
-                <?php if (!$listing_chat['contains_listing']): ?>
-                <img class="pfp" src="/api/storage/profile-pictures/<?= $listing_chat['is_seller'] ? $listing_chat['buyer_pfp_file_id'] : $listing_chat['seller_pfp_file_id'] ?>" alt="Okładka czatu">
-                <?php elseif ($listing_chat['cover_file_id']): ?>
-                <img src="/api/storage/covers/<?= $listing_chat['cover_file_id'] ?>" alt="Okładka czatu">
-                <?php endif ?>
-                <div class="chat-details">
-                    <?php if (!$listing_chat['contains_listing']): ?>
-                    <h3><?= htmlspecialchars($listing_chat['is_seller'] ? $listing_chat['buyer_name'] : $listing_chat['seller_name']) ?></h3>
-                    <?php else: ?>
-                    <h3><?= htmlspecialchars($listing_chat['listing_title']) ?></h3>
-                    <span><i data-lucide="user" aria-hidden="true"></i> <?= htmlspecialchars($listing_chat['is_seller'] ? $listing_chat['buyer_name'] : $listing_chat['seller_name']) ?></span>
-                    <?php endif ?>
-                </div>
-            </button>
-            <?php endforeach; endif;?>
-        </section>
-    </section>
-    <section id="message-box">
-        <?php if ($show_ui): ?>
-        <a id="message-to" href="<?= $href ?>">
-            <?= $display_image ?>
-            <span><?= $title ?></span>
-        </a>
-        <?php endif ?>
 
-        <div id="message-list" class="<?= (!$show_ui || $new_chat) ? 'no-chats' : '' ?>">
+
+<div id="sidebar-wrapper">
+    <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/sidebar.php' ?>
+    <section id="sidebar-pane">
+        <?php if ($show_ui): ?>
+        <div id="message-to">
+            <button id="sidebar-open-button" type="button" onclick="window.openSidebar();">
+                <i data-lucide="menu" aria-hidden="true"></i>
+                <span class="sr-only">Otwórz panel boczny</span>
+            </button>
+            <a href="<?= $href ?>">
+                <?= $display_image ?>
+                <?= $title ?>
+            </a>
+        </div>
+        <?php endif ?>
+        <div id="message-list"<?= (!$show_ui || $new_chat) ? ' class="no-chats"' : '' ?>>
             <?php if ($new_chat): ?>
             <i class="big-icon" data-lucide="message-square-dashed" aria-hidden="true"></i>
             <span>Napisz swoją pierwszą wiadomość</span>
@@ -228,7 +250,7 @@ ob_start();
             <span>Tutaj znajdzie się twój czat!</span>
             <?php else: ?>
             <?php require $_SERVER['DOCUMENT_ROOT'] . '/../resources/components/templates/messages.php'; ?>
-            <?php endif ?>
+            <?php endif; ?>
         </div>
 
         <?php if ($show_ui): ?>

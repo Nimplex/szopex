@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let contInert = false;
   
   window.addEventListener("resize", () => {
-    console.log(window.innerWidth);
     if (window.innerWidth > 1000) {
       content.inert = false;
     } else {

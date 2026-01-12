@@ -16,13 +16,14 @@ $SCRIPTS = [
 ];
 
 $SIDEBAR_CFG = [
+    'type' => 'link',
     'title' => $title,
     'groups' => [
         [
             ['Profil', '/settings/profile', 'user'],
             ['Powiadomienia', '/settings/notifications', 'bell'],
             ['Zabezpieczenia', '/settings/security', 'lock'],
-        ]
+        ],
     ],
     'group_names' => [
         'Ogólne',

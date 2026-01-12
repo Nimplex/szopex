@@ -9,39 +9,6 @@ window.openChat = (event) => {
   window.location.assign(locationUrl.toString());
 };
 
-window.openSidebar = () => {
-  const sidebarToggle = document.getElementById("sidebar-toggle");
-  const sidebar = document.getElementById("chats-sidebar");
-  const messageBox = document.getElementById("message-box");
-  const rightDash = document.getElementById("right-dash");
-  const isOpen = sidebar.dataset.open == "true";
-
-  sidebar.dataset.open = isOpen ? "false" : "true";
-  rightDash.style.transform = isOpen ? "" : "rotate(-180deg) translateX(1rem)";
-  sidebar.style.display = isOpen ? "none" : "flex";
-  messageBox.style.display = isOpen ? "flex" : "none";
-  if (isOpen) sidebarToggle.classList.remove("active");
-  else sidebarToggle.classList.add("active");
-}
-
-window.addEventListener("resize", () => {
-  // const sidebarToggle = document.getElementById("sidebar-toggle");
-  const sidebar = document.getElementById("chats-sidebar");
-  const messageBox = document.getElementById("message-box");
-  const isOpen = sidebar.dataset.open == "true";
-
-  if (window.innerWidth > 768) {
-    sidebar.style.display = "flex";
-    messageBox.style.display = "flex";
-  } else if (isOpen) {
-    sidebar.style.display = "flex";
-    messageBox.style.display = "none";
-  } else {
-    sidebar.style.display = "none";
-    messageBox.style.display = "flex";
-  }
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   // const sidebar = document.getElementById("chats-sidebar");
   const messageList = document.getElementById("message-list");
@@ -77,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loading = false;
   }
 
-  messageList.addEventListener("scroll", async () => {
+  async function listener() {
     if (loading) return;
     const sentinel = document.getElementById("sentinel");
     if (!sentinel) return;
@@ -90,5 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
       sentinel.remove();
       await loadNextPage(nextPage, chatId);
     }
-  });
+  }
+
+  messageList.addEventListener("scroll", listener);
+  window.addEventListener("resize", listener);
+  setTimeout(listener, 100);
 });
