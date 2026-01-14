@@ -152,6 +152,12 @@ $router->POST(
     true
 );
 
+$router->POST(
+    '/api/update-notifications',
+    fn () => require __DIR__ . '/../resources/api/update-notifications.php',
+    true
+);
+
 //==== ERRORS ===============================================================//
 
 $router->GET(

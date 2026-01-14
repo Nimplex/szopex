@@ -25,7 +25,7 @@ class User extends BaseDBModel
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-    
+
     public function find_by_login(string $login): ?array
     {
         $stmt = $this->db->prepare(<<<SQL
@@ -71,6 +71,47 @@ class User extends BaseDBModel
         }
 
         return false;
+    }
+
+    public function update_notifications(
+        int $id,
+        bool $message,
+        bool $reports,
+        bool $login,
+        bool $listings,
+        bool $administrative,
+        bool $contact,
+        bool $marketing,
+        bool $mobile_app_notifications,
+        bool $email_notifications
+    ): bool {
+        $stmt = $this->db->prepare(<<<SQL
+        UPDATE users SET
+            notifications_message = :message,
+            notifications_reports = :reports,
+            notifications_login = :login,
+            notifications_listings = :listings,
+            notifications_administrative = :administrative,
+            notifications_contact = :contact,
+            notifications_marketing = :marketing,
+            mobile_app_notifications = :mobile_app_notifications,
+            email_notifications = :email_notifications
+        WHERE id = :id
+        SQL);
+
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->bindValue(':message', $message, PDO::PARAM_BOOL);
+        $stmt->bindValue(':reports', $reports, PDO::PARAM_BOOL);
+        $stmt->bindValue(':login', $login, PDO::PARAM_BOOL);
+        $stmt->bindValue(':listings', $listings, PDO::PARAM_BOOL);
+        $stmt->bindValue(':administrative', $administrative, PDO::PARAM_BOOL);
+        $stmt->bindValue(':contact', $contact, PDO::PARAM_BOOL);
+        $stmt->bindValue(':marketing', $marketing, PDO::PARAM_BOOL);
+        $stmt->bindValue(':mobile_app_notifications', $mobile_app_notifications, PDO::PARAM_BOOL);
+        $stmt->bindValue(':email_notifications', $email_notifications, PDO::PARAM_BOOL);
+        $stmt->execute();
+
+        return true;
     }
 
     // I think it will be much safer not to expose password hashes etc. in responses even if it's not shown to user

@@ -1,4 +1,5 @@
 <?php
+use App\FlashMessage;
 
 /** @var \App\Controller\UserController $user_controller */
 global $user_controller;
@@ -14,6 +15,15 @@ $SETTINGS_PAGE = [
 
 $edit_indicator = '<span class="edit-indicator" aria-hidden="true">&nbsp;•</span>';
 
+$user = $user_controller->user->find_by_id($_SESSION['user_id']);
+
+if (!$user) {
+    (new FlashMessage())->setErr('i18n:user_not_found');
+    @session_destroy();
+    header('Location: /login', true, 303);
+    die;
+}
+
 ob_start();
 ?>
 
@@ -26,7 +36,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_message" id="notifications_message">
+                        <input type="checkbox" name="notifications_message" id="notifications_message" <?= $user['notifications_message'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -40,7 +50,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_reports" id="notifications_reports">
+                        <input type="checkbox" name="notifications_reports" id="notifications_reports" <?= $user['notifications_reports'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -54,7 +64,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_login" id="notifications_login">
+                        <input type="checkbox" name="notifications_login" id="notifications_login" <?= $user['notifications_login'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -68,7 +78,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_listings" id="notifications_listings">
+                        <input type="checkbox" name="notifications_listings" id="notifications_listings" <?= $user['notifications_listings'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -82,7 +92,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_administrative" id="notifications_administrative">
+                        <input type="checkbox" name="notifications_administrative" id="notifications_administrative" <?= $user['notifications_administrative'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -96,7 +106,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_contact" id="notifications_contact">
+                        <input type="checkbox" name="notifications_contact" id="notifications_contact" <?= $user['notifications_contact'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -110,7 +120,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="notifications_marketing" id="notifications_marketing">
+                        <input type="checkbox" name="notifications_marketing" id="notifications_marketing" <?= $user['notifications_marketing'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -124,7 +134,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="mobile_app_notifications" id="mobile_app_notifications">
+                        <input type="checkbox" name="mobile_app_notifications" id="mobile_app_notifications" <?= $user['mobile_app_notifications'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
@@ -138,7 +148,7 @@ ob_start();
                 </td>
                 <td>
                     <label class="switch">
-                        <input type="checkbox" name="email_notifications" id="email_notifications">
+                        <input type="checkbox" name="email_notifications" id="email_notifications" <?= $user['email_notifications'] == true ? 'checked' : '' ?>>
                         <span class="slider"></span>
                     </label>
                 </td>
